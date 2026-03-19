@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Other/SQLTemplate.sql to edit this template
  */
 /**
- * Author:  Jonathan Fuentealba, Gustavo Gallegos, Leslie Reyes
+ * Author:  Jonathan Fuentealba, Gustavo Gallegos, Rodolfo Guerrero, Rodolfo Guerrero, Leslie Reyes
  * Created: 14 mar 2026
  */
 
