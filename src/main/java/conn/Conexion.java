@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 /**
  *
- * @author Jonathan Fuentealba, Gustavo Gallegos, Leslie Reyes
+ * @author Jonathan Fuentealba, Gustavo Gallegos, Rodolfo Guerrero, Leslie Reyes
  */
 public class Conexion {
     private static final String NAME_DB = "transporte_hirata";

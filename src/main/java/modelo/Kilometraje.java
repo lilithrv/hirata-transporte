@@ -6,7 +6,7 @@ package modelo;
 
 /**
  *
- * @author Jonathan Fuentealba, Gustavo Gallegos, Leslie Reyes
+ * @author Jonathan Fuentealba, Gustavo Gallegos, Rodolfo Guerrero, Leslie Reyes
  */
 public class Kilometraje {
     
