@@ -32,6 +32,7 @@ CREATE TABLE vehiculos (
     marca VARCHAR(50) NOT NULL,
     modelo VARCHAR(50) NOT NULL,
     anio INT NOT NULL,
+    kilometraje_inicial INT NOT NULL,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_conductor) REFERENCES usuarios(id_usuario)
 );
@@ -51,6 +52,7 @@ CREATE TABLE mantenimiento (
     id_vehiculo INT NOT NULL,
     fecha DATE NOT NULL,
     tipo_mantenimiento ENUM('Preventivo', 'Correctivo') NOT NULL,
+    origen ENUM('Sistema', 'Manual') NOT NULL DEFAULT 'Sistema';
     descripcion TEXT,
     kilometraje INT,
     estado ENUM('Programado', 'Completado', 'Cancelado') NOT NULL DEFAULT 'Programado',
