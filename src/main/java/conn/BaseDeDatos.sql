@@ -52,9 +52,29 @@ CREATE TABLE mantenimiento (
     id_vehiculo INT NOT NULL,
     fecha DATE NOT NULL,
     tipo_mantenimiento ENUM('Preventivo', 'Correctivo') NOT NULL,
-    origen ENUM('Sistema', 'Manual') NOT NULL DEFAULT 'Sistema';
+    origen ENUM('Sistema', 'Manual') NOT NULL DEFAULT 'Sistema',
     descripcion TEXT,
     kilometraje INT,
     estado ENUM('Programado', 'Completado', 'Cancelado') NOT NULL DEFAULT 'Programado',
     FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo)
 );
+
+
+-- ROLES DISPONIBLES
+
+INSERT INTO roles (nombre) VALUES 
+    ('Administrador de Flota'),
+    ('Administrador de Mantenimiento'),
+    ('Conductor');
+
+-- INSERT EJEMPLOS
+
+INSERT INTO usuarios (nombre, email, password, id_rol) VALUES 
+('Carlos Mendoza',  'carlos.mendoza@hirata.cl',  '1234', 1),
+('Roberto Soto',    'roberto.soto@hirata.cl',    '1234', 2),
+('Miguel Fuentes',  'miguel.fuentes@hirata.cl',  '1234', 3),
+('Jorge Castillo', 'jorge.castillo@hirata.cl', '1234', 3);
+
+INSERT INTO vehiculos (id_conductor, patente, marca, modelo, anio, kilometraje_inicial) VALUES
+(3, 'BJKP45', 'Mercedes-Benz', 'Actros 2651', 2019, 98000),
+(4, 'FHRM21', 'Volvo', 'FH 460', 2021, 45000);
