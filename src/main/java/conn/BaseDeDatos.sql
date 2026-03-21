@@ -69,11 +69,13 @@ INSERT INTO roles (nombre) VALUES
 
 -- INSERT EJEMPLOS
 
+-- pass: 1234
 INSERT INTO usuarios (nombre, email, password, id_rol) VALUES 
-('Carlos Mendoza',  'carlos.mendoza@hirata.cl',  '1234', 1),
-('Roberto Soto',    'roberto.soto@hirata.cl',    '1234', 2),
-('Miguel Fuentes',  'miguel.fuentes@hirata.cl',  '1234', 3),
-('Jorge Castillo', 'jorge.castillo@hirata.cl', '1234', 3);
+('Carlos Mendoza',  'carlos.mendoza@hirata.cl',  '$2a$10$7QJ6YkqJv1Yb8V7zWlQh1uO6p9F0yQn3YzYFzZ3JZlJw5z1yKpG6C', 1),
+('Roberto Soto',    'roberto.soto@hirata.cl',    '$2a$10$7QJ6YkqJv1Yb8V7zWlQh1uO6p9F0yQn3YzYFzZ3JZlJw5z1yKpG6C', 2),
+('Miguel Fuentes',  'miguel.fuentes@hirata.cl',  '$2a$10$7QJ6YkqJv1Yb8V7zWlQh1uO6p9F0yQn3YzYFzZ3JZlJw5z1yKpG6C', 3),
+('Jorge Castillo', 'jorge.castillo@hirata.cl', '$2a$10$7QJ6YkqJv1Yb8V7zWlQh1uO6p9F0yQn3YzYFzZ3JZlJw5z1yKpG6C', 3);
+
 
 INSERT INTO vehiculos (id_conductor, patente, marca, modelo, anio, kilometraje_inicial) VALUES
 (3, 'BJKP45', 'Mercedes-Benz', 'Actros 2651', 2019, 98000),
