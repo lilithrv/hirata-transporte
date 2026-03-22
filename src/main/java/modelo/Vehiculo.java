@@ -4,6 +4,8 @@
  */
 package modelo;
 
+import java.time.Year;
+
 /**
  *
  * @author Jonathan Fuentealba, Gustavo Gallegos, Rodolfo Guerrero, Leslie Reyes
@@ -19,13 +21,13 @@ public class Vehiculo {
     private int kilometraje;
 
     public Vehiculo(int idVehiculo, int idConductor, String patente, String marca, String modelo, int anio, int kilometraje) {
-        this.idVehiculo = idVehiculo;
-        this.idConductor = idConductor;
-        this.patente = patente;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.anio = anio;
-        this.kilometraje = kilometraje;
+        this.setIdVehiculo(idVehiculo);
+        this.setIdConductor(idConductor);
+        this.setPatente(patente);
+        this.setMarca(marca);
+        this.setModelo(modelo);
+        this.setAnio(anio);
+        this.setKilometraje(kilometraje);
     }
 
     public Vehiculo() {
@@ -67,7 +69,7 @@ public class Vehiculo {
     }
 
     public void setIdConductor(int idConductor) {
-        if (idConductor >= 0) {
+        if (idConductor <= 0) {
             throw new IllegalArgumentException("ERROR INTERNO: El ID del conductor debe ser mayor a 0.");
         }
         this.idConductor = idConductor;
@@ -93,53 +95,68 @@ public class Vehiculo {
                 && !patenteLimpia.matches(regexModerna)
                 && !patenteLimpia.matches(regexNueva)) {
 
-            throw new IllegalArgumentException("ERROR: La marca del vehículo es obligatoria");
+            throw new IllegalArgumentException("ERROR: El formato de la patente no es válido según la ley chilena.");
         }
 
         this.patente = patenteLimpia;
     }
 
     public void setMarca(String marca) {
-        if(marca == null || marca.trim().isEmpty()){
-             throw new IllegalArgumentException("ERROR: La patente del vehículo es obligatoria.");
+        if (marca == null || marca.trim().isEmpty()) {
+            throw new IllegalArgumentException("ERROR: La marca del vehículo es obligatoria.");
         }
-        
+
         String marcaLimpia = marca.trim().toUpperCase();
-        
-        if(marcaLimpia.length() > 50){
+
+        if (marcaLimpia.length() > 50) {
             throw new IllegalArgumentException("ERROR: La marca no puede tener más de 50 caracteres.");
         }
-        
-        if(!marcaLimpia.matches("^[A-ZÁÉÍÓÚÑ\\s\\-]+$")){
-            throw new IllegalArgumentException("ERROR: La marca solo de contener letras, espacios o guiones.");
+
+        if (!marcaLimpia.matches("^[A-ZÁÉÍÓÚÑ\\s\\-]+$")) {
+            throw new IllegalArgumentException("ERROR: La marca solo debe contener letras, espacios o guiones.");
         }
-        
+
         this.marca = marcaLimpia;
     }
 
     public void setModelo(String modelo) {
-        if(modelo == null || modelo.trim().isEmpty()){
-             throw new IllegalArgumentException("ERROR: El modelo del vehículo es obligatorio.");
+        if (modelo == null || modelo.trim().isEmpty()) {
+            throw new IllegalArgumentException("ERROR: El modelo del vehículo es obligatorio.");
         }
-        
+
         String modeloLimpia = modelo.trim().toUpperCase();
-        
-        if(modeloLimpia.length() > 50){
+
+        if (modeloLimpia.length() > 50) {
             throw new IllegalArgumentException("ERROR: El modelo del vehículo no puede tener más de 50 caracteres.");
         }
-        
-        if(!modeloLimpia.matches("^[A-Z0-9ÁÉÍÓÚÑ\\s\\-]+$")){
-            throw new IllegalArgumentException("ERROR: El modelo del vehículo solo de contener letras, números, espacios o guiones.");
+
+        if (!modeloLimpia.matches("^[A-Z0-9ÁÉÍÓÚÑ\\s\\-]+$")) {
+            throw new IllegalArgumentException("ERROR: El modelo del vehículo solo debe contener letras, números, espacios o guiones.");
         }
-        
+
         this.modelo = modeloLimpia;
     }
 
     public void setAnio(int anio) {
+
+        int anioActual = Year.now().getValue();
+
+        if (anio < 1980) {
+            throw new IllegalArgumentException("ERROR: El año del vehículo es demasiado antiguo o inválido.");
+        }
+
+        if (anio > anioActual + 1) {
+            throw new IllegalArgumentException("ERROR: Ingresa un año válido.");
+        }
+
         this.anio = anio;
     }
 
     public void setKilometraje(int kilometraje) {
+        if(kilometraje < 0){
+            throw new IllegalArgumentException("ERROR: El kilometraje no puede ser menor a cero.");
+        }
+        
         this.kilometraje = kilometraje;
     }
 
