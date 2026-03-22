@@ -43,7 +43,7 @@ CREATE TABLE kilometraje (
     id_vehiculo INT NOT NULL,
     kilometros INT NOT NULL,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo),
+    FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo)ON DELETE CASCADE,
     FOREIGN KEY (id_conductor) REFERENCES usuarios(id_usuario)
 );
 
@@ -58,7 +58,7 @@ CREATE TABLE mantenimiento (
     kilometraje INT,
     estado ENUM('Programado', 'Completado', 'Cancelado') NOT NULL DEFAULT 'Programado',
     id_usuario_mantenimiento INT, -- quien lleva a cabo el mantenimiento
-    FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo),
+    FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo)ON DELETE CASCADE,
     FOREIGN KEY (id_usuario_mantenimiento) REFERENCES usuarios(id_usuario)
 );
 
