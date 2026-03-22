@@ -74,10 +74,10 @@ INSERT INTO roles (nombre) VALUES
 
 -- pass: 1234
 INSERT INTO usuarios (nombre, email, password, id_rol) VALUES 
-('Carlos Mendoza',  'carlos.mendoza@hirata.cl',  '$2a$10$7QJ6YkqJv1Yb8V7zWlQh1uO6p9F0yQn3YzYFzZ3JZlJw5z1yKpG6C', 1),
-('Roberto Soto',    'roberto.soto@hirata.cl',    '$2a$10$7QJ6YkqJv1Yb8V7zWlQh1uO6p9F0yQn3YzYFzZ3JZlJw5z1yKpG6C', 2),
-('Miguel Fuentes',  'miguel.fuentes@hirata.cl',  '$2a$10$7QJ6YkqJv1Yb8V7zWlQh1uO6p9F0yQn3YzYFzZ3JZlJw5z1yKpG6C', 3),
-('Jorge Castillo', 'jorge.castillo@hirata.cl', '$2a$10$7QJ6YkqJv1Yb8V7zWlQh1uO6p9F0yQn3YzYFzZ3JZlJw5z1yKpG6C', 3);
+('Carlos Mendoza', 'carlos.mendoza@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 1),
+('Roberto Soto', 'roberto.soto@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 2),
+('Miguel Fuentes', 'miguel.fuentes@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 3),
+('Jorge Castillo', 'jorge.castillo@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 3);
 
 
 INSERT INTO vehiculos (id_conductor, patente, marca, modelo, anio, kilometraje_inicial) VALUES

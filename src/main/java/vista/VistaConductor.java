@@ -15,6 +15,16 @@ public class VistaConductor extends javax.swing.JFrame {
      */
     public VistaConductor() {
         initComponents();
+        
+        this.setSize(600, 450);
+
+        // Evita que el usuario cambie el tamaño de la ventana
+        this.setResizable(false);
+
+        // Centra la ventana en la pantalla
+        this.setLocationRelativeTo(null);
+        
+        this.setTitle("Conductor Designado");
     }
 
     /**

@@ -67,7 +67,7 @@
                       <Group type="102" alignment="2" attributes="0">
                           <Component id="lblContrasena" linkSize="2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="42" pref="42" max="42" attributes="0"/>
-                          <Component id="jPasswordField1" linkSize="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="pwdPass" linkSize="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
@@ -92,7 +92,7 @@
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblContrasena" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jPasswordField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="pwdPass" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnIngresar" min="-2" pref="35" max="-2" attributes="0"/>
@@ -201,7 +201,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIngresarActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JPasswordField" name="jPasswordField1">
+        <Component class="javax.swing.JPasswordField" name="pwdPass">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>

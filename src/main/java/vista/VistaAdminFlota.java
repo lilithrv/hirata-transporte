@@ -15,6 +15,16 @@ public class VistaAdminFlota extends javax.swing.JFrame {
      */
     public VistaAdminFlota() {
         initComponents();
+        
+        this.setSize(600, 450);
+
+        // Evita que el usuario cambie el tamaño de la ventana
+        this.setResizable(false);
+
+        // Centra la ventana en la pantalla
+        this.setLocationRelativeTo(null);
+        
+        this.setTitle("Administrador de Flota");
     }
 
     /**

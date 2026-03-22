@@ -37,8 +37,8 @@ public class UsuarioDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    String hashGuardado = rs.getString("password");
-
+                    String hashGuardado = rs.getString("password").trim();
+                    
                     //BCrypt compara la contraseña ingresada con el hash de la BD
                     if (BCrypt.checkpw(password, hashGuardado)) {
 

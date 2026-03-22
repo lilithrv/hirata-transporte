@@ -23,6 +23,8 @@ public class VistaLogin extends javax.swing.JFrame {
 
         // Centra la ventana en la pantalla
         this.setLocationRelativeTo(null);
+        
+        this.setTitle("Acceso al Sistema");
     }
 
     /**
@@ -40,7 +42,7 @@ public class VistaLogin extends javax.swing.JFrame {
         lblContrasena = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         btnIngresar = new javax.swing.JButton();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        pwdPass = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,12 +92,12 @@ public class VistaLogin extends javax.swing.JFrame {
             }
         });
 
-        jPasswordField1.setBackground(new java.awt.Color(255, 255, 255));
-        jPasswordField1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jPasswordField1.setForeground(new java.awt.Color(0, 0, 0));
-        jPasswordField1.setMaximumSize(new java.awt.Dimension(200, 30));
-        jPasswordField1.setMinimumSize(new java.awt.Dimension(200, 30));
-        jPasswordField1.setPreferredSize(new java.awt.Dimension(200, 30));
+        pwdPass.setBackground(new java.awt.Color(255, 255, 255));
+        pwdPass.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        pwdPass.setForeground(new java.awt.Color(0, 0, 0));
+        pwdPass.setMaximumSize(new java.awt.Dimension(200, 30));
+        pwdPass.setMinimumSize(new java.awt.Dimension(200, 30));
+        pwdPass.setPreferredSize(new java.awt.Dimension(200, 30));
 
         javax.swing.GroupLayout PnlPrincipalLayout = new javax.swing.GroupLayout(PnlPrincipal);
         PnlPrincipal.setLayout(PnlPrincipalLayout);
@@ -112,7 +114,7 @@ public class VistaLogin extends javax.swing.JFrame {
                     .addGroup(PnlPrincipalLayout.createSequentialGroup()
                         .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(42, 42, 42)
-                        .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(pwdPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(6, 6, 6))
             .addGroup(javax.swing.GroupLayout.Alignment.CENTER, PnlPrincipalLayout.createSequentialGroup()
                 .addGap(225, 225, 225)
@@ -122,7 +124,7 @@ public class VistaLogin extends javax.swing.JFrame {
 
         PnlPrincipalLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lblContrasena, lblUsuario});
 
-        PnlPrincipalLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jPasswordField1, txtUsuario});
+        PnlPrincipalLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {pwdPass, txtUsuario});
 
         PnlPrincipalLayout.setVerticalGroup(
             PnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,7 +138,7 @@ public class VistaLogin extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(PnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pwdPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(179, Short.MAX_VALUE))
@@ -158,6 +160,42 @@ public class VistaLogin extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
+        
+        //Capturamos datos ingresados por el usuario
+        String emailUser = txtUsuario.getText().trim();
+        String passUser = new String(pwdPass.getPassword()).trim();
+        
+        dao.UsuarioDAO daoUsuario = new dao.UsuarioDAO();
+        modelo.Usuario usuario = daoUsuario.verificarCredenciales(emailUser, passUser );
+        
+        if (usuario != null) {
+            // Guardamos el usuario en la sesión
+            util.Sesion.setUsuarioActivo(usuario);
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Bienvenido " + usuario.getEmail());
+
+            // Redirigir según el rol que devolvió la BD
+            switch (usuario.getRol().getNombreRol()) {
+                case "Administrador de Flota":
+                    new VistaAdminFlota().setVisible(true);
+                    break;
+                case "Administrador de Mantenimiento":
+                    new VistaAdminMantenimiento().setVisible(true);
+                    break;
+                case "Conductor":
+                    new VistaConductor().setVisible(true);
+                    break;
+                default:
+                    javax.swing.JOptionPane.showMessageDialog(this, "Rol no reconocido.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    return;
+            }
+
+            this.dispose(); // Cierra la ventana de Login
+
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Credenciales incorrectas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+        
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     /**
@@ -198,10 +236,10 @@ public class VistaLogin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PnlPrincipal;
     private javax.swing.JButton btnIngresar;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel lblContrasena;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblUsuario;
+    private javax.swing.JPasswordField pwdPass;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
