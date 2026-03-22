@@ -42,7 +42,7 @@ public class Rol {
             throw new IllegalArgumentException("El nomnbre es requerido");
         }
 
-        if (nombreRol.length() < 3 || nombreRol.length() > 20) {
+        if (nombreRol.length() < 3 || nombreRol.length() > 30) {
             throw new IllegalArgumentException("ERROR: El rol no cumple con el rango (3- 20 caracteres): " + nombreRol);
         }
         this.nombreRol = nombreRol;
