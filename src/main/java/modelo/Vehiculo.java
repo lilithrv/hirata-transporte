@@ -13,32 +13,32 @@ import java.time.Year;
 public class Vehiculo {
 
     private int idVehiculo;
-    private int idConductor;
+    private Usuario conductor;
     private String patente;
     private String marca;
     private String modelo;
     private int anio;
-    private int kilometraje;
+    private int kilometrajeInicial;
 
-    public Vehiculo(int idVehiculo, int idConductor, String patente, String marca, String modelo, int anio, int kilometraje) {
+    public Vehiculo() {
+    }
+
+    public Vehiculo(int idVehiculo, Usuario conductor, String patente, String marca, String modelo, int anio, int kilometrajeInicial) {
         this.setIdVehiculo(idVehiculo);
-        this.setIdConductor(idConductor);
+        this.setConductor(conductor);
         this.setPatente(patente);
         this.setMarca(marca);
         this.setModelo(modelo);
         this.setAnio(anio);
-        this.setKilometraje(kilometraje);
-    }
-
-    public Vehiculo() {
+        this.setKilometrajeInicial(kilometrajeInicial);
     }
 
     public int getIdVehiculo() {
         return idVehiculo;
     }
 
-    public int getIdConductor() {
-        return idConductor;
+    public Usuario getConductor() {
+        return conductor;
     }
 
     public String getPatente() {
@@ -57,8 +57,8 @@ public class Vehiculo {
         return anio;
     }
 
-    public int getKilometraje() {
-        return kilometraje;
+    public int getKilometrajeInicial() {
+        return kilometrajeInicial;
     }
 
     public void setIdVehiculo(int idVehiculo) {
@@ -68,11 +68,8 @@ public class Vehiculo {
         this.idVehiculo = idVehiculo;
     }
 
-    public void setIdConductor(int idConductor) {
-        if (idConductor <= 0) {
-            throw new IllegalArgumentException("ERROR INTERNO: El ID del conductor debe ser mayor a 0.");
-        }
-        this.idConductor = idConductor;
+    public void setConductor(Usuario conductor) {
+        this.conductor = conductor;
     }
 
     public void setPatente(String patente) {
@@ -152,17 +149,16 @@ public class Vehiculo {
         this.anio = anio;
     }
 
-    public void setKilometraje(int kilometraje) {
-        if(kilometraje < 0){
+    public void setKilometrajeInicial(int kilometrajeInicial) {
+        if (kilometrajeInicial < 0) {
             throw new IllegalArgumentException("ERROR: El kilometraje no puede ser menor a cero.");
         }
-        
-        this.kilometraje = kilometraje;
+        this.kilometrajeInicial = kilometrajeInicial;
     }
 
     @Override
     public String toString() {
-        return "Vehiculo{" + "idVehiculo=" + idVehiculo + ", idConductor=" + idConductor + ", patente=" + patente + ", marca=" + marca + ", modelo=" + modelo + ", anio=" + anio + ", kilometraje=" + kilometraje + '}';
+        return "Vehiculo{" + "idVehiculo=" + idVehiculo + ", conductor=" + conductor + ", patente=" + patente + ", marca=" + marca + ", modelo=" + modelo + ", anio=" + anio + ", kilometrajeInicial=" + kilometrajeInicial + '}';
     }
 
-} // Class
+}
