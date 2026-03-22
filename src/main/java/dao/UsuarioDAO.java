@@ -22,32 +22,43 @@ import org.mindrot.jbcrypt.BCrypt;
 public class UsuarioDAO {
 
     //VERIFICAR CREDENCIALES
-    public Usuario verificarCredenciales(String correo, String password) throws SQLException {
-        String sql = "SELECT id_usuario, correo, password FROM usuarios WHERE correo = ?";
+    public Usuario verificarCredenciales(String email, String password) {
+        String sql = "SELECT u.id_usuario, u.email, u.password, "
+                + "r.id_rol, r.nombre AS nombre_rol "
+                + "FROM usuarios u "
+                + "JOIN roles r ON u.id_rol = r.id_rol "
+                + "WHERE u.email = ?";
+
         Usuario usuarioEncontrado = null;
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, correo);
+            ps.setString(1, email);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String hashGuardado = rs.getString("password");
 
-                    // BCrypt compara la contraseña ingresada con el hash de la BD
+                    //BCrypt compara la contraseña ingresada con el hash de la BD
                     if (BCrypt.checkpw(password, hashGuardado)) {
+
+                        Rol rol = new Rol();
+                        rol.setIdRol(rs.getInt("id_rol"));
+                        rol.setNombreRol(rs.getString("nombre_rol"));
+
                         usuarioEncontrado = new Usuario();
                         usuarioEncontrado.setIdUsuario(rs.getInt("id_usuario"));
-                        usuarioEncontrado.setCorreo(rs.getString("correo"));
-                        usuarioEncontrado.setPassword(hashGuardado);
+                        usuarioEncontrado.setEmail(rs.getString("email"));
+                        usuarioEncontrado.setRol(rol);
                     }
+                    // si la contraseña no coincide retorna null
                 }
-                
-                //si credenciales son incorrectas, retorna null
+                // si el email no existe retorna null
             }
         } catch (SQLException e) {
-            System.out.println("Error al obtener usuario: " + e.getMessage());
+            System.out.println("Error al verificar credenciales: " + e.getMessage());
         }
+
         return usuarioEncontrado;
     }
 
@@ -75,14 +86,17 @@ public class UsuarioDAO {
     //ACTUALIZAR
     public void actualizar(Usuario usuario) {
         String sql = "UPDATE usuarios SET nombre = ?, email = ?, password = ?, id_rol = ?  "
-                + "WHERE id = ?";
+                + "WHERE id_usuario = ?";
+
+        String passwordHasheada = BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt(12));
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, usuario.getNombreUsuario());
             ps.setString(2, usuario.getEmail());
-            ps.setString(3, usuario.getPassword());
+            ps.setString(3, passwordHasheada);
             ps.setInt(4, usuario.getRol().getIdRol());
+            ps.setInt(5, usuario.getIdUsuario());
 
             int filas = ps.executeUpdate();
 
@@ -93,14 +107,17 @@ public class UsuarioDAO {
 
     public boolean actualizar2(Usuario usuario) {
         String sql = "UPDATE usuarios SET nombre = ?, email = ?, password = ?, id_rol = ? "
-                + "WHERE id = ?";
+                + "WHERE id_usuario = ?";
+
+        String passwordHasheada = BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt(12));
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, usuario.getNombreUsuario());
             ps.setString(2, usuario.getEmail());
-            ps.setString(3, usuario.getPassword());
+            ps.setString(3, passwordHasheada);
             ps.setInt(4, usuario.getRol().getIdRol());
+            ps.setInt(5, usuario.getIdUsuario());
 
             int filas = ps.executeUpdate();
 
@@ -114,7 +131,7 @@ public class UsuarioDAO {
 
     //ELIMINAR
     public void eliminar(int id) {
-        String sql = "DELETE FROM usuarios WHERE id = ?";
+        String sql = "DELETE FROM usuarios WHERE id_usuario = ?";
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -138,10 +155,11 @@ public class UsuarioDAO {
     public List<Usuario> listarTodos() {
         List<Usuario> listado = new ArrayList<>();
 
-        String sql = "SELECT u.id_usuario, u.nombre, u.email, u.id_role, r.nombre "
+        String sql = "SELECT u.id_usuario, u.nombre AS nombre_usuario, u.email, "
+                + "r.id_rol, r.nombre AS nombre_rol "
                 + "FROM usuarios u "
                 + "JOIN roles r ON u.id_rol = r.id_rol "
-                + "ORDER BY u..id_usuario ";
+                + "ORDER BY u.id_usuario";
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -149,11 +167,11 @@ public class UsuarioDAO {
                 while (rs.next()) {
                     Rol rol = new Rol();
                     rol.setIdRol(rs.getInt("id_rol"));
-                    rol.setNombreRol(rs.getString("nombre"));
+                    rol.setNombreRol(rs.getString("nombre_rol"));
 
                     Usuario usuario = new Usuario(
                             rs.getInt("id_usuario"),
-                            rs.getString("nombre"),
+                            rs.getString("nombre_usuario"),
                             rs.getString("email"),
                             rol
                     );
@@ -162,7 +180,7 @@ public class UsuarioDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar idiomas: " + e.getMessage());
+            System.out.println("Error al listar usuarios: " + e.getMessage());
             e.printStackTrace();
         }
 

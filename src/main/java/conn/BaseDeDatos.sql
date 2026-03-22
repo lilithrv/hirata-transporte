@@ -50,13 +50,16 @@ CREATE TABLE kilometraje (
 CREATE TABLE mantenimiento (
     id_mantenimiento INT AUTO_INCREMENT PRIMARY KEY,
     id_vehiculo INT NOT NULL,
-    fecha DATE NOT NULL,
-    tipo_mantenimiento ENUM('Preventivo', 'Correctivo') NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- cuando se crea la alerta o programa la mantención
+    fecha_completado DATE; -- cuando se cambia el estado
+    tipo_mantenimiento ENUM('Preventivo', 'Correctivo') NOT NULL DEFAULT 'Preventivo',
     origen ENUM('Sistema', 'Manual') NOT NULL DEFAULT 'Sistema',
     descripcion TEXT,
     kilometraje INT,
     estado ENUM('Programado', 'Completado', 'Cancelado') NOT NULL DEFAULT 'Programado',
-    FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo)
+    id_usuario_mantenimiento INT, -- quien lleva a cabo el mantenimiento
+    FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo),
+    FOREIGN KEY (id_usuario_mantenimiento) REFERENCES usuarios(id_usuario);
 );
 
 
