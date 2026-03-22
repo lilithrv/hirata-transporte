@@ -1,14 +1,12 @@
-
 package modelo;
 
 import java.util.Date;
 
-
 public class Kilometraje {
-    
+
     private int idKilometraje;
-    private int idConductor;
-    private int idVehiculo;
+    private Usuario conductor;
+    private Vehiculo vehiculo;
     private int kilometros;
     private Date fechaRegistro;
 
@@ -17,15 +15,14 @@ public class Kilometraje {
     }
 
     // constructor con datos
-    public Kilometraje(int idKilometraje, int idConductor, int idVehiculo, int kilometros, Date fechaRegistro) {
+    public Kilometraje(int idKilometraje, Usuario conductor, Vehiculo vehiculo, int kilometros, Date fechaRegistro) {
         this.idKilometraje = idKilometraje;
-        this.idConductor = idConductor;
-        this.idVehiculo = idVehiculo;
+        this.conductor = conductor;
+        this.vehiculo = vehiculo;
         this.kilometros = kilometros;
         this.fechaRegistro = fechaRegistro;
     }
 
-    
     public int getIdKilometraje() {
         return idKilometraje;
     }
@@ -34,22 +31,22 @@ public class Kilometraje {
         this.idKilometraje = idKilometraje;
     }
 
-    public int getIdConductor() {
-        return idConductor;
+ public Usuario getConductor() {
+        return conductor;
     }
 
-    public void setIdConductor(int idConductor) {
-        this.idConductor = idConductor;
+    public void setConductor(Usuario conductor) {
+        this.conductor = conductor;
     }
 
-    public int getIdVehiculo() {
-        return idVehiculo;
+    public Vehiculo getVehiculo() {
+        return vehiculo;
     }
 
-    public void setIdVehiculo(int idVehiculo) {
-        this.idVehiculo = idVehiculo;
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
     }
-
+    
     public int getKilometros() {
         return kilometros;
     }
@@ -66,7 +63,6 @@ public class Kilometraje {
         this.fechaRegistro = fechaRegistro;
     }
 
-    
     @Override
     public String toString() {
         return "Kilometraje registrado: " + kilometros + " km";
