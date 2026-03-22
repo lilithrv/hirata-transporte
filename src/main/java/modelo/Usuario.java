@@ -25,7 +25,6 @@ public class Usuario {
         this.email = email;
         this.rol = rol;
     }
-    
 
     public Usuario(int idUsuario, String nombreUsuario, String email, String password, Rol rol) {
         this.idUsuario = idUsuario;
@@ -59,7 +58,7 @@ public class Usuario {
         this.idUsuario = idUsuario;
     }
 
-    public void setNombre(String nombreUsuario) {
+    public void setNombreUsuario(String nombreUsuario) {
         if (nombreUsuario == null) {
             throw new NullPointerException("El nombre no puede ser nulo");
         }
@@ -71,7 +70,7 @@ public class Usuario {
         this.nombreUsuario = nombreUsuario;
     }
 
-    public void setCorreo(String email) {
+    public void setEmail(String email) {
         if (email == null) {
             throw new NullPointerException("El correo no puede ser nulo");
         }
@@ -84,10 +83,20 @@ public class Usuario {
     }
 
     public void setPassword(String password) {
+        if (password == null) {
+            throw new NullPointerException("La contraseña no puede ser nula");
+        }
+
+        if (password.trim().isEmpty()) {
+            throw new IllegalArgumentException("La contraseña es requerida");
+        }
         this.password = password;
     }
 
     public void setRol(Rol rol) {
+        if (rol == null) {
+            throw new IllegalArgumentException("El rol es requerido.");
+        }
         this.rol = rol;
     }
 
