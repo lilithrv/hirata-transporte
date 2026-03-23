@@ -39,50 +39,57 @@ public class VistaLogin extends javax.swing.JFrame {
         PnlPrincipal = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
-        lblContrasena = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         btnIngresar = new javax.swing.JButton();
-        pwdPass = new javax.swing.JPasswordField();
+        jLabel2 = new javax.swing.JLabel();
+        jSseparadorUser = new javax.swing.JSeparator();
+        lblPass = new javax.swing.JLabel();
+        jSeparadorPas = new javax.swing.JSeparator();
+        jPassTxt = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        PnlPrincipal.setBackground(new java.awt.Color(204, 204, 204));
-        PnlPrincipal.setForeground(new java.awt.Color(153, 153, 153));
+        PnlPrincipal.setBackground(new java.awt.Color(255, 255, 255));
+        PnlPrincipal.setForeground(new java.awt.Color(255, 255, 255));
+        PnlPrincipal.setToolTipText("");
         PnlPrincipal.setMaximumSize(new java.awt.Dimension(600, 450));
         PnlPrincipal.setMinimumSize(new java.awt.Dimension(600, 450));
         PnlPrincipal.setPreferredSize(new java.awt.Dimension(600, 450));
+        PnlPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblTitulo.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblTitulo.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
-        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblTitulo.setText("INICIAR SESIÓN");
+        PnlPrincipal.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 350, -1));
 
-        lblUsuario.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        lblUsuario.setFont(new java.awt.Font("Roboto Light", 1, 18)); // NOI18N
         lblUsuario.setForeground(new java.awt.Color(0, 0, 0));
         lblUsuario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblUsuario.setText("Usuario:");
+        lblUsuario.setText("Usuario");
         lblUsuario.setMaximumSize(new java.awt.Dimension(100, 20));
         lblUsuario.setPreferredSize(new java.awt.Dimension(100, 20));
-
-        lblContrasena.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        lblContrasena.setForeground(new java.awt.Color(0, 0, 0));
-        lblContrasena.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblContrasena.setText("Contraseña:");
-        lblContrasena.setMaximumSize(new java.awt.Dimension(100, 20));
-        lblContrasena.setPreferredSize(new java.awt.Dimension(100, 20));
+        PnlPrincipal.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 125, -1));
 
         txtUsuario.setBackground(new java.awt.Color(255, 255, 255));
         txtUsuario.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtUsuario.setForeground(new java.awt.Color(0, 0, 0));
-        txtUsuario.setCaretColor(new java.awt.Color(204, 204, 204));
+        txtUsuario.setText("Ingrese su nombre de usuario...");
+        txtUsuario.setBorder(null);
         txtUsuario.setMaximumSize(new java.awt.Dimension(200, 30));
         txtUsuario.setMinimumSize(new java.awt.Dimension(200, 30));
         txtUsuario.setPreferredSize(new java.awt.Dimension(200, 30));
+        txtUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUsuarioActionPerformed(evt);
+            }
+        });
+        PnlPrincipal.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 360, 20));
 
         btnIngresar.setBackground(new java.awt.Color(0, 102, 204));
-        btnIngresar.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnIngresar.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
         btnIngresar.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresar.setText("INICIAR SESIÓN");
+        btnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnIngresar.setMaximumSize(new java.awt.Dimension(150, 40));
         btnIngresar.setMinimumSize(new java.awt.Dimension(150, 40));
         btnIngresar.setPreferredSize(new java.awt.Dimension(150, 40));
@@ -91,68 +98,41 @@ public class VistaLogin extends javax.swing.JFrame {
                 btnIngresarActionPerformed(evt);
             }
         });
+        PnlPrincipal.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 490, -1, 35));
 
-        pwdPass.setBackground(new java.awt.Color(255, 255, 255));
-        pwdPass.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        pwdPass.setForeground(new java.awt.Color(0, 0, 0));
-        pwdPass.setMaximumSize(new java.awt.Dimension(200, 30));
-        pwdPass.setMinimumSize(new java.awt.Dimension(200, 30));
-        pwdPass.setPreferredSize(new java.awt.Dimension(200, 30));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/SideIMG.png"))); // NOI18N
+        jLabel2.setText("jLabel2");
+        jLabel2.setAutoscrolls(true);
+        PnlPrincipal.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, 580, 650));
 
-        javax.swing.GroupLayout PnlPrincipalLayout = new javax.swing.GroupLayout(PnlPrincipal);
-        PnlPrincipal.setLayout(PnlPrincipalLayout);
-        PnlPrincipalLayout.setHorizontalGroup(
-            PnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PnlPrincipalLayout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(PnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(PnlPrincipalLayout.createSequentialGroup()
-                        .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
-                        .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PnlPrincipalLayout.createSequentialGroup()
-                        .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
-                        .addComponent(pwdPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(6, 6, 6))
-            .addGroup(javax.swing.GroupLayout.Alignment.CENTER, PnlPrincipalLayout.createSequentialGroup()
-                .addGap(225, 225, 225)
-                .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(225, 225, 225))
-        );
+        jSseparadorUser.setForeground(new java.awt.Color(0, 0, 0));
+        PnlPrincipal.add(jSseparadorUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 313, 360, 10));
 
-        PnlPrincipalLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lblContrasena, lblUsuario});
+        lblPass.setFont(new java.awt.Font("Roboto Light", 1, 18)); // NOI18N
+        lblPass.setForeground(new java.awt.Color(0, 0, 0));
+        lblPass.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblPass.setText("Contraseña");
+        lblPass.setMaximumSize(new java.awt.Dimension(100, 20));
+        lblPass.setPreferredSize(new java.awt.Dimension(100, 20));
+        PnlPrincipal.add(lblPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 125, -1));
 
-        PnlPrincipalLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {pwdPass, txtUsuario});
+        jSeparadorPas.setForeground(new java.awt.Color(0, 0, 0));
+        PnlPrincipal.add(jSeparadorPas, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 360, 10));
 
-        PnlPrincipalLayout.setVerticalGroup(
-            PnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PnlPrincipalLayout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addComponent(lblTitulo)
-                .addGap(18, 18, 18)
-                .addGroup(PnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(PnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pwdPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(179, Short.MAX_VALUE))
-        );
+        jPassTxt.setBackground(new java.awt.Color(255, 255, 255));
+        jPassTxt.setText("jPasswordField1");
+        jPassTxt.setBorder(null);
+        PnlPrincipal.add(jPassTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, 360, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(PnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(PnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
         );
 
         pack();
@@ -198,6 +178,10 @@ public class VistaLogin extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnIngresarActionPerformed
 
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsuarioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -236,10 +220,13 @@ public class VistaLogin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PnlPrincipal;
     private javax.swing.JButton btnIngresar;
-    private javax.swing.JLabel lblContrasena;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPasswordField jPassTxt;
+    private javax.swing.JSeparator jSeparadorPas;
+    private javax.swing.JSeparator jSseparadorUser;
+    private javax.swing.JLabel lblPass;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblUsuario;
-    private javax.swing.JPasswordField pwdPass;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
