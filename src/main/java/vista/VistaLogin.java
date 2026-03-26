@@ -16,7 +16,7 @@ public class VistaLogin extends javax.swing.JFrame {
     public VistaLogin() {
         initComponents();
         
-        this.setSize(600, 450);
+        this.setSize(1000, 650);
 
         // Evita que el usuario cambie el tamaño de la ventana
         this.setResizable(false);
@@ -73,7 +73,6 @@ public class VistaLogin extends javax.swing.JFrame {
 
         txtUsuario.setBackground(new java.awt.Color(255, 255, 255));
         txtUsuario.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtUsuario.setText("Ingrese su nombre de usuario...");
         txtUsuario.setBorder(null);
         txtUsuario.setMaximumSize(new java.awt.Dimension(200, 30));
         txtUsuario.setMinimumSize(new java.awt.Dimension(200, 30));
@@ -89,7 +88,7 @@ public class VistaLogin extends javax.swing.JFrame {
         btnIngresar.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
         btnIngresar.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresar.setText("INICIAR SESIÓN");
-        btnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnIngresar.setMaximumSize(new java.awt.Dimension(150, 40));
         btnIngresar.setMinimumSize(new java.awt.Dimension(150, 40));
         btnIngresar.setPreferredSize(new java.awt.Dimension(150, 40));
@@ -120,8 +119,12 @@ public class VistaLogin extends javax.swing.JFrame {
         PnlPrincipal.add(jSeparadorPas, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 360, 10));
 
         jPassTxt.setBackground(new java.awt.Color(255, 255, 255));
-        jPassTxt.setText("jPasswordField1");
         jPassTxt.setBorder(null);
+        jPassTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPassTxtActionPerformed(evt);
+            }
+        });
         PnlPrincipal.add(jPassTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, 360, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -143,7 +146,7 @@ public class VistaLogin extends javax.swing.JFrame {
         
         //Capturamos datos ingresados por el usuario
         String emailUser = txtUsuario.getText().trim();
-        String passUser = new String(pwdPass.getPassword()).trim();
+        String passUser = new String(jPassTxt.getPassword()).trim();
         
         dao.UsuarioDAO daoUsuario = new dao.UsuarioDAO();
         modelo.Usuario usuario = daoUsuario.verificarCredenciales(emailUser, passUser );
@@ -181,6 +184,10 @@ public class VistaLogin extends javax.swing.JFrame {
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsuarioActionPerformed
+
+    private void jPassTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPassTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPassTxtActionPerformed
 
     /**
      * @param args the command line arguments
