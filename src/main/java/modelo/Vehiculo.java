@@ -5,6 +5,7 @@
 package modelo;
 
 import java.time.Year;
+import java.util.Date;
 
 /**
  *
@@ -19,19 +20,22 @@ public class Vehiculo {
     private String modelo;
     private int anio;
     private int kilometrajeInicial;
+    private Date fechaRegistro;
 
     public Vehiculo() {
     }
 
-    public Vehiculo(int idVehiculo, Usuario conductor, String patente, String marca, String modelo, int anio, int kilometrajeInicial) {
-        this.setIdVehiculo(idVehiculo);
-        this.setConductor(conductor);
-        this.setPatente(patente);
-        this.setMarca(marca);
-        this.setModelo(modelo);
-        this.setAnio(anio);
-        this.setKilometrajeInicial(kilometrajeInicial);
+    public Vehiculo(int idVehiculo, Usuario conductor, String patente, String marca, String modelo, int anio, int kilometrajeInicial, Date fechaRegistro) {
+        this.idVehiculo = idVehiculo;
+        this.conductor = conductor;
+        this.patente = patente;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.anio = anio;
+        this.kilometrajeInicial = kilometrajeInicial;
+        this.fechaRegistro = fechaRegistro;
     }
+
 
     public int getIdVehiculo() {
         return idVehiculo;
@@ -59,6 +63,10 @@ public class Vehiculo {
 
     public int getKilometrajeInicial() {
         return kilometrajeInicial;
+    }
+
+    public Date getFechaRegistro() {
+        return fechaRegistro;
     }
 
     public void setIdVehiculo(int idVehiculo) {
@@ -155,6 +163,11 @@ public class Vehiculo {
         }
         this.kilometrajeInicial = kilometrajeInicial;
     }
+
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+    
 
     @Override
     public String toString() {
