@@ -4,18 +4,39 @@
  */
 package vista;
 
+import dao.KilometrajeDAO;
+import dao.MantenimientoDAO;
+import dao.VehiculoDAO;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import modelo.Kilometraje;
+import modelo.Mantenimiento;
+import modelo.Usuario;
+import modelo.Vehiculo;
+import util.Sesion;
+
 /**
  *
  * @author gustavo
  */
 public class VistaConductor extends javax.swing.JFrame {
 
+    private VehiculoDAO vehiculoDAO = new VehiculoDAO();
+    private KilometrajeDAO kilometrajeDAO = new KilometrajeDAO();
+    private MantenimientoDAO mantenimientoDAO = new MantenimientoDAO();
+
+    private Vehiculo vehiculo;
+    private Kilometraje ultimo;
+
     /**
      * Creates new form VistaConductor
      */
     public VistaConductor() {
         initComponents();
-        
+
+        //campos no editables
+        bloquearCampos();
+
         this.setSize(1000, 650);
 
         // Evita que el usuario cambie el tamaño de la ventana
@@ -23,8 +44,49 @@ public class VistaConductor extends javax.swing.JFrame {
 
         // Centra la ventana en la pantalla
         this.setLocationRelativeTo(null);
-        
+
         this.setTitle("Conductor Designado");
+
+        //cargar datos conductor
+        cargarDatos();
+    }
+
+    private void bloquearCampos() {
+        JTextField[] campos = {txtAnio, txtMarca, txtModelo, txtPatente, txtAnio, txtKilometroI, txtKmUltimoRegistrado, txtFechaUltimoKm};
+        for (JTextField campo : campos) {
+            campo.setEditable(false);
+            campo.setFocusable(false);
+        }
+    }
+
+    private void cargarDatos() {
+        Usuario conductorLogueado = Sesion.getUsuarioActivo();
+        vehiculo = vehiculoDAO.obtenerVehiculoPorConductor(conductorLogueado.getIdUsuario());
+
+        if (vehiculo != null) {
+            ultimo = kilometrajeDAO.ultimoKmPorVehiculo(vehiculo.getIdVehiculo());
+
+            txtAnio.setText(vehiculo.getPatente());
+            txtMarca.setText(vehiculo.getMarca());
+            txtModelo.setText(vehiculo.getModelo());
+            txtPatente.setText(vehiculo.getPatente());
+            txtAnio.setText(String.valueOf(vehiculo.getAnio()));
+            txtKilometroI.setText(String.valueOf(vehiculo.getKilometrajeInicial()));
+
+            txtKmUltimoRegistrado.setText(ultimo != null ? String.valueOf(ultimo.getKilometros()) : "Sin registro");
+            txtFechaUltimoKm.setText(ultimo != null ? ultimo.getFechaRegistro().toString() : "Sin registro");
+
+        } else {
+            // Si el conductor no tiene vehículo asignado
+            txtAnio.setText("Sin vehículo asignado");
+            txtMarca.setText("-");
+            txtModelo.setText("-");
+            txtPatente.setText("-");
+            txtAnio.setText("-");
+            txtKilometroI.setText("-");
+            txtKmUltimoRegistrado.setText("-");
+            txtFechaUltimoKm.setText("-");
+        }
     }
 
     /**
@@ -44,22 +106,26 @@ public class VistaConductor extends javax.swing.JFrame {
         txtMarca = new javax.swing.JTextField();
         lblMarca = new javax.swing.JLabel();
         lblModelo = new javax.swing.JLabel();
-        lblPatente = new javax.swing.JLabel();
+        lblAnio = new javax.swing.JLabel();
         txtModelo = new javax.swing.JTextField();
-        txtPatente = new javax.swing.JTextField();
-        lblKilometroI = new javax.swing.JLabel();
+        txtAnio = new javax.swing.JTextField();
+        lblKmUltimoRegistro = new javax.swing.JLabel();
         txtKilometroI = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        txtFechaUltimoKm = new javax.swing.JTextField();
         lblKilometroF = new javax.swing.JLabel();
         btnEnviar = new javax.swing.JButton();
+        lblKilometroI1 = new javax.swing.JLabel();
+        txtNuevoKm = new javax.swing.JTextField();
+        lblKmUltimoRegistro1 = new javax.swing.JLabel();
+        txtKmUltimoRegistrado = new javax.swing.JTextField();
+        lblPatente = new javax.swing.JLabel();
+        txtPatente = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1000, 650));
-        setPreferredSize(new java.awt.Dimension(1000, 650));
 
         pnlPrincipal.setBackground(new java.awt.Color(255, 255, 255));
         pnlPrincipal.setForeground(new java.awt.Color(255, 255, 255));
-        pnlPrincipal.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         pnlPrincipal.setMaximumSize(new java.awt.Dimension(600, 450));
         pnlPrincipal.setMinimumSize(new java.awt.Dimension(600, 450));
         pnlPrincipal.setPreferredSize(new java.awt.Dimension(600, 450));
@@ -67,7 +133,6 @@ public class VistaConductor extends javax.swing.JFrame {
 
         lblImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/SideIMG.png"))); // NOI18N
         lblImg.setText("jLabel1");
-        lblImg.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         lblImg.setMaximumSize(new java.awt.Dimension(652, 840));
         lblImg.setMinimumSize(new java.awt.Dimension(652, 840));
         lblImg.setPreferredSize(new java.awt.Dimension(652, 840));
@@ -75,15 +140,11 @@ public class VistaConductor extends javax.swing.JFrame {
         lblImg.getAccessibleContext().setAccessibleDescription("");
 
         lblInfo.setFont(new java.awt.Font("PT Serif", 1, 24)); // NOI18N
-        lblInfo.setForeground(new java.awt.Color(0, 0, 0));
         lblInfo.setText("Información del Conductor");
-        lblInfo.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         pnlPrincipal.add(lblInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, -1));
 
         lblNombre.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        lblNombre.setForeground(new java.awt.Color(0, 0, 0));
         lblNombre.setText("Nombre");
-        lblNombre.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         pnlPrincipal.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, -1, -1));
 
         txtNombre.setMaximumSize(new java.awt.Dimension(80, 23));
@@ -100,50 +161,74 @@ public class VistaConductor extends javax.swing.JFrame {
         pnlPrincipal.add(txtMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, -1, -1));
 
         lblMarca.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        lblMarca.setForeground(new java.awt.Color(0, 0, 0));
         lblMarca.setText("Marca");
         pnlPrincipal.add(lblMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, -1, -1));
 
         lblModelo.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        lblModelo.setForeground(new java.awt.Color(0, 0, 0));
         lblModelo.setText("Modelo");
         pnlPrincipal.add(lblModelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, -1, -1));
 
-        lblPatente.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        lblPatente.setForeground(new java.awt.Color(0, 0, 0));
-        lblPatente.setText("Patente");
-        pnlPrincipal.add(lblPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, -1, -1));
+        lblAnio.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblAnio.setText("Año");
+        pnlPrincipal.add(lblAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, -1));
 
         txtModelo.setMaximumSize(new java.awt.Dimension(80, 23));
         txtModelo.setPreferredSize(new java.awt.Dimension(220, 23));
         pnlPrincipal.add(txtModelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, -1, -1));
 
-        txtPatente.setMaximumSize(new java.awt.Dimension(80, 23));
-        txtPatente.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(txtPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
+        txtAnio.setMaximumSize(new java.awt.Dimension(80, 23));
+        txtAnio.setPreferredSize(new java.awt.Dimension(220, 23));
+        pnlPrincipal.add(txtAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 300, -1, -1));
 
-        lblKilometroI.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        lblKilometroI.setForeground(new java.awt.Color(0, 0, 0));
-        lblKilometroI.setText("Kilómetro Inicial");
-        pnlPrincipal.add(lblKilometroI, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, -1, -1));
+        lblKmUltimoRegistro.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblKmUltimoRegistro.setText("Fecha ultimo registro´");
+        pnlPrincipal.add(lblKmUltimoRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, -1, -1));
 
         txtKilometroI.setMaximumSize(new java.awt.Dimension(80, 23));
         txtKilometroI.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(txtKilometroI, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 370, -1, -1));
+        pnlPrincipal.add(txtKilometroI, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 330, -1, -1));
 
-        jTextField6.setMaximumSize(new java.awt.Dimension(80, 23));
-        jTextField6.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 420, -1, -1));
+        txtFechaUltimoKm.setMaximumSize(new java.awt.Dimension(80, 23));
+        txtFechaUltimoKm.setPreferredSize(new java.awt.Dimension(220, 23));
+        pnlPrincipal.add(txtFechaUltimoKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 400, -1, -1));
 
         lblKilometroF.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        lblKilometroF.setForeground(new java.awt.Color(0, 0, 0));
         lblKilometroF.setText("Kilómetro Final");
-        pnlPrincipal.add(lblKilometroF, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, -1, -1));
+        pnlPrincipal.add(lblKilometroF, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, -1, -1));
 
         btnEnviar.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         btnEnviar.setForeground(new java.awt.Color(255, 255, 255));
         btnEnviar.setText("Enviar");
+        btnEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarActionPerformed(evt);
+            }
+        });
         pnlPrincipal.add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 520, 180, 40));
+
+        lblKilometroI1.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblKilometroI1.setText("Kilómetro Inicial");
+        pnlPrincipal.add(lblKilometroI1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
+
+        txtNuevoKm.setMaximumSize(new java.awt.Dimension(80, 23));
+        txtNuevoKm.setPreferredSize(new java.awt.Dimension(220, 23));
+        pnlPrincipal.add(txtNuevoKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 450, -1, -1));
+
+        lblKmUltimoRegistro1.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblKmUltimoRegistro1.setText("último km registrado");
+        pnlPrincipal.add(lblKmUltimoRegistro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, -1, -1));
+
+        txtKmUltimoRegistrado.setMaximumSize(new java.awt.Dimension(80, 23));
+        txtKmUltimoRegistrado.setPreferredSize(new java.awt.Dimension(220, 23));
+        pnlPrincipal.add(txtKmUltimoRegistrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 370, -1, -1));
+
+        lblPatente.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblPatente.setText("Patente");
+        pnlPrincipal.add(lblPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, -1, -1));
+
+        txtPatente.setMaximumSize(new java.awt.Dimension(80, 23));
+        txtPatente.setPreferredSize(new java.awt.Dimension(220, 23));
+        pnlPrincipal.add(txtPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,6 +247,73 @@ public class VistaConductor extends javax.swing.JFrame {
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
+        // TODO add your handling code here:
+        try {
+
+            int kmNuevo = Integer.parseInt(txtNuevoKm.getText().trim());
+
+            //  km de referencia 
+            int kmUltimoRegistrado = (ultimo != null) ? ultimo.getKilometros() : vehiculo.getKilometrajeInicial();
+            if (kmNuevo <= kmUltimoRegistrado) {
+                JOptionPane.showMessageDialog(this,
+                        "El km ingresado debe ser mayor al último registrado (" + kmUltimoRegistrado + " km).",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Verificar si tiene mantenimiento programado
+            if (mantenimientoDAO.tieneMantenimientoProgramado(vehiculo.getIdVehiculo())) {
+                JOptionPane.showMessageDialog(this,
+                        "No puedes registrar km. El vehículo tiene un mantenimiento programado pendiente.",
+                        "Mantenimiento Pendiente", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // nuevo kilometraje
+            Kilometraje nuevoKm = new Kilometraje();
+            nuevoKm.setConductor(Sesion.getUsuarioActivo());
+            nuevoKm.setVehiculo(vehiculo);
+            nuevoKm.setKilometros(kmNuevo);
+
+            boolean insertado = kilometrajeDAO.insertarKilometraje(nuevoKm);
+
+            if (insertado) {
+                // PROGRAMAR MANTENIMIENTO Y ALERTA
+                // referencia para el delta es el km del último mantenimiento, o el inicial si no hay
+                Integer kmUltimoMant = mantenimientoDAO.obtenerKmUltimoMantenimiento(vehiculo.getIdVehiculo());
+                int kmReferenciaMant = (kmUltimoMant != null) ? kmUltimoMant : vehiculo.getKilometrajeInicial();
+
+                int diferencia = kmNuevo - kmReferenciaMant;
+                
+                if (diferencia >= 5000) {
+                    // Insertar mantenimiento
+                    Mantenimiento mant = new Mantenimiento();
+                    mant.setVehiculo(vehiculo);
+                    mant.setKilometraje(kmNuevo);
+                    mantenimientoDAO.programar(mant);
+
+                    JOptionPane.showMessageDialog(this,
+                            "Km registrado. Se ha programado un mantenimiento preventivo automáticamente.",
+                            "Mantenimiento Programado", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Km registrado correctamente.",
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+                //  Refrescar datos 
+                cargarDatos();
+                txtNuevoKm.setText("");
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ingresa un número válido.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEnviarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -200,20 +352,26 @@ public class VistaConductor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviar;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JLabel lblAnio;
     private javax.swing.JLabel lblImg;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblKilometroF;
-    private javax.swing.JLabel lblKilometroI;
+    private javax.swing.JLabel lblKilometroI1;
+    private javax.swing.JLabel lblKmUltimoRegistro;
+    private javax.swing.JLabel lblKmUltimoRegistro1;
     private javax.swing.JLabel lblMarca;
     private javax.swing.JLabel lblModelo;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblPatente;
     private javax.swing.JPanel pnlPrincipal;
+    private javax.swing.JTextField txtAnio;
+    private javax.swing.JTextField txtFechaUltimoKm;
     private javax.swing.JTextField txtKilometroI;
+    private javax.swing.JTextField txtKmUltimoRegistrado;
     private javax.swing.JTextField txtMarca;
     private javax.swing.JTextField txtModelo;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtNuevoKm;
     private javax.swing.JTextField txtPatente;
     // End of variables declaration//GEN-END:variables
 }
