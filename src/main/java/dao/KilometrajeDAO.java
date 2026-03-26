@@ -17,9 +17,8 @@ public class KilometrajeDAO {
 
         String sql = "INSERT INTO kilometraje (id_conductor, id_vehiculo, kilometros) VALUES (?, ?, ?)";
 
-        try {
-            Connection conn = Conexion.getInstancia();
-            PreparedStatement ps = conn.prepareStatement(sql);
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, kil.getConductor().getIdUsuario());
             ps.setInt(2, kil.getVehiculo().getIdVehiculo());
@@ -101,7 +100,7 @@ public class KilometrajeDAO {
             """;
 
         Connection conn = Conexion.getInstancia();
-        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, idVehiculo);
             ResultSet rs = ps.executeQuery();
