@@ -167,6 +167,7 @@ public class VehiculoDAO {
                     v.setModelo(rs.getString("modelo"));
                     v.setAnio(rs.getInt("anio"));
                     v.setKilometrajeInicial(rs.getInt("kilometraje_inicial"));
+                    v.setFechaRegistro(rs.getTimestamp("fecha_registro"));
                     return v;
                 }
             }
