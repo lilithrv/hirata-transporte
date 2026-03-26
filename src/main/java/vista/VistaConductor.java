@@ -143,7 +143,7 @@ public class VistaConductor extends javax.swing.JFrame {
         btnEnviar.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         btnEnviar.setForeground(new java.awt.Color(255, 255, 255));
         btnEnviar.setText("Enviar");
-        pnlPrincipal.add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 540, 130, 40));
+        pnlPrincipal.add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 520, 180, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
