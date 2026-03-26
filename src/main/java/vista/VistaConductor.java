@@ -36,21 +36,130 @@ public class VistaConductor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnlPrincipal = new javax.swing.JPanel();
+        lblImg = new javax.swing.JLabel();
+        lblInfo = new javax.swing.JLabel();
+        lblNombre = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        txtMarca = new javax.swing.JTextField();
+        lblMarca = new javax.swing.JLabel();
+        lblModelo = new javax.swing.JLabel();
+        lblPatente = new javax.swing.JLabel();
+        txtModelo = new javax.swing.JTextField();
+        txtPatente = new javax.swing.JTextField();
+        lblKilometroI = new javax.swing.JLabel();
+        txtKilometroI = new javax.swing.JTextField();
+        jTextField6 = new javax.swing.JTextField();
+        lblKilometroF = new javax.swing.JLabel();
+        btnEnviar = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1000, 650));
+        setPreferredSize(new java.awt.Dimension(1000, 650));
+
+        pnlPrincipal.setBackground(new java.awt.Color(255, 255, 255));
+        pnlPrincipal.setForeground(new java.awt.Color(255, 255, 255));
+        pnlPrincipal.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        pnlPrincipal.setMaximumSize(new java.awt.Dimension(600, 450));
+        pnlPrincipal.setMinimumSize(new java.awt.Dimension(600, 450));
+        pnlPrincipal.setPreferredSize(new java.awt.Dimension(600, 450));
+        pnlPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/SideIMG.png"))); // NOI18N
+        lblImg.setText("jLabel1");
+        lblImg.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        lblImg.setMaximumSize(new java.awt.Dimension(652, 840));
+        lblImg.setMinimumSize(new java.awt.Dimension(652, 840));
+        lblImg.setPreferredSize(new java.awt.Dimension(652, 840));
+        pnlPrincipal.add(lblImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, 580, 650));
+        lblImg.getAccessibleContext().setAccessibleDescription("");
+
+        lblInfo.setFont(new java.awt.Font("PT Serif", 1, 24)); // NOI18N
+        lblInfo.setForeground(new java.awt.Color(0, 0, 0));
+        lblInfo.setText("Información del Conductor");
+        lblInfo.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        pnlPrincipal.add(lblInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, -1));
+
+        lblNombre.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblNombre.setForeground(new java.awt.Color(0, 0, 0));
+        lblNombre.setText("Nombre");
+        lblNombre.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        pnlPrincipal.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, -1, -1));
+
+        txtNombre.setMaximumSize(new java.awt.Dimension(80, 23));
+        txtNombre.setPreferredSize(new java.awt.Dimension(220, 23));
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
+            }
+        });
+        pnlPrincipal.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, -1, -1));
+
+        txtMarca.setMaximumSize(new java.awt.Dimension(80, 23));
+        txtMarca.setPreferredSize(new java.awt.Dimension(220, 23));
+        pnlPrincipal.add(txtMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, -1, -1));
+
+        lblMarca.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblMarca.setForeground(new java.awt.Color(0, 0, 0));
+        lblMarca.setText("Marca");
+        pnlPrincipal.add(lblMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, -1, -1));
+
+        lblModelo.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblModelo.setForeground(new java.awt.Color(0, 0, 0));
+        lblModelo.setText("Modelo");
+        pnlPrincipal.add(lblModelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, -1, -1));
+
+        lblPatente.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblPatente.setForeground(new java.awt.Color(0, 0, 0));
+        lblPatente.setText("Patente");
+        pnlPrincipal.add(lblPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, -1, -1));
+
+        txtModelo.setMaximumSize(new java.awt.Dimension(80, 23));
+        txtModelo.setPreferredSize(new java.awt.Dimension(220, 23));
+        pnlPrincipal.add(txtModelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, -1, -1));
+
+        txtPatente.setMaximumSize(new java.awt.Dimension(80, 23));
+        txtPatente.setPreferredSize(new java.awt.Dimension(220, 23));
+        pnlPrincipal.add(txtPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
+
+        lblKilometroI.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblKilometroI.setForeground(new java.awt.Color(0, 0, 0));
+        lblKilometroI.setText("Kilómetro Inicial");
+        pnlPrincipal.add(lblKilometroI, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, -1, -1));
+
+        txtKilometroI.setMaximumSize(new java.awt.Dimension(80, 23));
+        txtKilometroI.setPreferredSize(new java.awt.Dimension(220, 23));
+        pnlPrincipal.add(txtKilometroI, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 370, -1, -1));
+
+        jTextField6.setMaximumSize(new java.awt.Dimension(80, 23));
+        jTextField6.setPreferredSize(new java.awt.Dimension(220, 23));
+        pnlPrincipal.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 420, -1, -1));
+
+        lblKilometroF.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblKilometroF.setForeground(new java.awt.Color(0, 0, 0));
+        lblKilometroF.setText("Kilómetro Final");
+        pnlPrincipal.add(lblKilometroF, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, -1, -1));
+
+        btnEnviar.setText("Enviar");
+        pnlPrincipal.add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 540, 130, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(pnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(pnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreActionPerformed
 
     /**
      * @param args the command line arguments
@@ -88,5 +197,21 @@ public class VistaConductor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEnviar;
+    private javax.swing.JTextField jTextField6;
+    private javax.swing.JLabel lblImg;
+    private javax.swing.JLabel lblInfo;
+    private javax.swing.JLabel lblKilometroF;
+    private javax.swing.JLabel lblKilometroI;
+    private javax.swing.JLabel lblMarca;
+    private javax.swing.JLabel lblModelo;
+    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblPatente;
+    private javax.swing.JPanel pnlPrincipal;
+    private javax.swing.JTextField txtKilometroI;
+    private javax.swing.JTextField txtMarca;
+    private javax.swing.JTextField txtModelo;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtPatente;
     // End of variables declaration//GEN-END:variables
 }
