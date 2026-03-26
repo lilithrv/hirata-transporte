@@ -31,7 +31,7 @@ public class Kilometraje {
         this.idKilometraje = idKilometraje;
     }
 
- public Usuario getConductor() {
+    public Usuario getConductor() {
         return conductor;
     }
 
@@ -46,12 +46,15 @@ public class Kilometraje {
     public void setVehiculo(Vehiculo vehiculo) {
         this.vehiculo = vehiculo;
     }
-    
+
     public int getKilometros() {
         return kilometros;
     }
 
     public void setKilometros(int kilometros) {
+        if (kilometros < 0) {
+            throw new IllegalArgumentException("ERROR: El kilometraje no puede ser menor a cero.");
+        }
         this.kilometros = kilometros;
     }
 
