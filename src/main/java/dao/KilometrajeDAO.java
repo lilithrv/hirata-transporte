@@ -85,7 +85,7 @@ public class KilometrajeDAO {
         return lista;
     }
 
-    public Kilometraje obtenerUltimoPorVehiculo(int idVehiculo) {
+    public Kilometraje ultimoKmPorVehiculo(int idVehiculo) {
         Kilometraje kilometraje = null;
 
         String sql = """
