@@ -140,6 +140,8 @@ public class VistaConductor extends javax.swing.JFrame {
         lblKilometroF.setText("Kilómetro Final");
         pnlPrincipal.add(lblKilometroF, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, -1, -1));
 
+        btnEnviar.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        btnEnviar.setForeground(new java.awt.Color(255, 255, 255));
         btnEnviar.setText("Enviar");
         pnlPrincipal.add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 540, 130, 40));
 
