@@ -251,4 +251,47 @@ public class MantenimientoDAO {
         return null;
     }
 
+    //MANTENIMIENTO PROGRAMADO
+    public boolean tieneMantenimientoProgramado(int idVehiculo) {
+        String sql = "SELECT COUNT(*) FROM mantenimiento WHERE id_vehiculo = ? AND estado = 'Programado'";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idVehiculo);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al verificar mantenimiento: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public Integer obtenerKmUltimoMantenimiento(int idVehiculo) {
+        String sql = """
+            SELECT kilometraje FROM mantenimiento 
+            WHERE id_vehiculo = ? 
+            ORDER BY fecha_creacion DESC 
+            LIMIT 1
+            """;
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idVehiculo);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("kilometraje"); 
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener km último mantenimiento: " + e.getMessage());
+        }
+        return null; // null = nunca ha tenido mantenimiento
+    }
 }
