@@ -91,7 +91,8 @@ public class MantenimientoDAO {
     }
 
     public boolean actualizar2(Mantenimiento mantenimiento) {
-        String sql = "UPDATE mantenimiento SET descripcion = ?, estado = ?, id_usuario_mantenimiento = ?  "
+        String sql = "UPDATE mantenimiento SET descripcion = ?, estado = ?, id_usuario_mantenimiento = ?,  "
+                + "fecha_completado = CASE WHEN ? IN ('Completado', 'Cancelado') THEN NOW() ELSE NULL END "
                 + "WHERE id_mantenimiento = ?";
 
         Connection conn = Conexion.getInstancia();
@@ -105,7 +106,8 @@ public class MantenimientoDAO {
                 ps.setNull(3, java.sql.Types.INTEGER);
             }
 
-            ps.setInt(4, mantenimiento.getIdMantenimiento());
+            ps.setString(4, mantenimiento.getEstado().name());
+            ps.setInt(5, mantenimiento.getIdMantenimiento());
 
             int filas = ps.executeUpdate();
 
@@ -191,7 +193,7 @@ public class MantenimientoDAO {
                     mantenimiento.setKilometraje(rs.getInt("kilometraje"));
                     mantenimiento.setEstado(EstadoMantenimiento.valueOf(rs.getString("estado")));
                     mantenimiento.setFechaCreacion(rs.getTimestamp("fecha_creacion"));
-                    mantenimiento.setFechaCompletado(rs.getDate("fecha_completado"));
+                    mantenimiento.setFechaCompletado(rs.getTimestamp("fecha_completado"));
                     mantenimiento.setUsuarioMantenimiento(usuario);
 
                     listado.add(mantenimiento);
@@ -257,7 +259,7 @@ public class MantenimientoDAO {
                     mantenimiento.setKilometraje(rs.getInt("kilometraje"));
                     mantenimiento.setEstado(EstadoMantenimiento.valueOf(rs.getString("estado")));
                     mantenimiento.setFechaCreacion(rs.getTimestamp("fecha_creacion"));
-                    mantenimiento.setFechaCompletado(rs.getDate("fecha_completado"));
+                    mantenimiento.setFechaCompletado(rs.getTimestamp("fecha_completado"));
                     mantenimiento.setUsuarioMantenimiento(usuario);
 
                     return mantenimiento;
@@ -320,7 +322,7 @@ public class MantenimientoDAO {
         // solo muestra los vehiculos que no tienen mantención pendiente programada
         // los con estado Cancelado o Completado se excluyen, solo los activos del momento
         String sql = "SELECT v.id_vehiculo, v.patente, v.marca, v.modelo, v.anio, "
-                + "v.kilometraje_inicial, "  
+                + "v.kilometraje_inicial, "
                 + "u.nombre AS nombre_conductor "
                 + "FROM vehiculos v "
                 + "LEFT JOIN usuarios u ON v.id_conductor = u.id_usuario "
