@@ -91,10 +91,10 @@ public class Vehiculo {
         String regexAntigua = "^[A-Z]{2}[0-9]{4}$";
 
         //Formato patente 2007 - 2025: 4 letras y 2 números
-        String regexModerna = "^[BCDFGHJKLPRSTVWXYZ]{4}[0-9]{2}$";
+        String regexModerna = "^[BCDFGHJKLMPRSTVWXYZ]{4}[0-9]{2}$";
 
         //Formato patente nueva: 5 letras y 1 número 
-        String regexNueva = "^[BCDFGHJKLPRSTVWXYZ]{5}[0-9]{1}$";
+        String regexNueva = "^[BCDFGHJKLMPRSTVWXYZ]{5}[0-9]{1}$";
 
         if (!patenteLimpia.matches(regexAntigua)
                 && !patenteLimpia.matches(regexModerna)

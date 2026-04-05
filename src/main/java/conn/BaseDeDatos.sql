@@ -51,7 +51,7 @@ CREATE TABLE mantenimiento (
     id_mantenimiento INT AUTO_INCREMENT PRIMARY KEY,
     id_vehiculo INT NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- cuando se crea la alerta o programa la mantención
-    fecha_completado DATE, -- cuando se cambia el estado
+    fecha_completado DATETIME, -- cuando se cambia el estado
     tipo_mantenimiento ENUM('Preventivo', 'Correctivo') NOT NULL DEFAULT 'Preventivo',
     origen ENUM('Sistema', 'Manual') NOT NULL DEFAULT 'Sistema',
     descripcion TEXT,

@@ -91,7 +91,8 @@ public class MantenimientoDAO {
     }
 
     public boolean actualizar2(Mantenimiento mantenimiento) {
-        String sql = "UPDATE mantenimiento SET descripcion = ?, estado = ?, id_usuario_mantenimiento = ?  "
+        String sql = "UPDATE mantenimiento SET descripcion = ?, estado = ?, id_usuario_mantenimiento = ?,  "
+                + "fecha_completado = CASE WHEN ? IN ('Completado', 'Cancelado') THEN NOW() ELSE NULL END "
                 + "WHERE id_mantenimiento = ?";
 
         Connection conn = Conexion.getInstancia();
@@ -105,7 +106,8 @@ public class MantenimientoDAO {
                 ps.setNull(3, java.sql.Types.INTEGER);
             }
 
-            ps.setInt(4, mantenimiento.getIdMantenimiento());
+            ps.setString(4, mantenimiento.getEstado().name());
+            ps.setInt(5, mantenimiento.getIdMantenimiento());
 
             int filas = ps.executeUpdate();
 
@@ -146,10 +148,12 @@ public class MantenimientoDAO {
         String sql = "SELECT m.id_mantenimiento, m.tipo_mantenimiento, m.origen, "
                 + "m.descripcion, m.kilometraje, m.estado, "
                 + "m.fecha_creacion, m.fecha_completado, "
-                + "v.id_vehiculo, v.patente, v.marca, v.modelo, "
+                + "v.id_vehiculo, v.patente, v.marca, v.modelo, v.anio, "
+                + "c.nombre AS nombre_conductor, " // <-- conductor del vehículo
                 + "u.id_usuario, u.nombre AS nombre_usuario "
                 + "FROM mantenimiento m "
                 + "JOIN vehiculos v ON m.id_vehiculo = v.id_vehiculo "
+                + "LEFT JOIN usuarios c ON v.id_conductor = c.id_usuario " // <-- JOIN conductor
                 + "LEFT JOIN usuarios u ON m.id_usuario_mantenimiento = u.id_usuario "
                 + "ORDER BY m.fecha_creacion DESC";
 
@@ -163,6 +167,13 @@ public class MantenimientoDAO {
                     vehiculo.setPatente(rs.getString("patente"));
                     vehiculo.setMarca(rs.getString("marca"));
                     vehiculo.setModelo(rs.getString("modelo"));
+                    vehiculo.setAnio(rs.getInt("anio"));
+
+                    if (rs.getString("nombre_conductor") != null) {
+                        Usuario conductor = new Usuario();
+                        conductor.setNombreUsuario(rs.getString("nombre_conductor"));
+                        vehiculo.setConductor(conductor);
+                    }
 
                     // LEFT JOIN: el usuario puede ser null si está Programado
                     Usuario usuario = null;
@@ -182,7 +193,7 @@ public class MantenimientoDAO {
                     mantenimiento.setKilometraje(rs.getInt("kilometraje"));
                     mantenimiento.setEstado(EstadoMantenimiento.valueOf(rs.getString("estado")));
                     mantenimiento.setFechaCreacion(rs.getTimestamp("fecha_creacion"));
-                    mantenimiento.setFechaCompletado(rs.getDate("fecha_completado"));
+                    mantenimiento.setFechaCompletado(rs.getTimestamp("fecha_completado"));
                     mantenimiento.setUsuarioMantenimiento(usuario);
 
                     listado.add(mantenimiento);
@@ -201,10 +212,12 @@ public class MantenimientoDAO {
         String sql = "SELECT m.id_mantenimiento, m.tipo_mantenimiento, m.origen, "
                 + "m.descripcion, m.kilometraje, m.estado, "
                 + "m.fecha_creacion, m.fecha_completado, "
-                + "v.id_vehiculo, v.patente, v.marca, v.modelo, "
+                + "v.id_vehiculo, v.patente, v.marca, v.modelo, v.anio, "
+                + "c.nombre AS nombre_conductor, " // <--
                 + "u.id_usuario, u.nombre AS nombre_usuario "
                 + "FROM mantenimiento m "
                 + "JOIN vehiculos v ON m.id_vehiculo = v.id_vehiculo "
+                + "LEFT JOIN usuarios c ON v.id_conductor = c.id_usuario " // <--
                 + "LEFT JOIN usuarios u ON m.id_usuario_mantenimiento = u.id_usuario "
                 + "WHERE m.id_mantenimiento = ?";
 
@@ -221,6 +234,14 @@ public class MantenimientoDAO {
                     vehiculo.setPatente(rs.getString("patente"));
                     vehiculo.setMarca(rs.getString("marca"));
                     vehiculo.setModelo(rs.getString("modelo"));
+                    vehiculo.setAnio(rs.getInt("anio"));
+
+                    // Conductor del vehículo
+                    if (rs.getString("nombre_conductor") != null) {
+                        Usuario conductor = new Usuario();
+                        conductor.setNombreUsuario(rs.getString("nombre_conductor"));
+                        vehiculo.setConductor(conductor);
+                    }
 
                     Usuario usuario = null;
                     if (rs.getInt("id_usuario") != 0) {
@@ -238,7 +259,7 @@ public class MantenimientoDAO {
                     mantenimiento.setKilometraje(rs.getInt("kilometraje"));
                     mantenimiento.setEstado(EstadoMantenimiento.valueOf(rs.getString("estado")));
                     mantenimiento.setFechaCreacion(rs.getTimestamp("fecha_creacion"));
-                    mantenimiento.setFechaCompletado(rs.getDate("fecha_completado"));
+                    mantenimiento.setFechaCompletado(rs.getTimestamp("fecha_completado"));
                     mantenimiento.setUsuarioMantenimiento(usuario);
 
                     return mantenimiento;
@@ -286,12 +307,59 @@ public class MantenimientoDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                return rs.getInt("kilometraje"); 
+                return rs.getInt("kilometraje");
             }
 
         } catch (SQLException e) {
             System.out.println("Error al obtener km último mantenimiento: " + e.getMessage());
         }
         return null; // null = nunca ha tenido mantenimiento
+    }
+
+    public List<Vehiculo> listarSinMantenimientoProgramado() {
+        List<Vehiculo> lista = new ArrayList<>();
+
+        // solo muestra los vehiculos que no tienen mantención pendiente programada
+        // los con estado Cancelado o Completado se excluyen, solo los activos del momento
+        String sql = "SELECT v.id_vehiculo, v.patente, v.marca, v.modelo, v.anio, "
+                + "v.kilometraje_inicial, "
+                + "u.nombre AS nombre_conductor "
+                + "FROM vehiculos v "
+                + "LEFT JOIN usuarios u ON v.id_conductor = u.id_usuario "
+                + "WHERE NOT EXISTS ( "
+                + "    SELECT 1 FROM mantenimiento m "
+                + "    WHERE m.id_vehiculo = v.id_vehiculo "
+                + "    AND m.estado = 'Programado' "
+                + ") "
+                + "ORDER BY v.patente ASC";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+
+                    Vehiculo vehiculo = new Vehiculo();
+                    vehiculo.setIdVehiculo(rs.getInt("id_vehiculo"));
+                    vehiculo.setPatente(rs.getString("patente"));
+                    vehiculo.setMarca(rs.getString("marca"));
+                    vehiculo.setModelo(rs.getString("modelo"));
+                    vehiculo.setAnio(rs.getInt("anio"));
+                    vehiculo.setKilometrajeInicial(rs.getInt("kilometraje_inicial"));
+
+                    if (rs.getString("nombre_conductor") != null) {
+                        Usuario conductor = new Usuario();
+                        conductor.setNombreUsuario(rs.getString("nombre_conductor"));
+                        vehiculo.setConductor(conductor);
+                    }
+
+                    lista.add(vehiculo);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al listar vehículos sin mantenimiento programado: " + e.getMessage());
+        }
+
+        System.out.println(lista);
+        return lista;
     }
 }
