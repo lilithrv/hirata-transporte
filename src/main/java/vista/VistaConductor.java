@@ -99,7 +99,6 @@ public class VistaConductor extends javax.swing.JFrame {
     private void initComponents() {
 
         pnlPrincipal = new javax.swing.JPanel();
-        lblImg = new javax.swing.JLabel();
         lblInfo = new javax.swing.JLabel();
         lblNombre = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
@@ -130,14 +129,6 @@ public class VistaConductor extends javax.swing.JFrame {
         pnlPrincipal.setMinimumSize(new java.awt.Dimension(600, 450));
         pnlPrincipal.setPreferredSize(new java.awt.Dimension(600, 450));
         pnlPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lblImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/SideIMG.png"))); // NOI18N
-        lblImg.setText("jLabel1");
-        lblImg.setMaximumSize(new java.awt.Dimension(652, 840));
-        lblImg.setMinimumSize(new java.awt.Dimension(652, 840));
-        lblImg.setPreferredSize(new java.awt.Dimension(652, 840));
-        pnlPrincipal.add(lblImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, 580, 650));
-        lblImg.getAccessibleContext().setAccessibleDescription("");
 
         lblInfo.setFont(new java.awt.Font("PT Serif", 1, 24)); // NOI18N
         lblInfo.setText("Información del Conductor");
@@ -194,7 +185,7 @@ public class VistaConductor extends javax.swing.JFrame {
 
         lblKilometroF.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         lblKilometroF.setText("Kilómetro Final");
-        pnlPrincipal.add(lblKilometroF, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, -1, -1));
+        pnlPrincipal.add(lblKilometroF, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 450, -1, -1));
 
         btnEnviar.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         btnEnviar.setForeground(new java.awt.Color(255, 255, 255));
@@ -353,7 +344,6 @@ public class VistaConductor extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviar;
     private javax.swing.JLabel lblAnio;
-    private javax.swing.JLabel lblImg;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblKilometroF;
     private javax.swing.JLabel lblKilometroI1;
