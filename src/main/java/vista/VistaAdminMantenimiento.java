@@ -636,6 +636,11 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
         // El usuario lo maneja el DAO directamente desde Sesion.getUsuarioActivo()
         boolean actualizado = mantenimientoDAO.actualizar2(mantenimientoSeleccionado);
         if (actualizado) {
+            // Si se completó o canceló, remover conductor del vehículo
+            if (estadoNuevo == EstadoMantenimiento.Completado
+                    || estadoNuevo == EstadoMantenimiento.Cancelado) {
+                vehiculoDAO.removerConductor(mantenimientoSeleccionado.getVehiculo().getIdVehiculo());
+            }
             JOptionPane.showMessageDialog(this, "Mantenimiento actualizado correctamente.", "Éxito", INFORMATION_MESSAGE);
             cargarTabla();
         } else {
