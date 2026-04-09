@@ -38,7 +38,7 @@ public class UsuarioDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String hashGuardado = rs.getString("password").trim();
-                    
+
                     //BCrypt compara la contraseña ingresada con el hash de la BD
                     if (BCrypt.checkpw(password, hashGuardado)) {
 
@@ -219,4 +219,33 @@ public class UsuarioDAO {
 
         return null;
     }
+
+    public List<Usuario> listarConductores() {
+        List<Usuario> lista = new ArrayList<>();
+
+        String sql = " SELECT u.id_usuario, u.nombre, u.email "
+                + "FROM usuarios u "
+                + "JOIN roles r ON u.id_rol = r.id_rol "
+                + "WHERE r.nombre = 'Conductor' "
+                + "ORDER BY u.nombre ASC";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("id_usuario"));
+                u.setNombreUsuario(rs.getString("nombre"));
+                u.setEmail(rs.getString("email"));
+                lista.add(u);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al listar conductores: " + e.getMessage());
+        }
+        return lista;
+    }
+
 }
