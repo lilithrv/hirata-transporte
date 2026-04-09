@@ -4,15 +4,16 @@
  */
 package vista;
 
+import java.awt.Color;
+
 /**
  *
  * @author gustavo
  */
 public class VistaLogin extends javax.swing.JFrame {
 
-    /**
-     * Creates new form VistaLogin
-     */
+    int xMouse, yMouse;
+    
     public VistaLogin() {
         initComponents();
         
@@ -37,17 +38,23 @@ public class VistaLogin extends javax.swing.JFrame {
     private void initComponents() {
 
         PnlPrincipal = new javax.swing.JPanel();
+        lblImg = new javax.swing.JLabel();
+        jHeader = new javax.swing.JPanel();
+        extBtn = new javax.swing.JPanel();
+        lblExit = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         btnIngresar = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         jSseparadorUser = new javax.swing.JSeparator();
         lblPass = new javax.swing.JLabel();
         jSeparadorPas = new javax.swing.JSeparator();
         jPassTxt = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocationByPlatform(true);
+        setUndecorated(true);
+        setResizable(false);
 
         PnlPrincipal.setBackground(new java.awt.Color(255, 255, 255));
         PnlPrincipal.setForeground(new java.awt.Color(255, 255, 255));
@@ -56,6 +63,82 @@ public class VistaLogin extends javax.swing.JFrame {
         PnlPrincipal.setMinimumSize(new java.awt.Dimension(600, 450));
         PnlPrincipal.setPreferredSize(new java.awt.Dimension(600, 450));
         PnlPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblImg.setBackground(new java.awt.Color(250, 250, 250));
+        lblImg.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        lblImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/SideIMG.png"))); // NOI18N
+        lblImg.setToolTipText("");
+        lblImg.setAutoscrolls(true);
+        PnlPrincipal.add(lblImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, 580, 650));
+
+        jHeader.setBackground(new java.awt.Color(255, 255, 255));
+        jHeader.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jHeaderMouseDragged(evt);
+            }
+        });
+        jHeader.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jHeaderMousePressed(evt);
+            }
+        });
+
+        extBtn.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblExit.setBackground(new java.awt.Color(255, 255, 255));
+        lblExit.setFont(new java.awt.Font("Roboto Light", 1, 24)); // NOI18N
+        lblExit.setForeground(new java.awt.Color(0, 0, 0));
+        lblExit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblExit.setText("X");
+        lblExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblExit.setPreferredSize(new java.awt.Dimension(40, 40));
+        lblExit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblExitMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblExitMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblExitMouseExited(evt);
+            }
+        });
+
+        javax.swing.GroupLayout extBtnLayout = new javax.swing.GroupLayout(extBtn);
+        extBtn.setLayout(extBtnLayout);
+        extBtnLayout.setHorizontalGroup(
+            extBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1006, Short.MAX_VALUE)
+            .addGroup(extBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(extBtnLayout.createSequentialGroup()
+                    .addComponent(lblExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 966, Short.MAX_VALUE)))
+        );
+        extBtnLayout.setVerticalGroup(
+            extBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+            .addGroup(extBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lblExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jHeaderLayout = new javax.swing.GroupLayout(jHeader);
+        jHeader.setLayout(jHeaderLayout);
+        jHeaderLayout.setHorizontalGroup(
+            jHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1006, Short.MAX_VALUE)
+            .addGroup(jHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jHeaderLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(extBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        jHeaderLayout.setVerticalGroup(
+            jHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+            .addGroup(jHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(extBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        PnlPrincipal.add(jHeader, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 40));
 
         lblTitulo.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
@@ -72,11 +155,16 @@ public class VistaLogin extends javax.swing.JFrame {
         PnlPrincipal.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 125, -1));
 
         txtUsuario.setBackground(new java.awt.Color(255, 255, 255));
-        txtUsuario.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtUsuario.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         txtUsuario.setBorder(null);
         txtUsuario.setMaximumSize(new java.awt.Dimension(200, 30));
         txtUsuario.setMinimumSize(new java.awt.Dimension(200, 30));
         txtUsuario.setPreferredSize(new java.awt.Dimension(200, 30));
+        txtUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtUsuarioMousePressed(evt);
+            }
+        });
         txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUsuarioActionPerformed(evt);
@@ -88,7 +176,7 @@ public class VistaLogin extends javax.swing.JFrame {
         btnIngresar.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
         btnIngresar.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresar.setText("INICIAR SESIÓN");
-        btnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnIngresar.setMaximumSize(new java.awt.Dimension(150, 40));
         btnIngresar.setMinimumSize(new java.awt.Dimension(150, 40));
         btnIngresar.setPreferredSize(new java.awt.Dimension(150, 40));
@@ -98,11 +186,6 @@ public class VistaLogin extends javax.swing.JFrame {
             }
         });
         PnlPrincipal.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 490, -1, 35));
-
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/SideIMG.png"))); // NOI18N
-        jLabel2.setText("jLabel2");
-        jLabel2.setAutoscrolls(true);
-        PnlPrincipal.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, 580, 650));
 
         jSseparadorUser.setForeground(new java.awt.Color(0, 0, 0));
         PnlPrincipal.add(jSseparadorUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 313, 360, 10));
@@ -120,6 +203,11 @@ public class VistaLogin extends javax.swing.JFrame {
 
         jPassTxt.setBackground(new java.awt.Color(255, 255, 255));
         jPassTxt.setBorder(null);
+        jPassTxt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPassTxtMousePressed(evt);
+            }
+        });
         jPassTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPassTxtActionPerformed(evt);
@@ -189,6 +277,54 @@ public class VistaLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jPassTxtActionPerformed
 
+    private void jHeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jHeaderMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_jHeaderMousePressed
+
+    private void jHeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jHeaderMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+        this.setLocation(x - xMouse, y - yMouse);
+    }//GEN-LAST:event_jHeaderMouseDragged
+
+    private void lblExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_lblExitMouseClicked
+
+    private void lblExitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseEntered
+        lblExit.setBackground(Color.red);
+        lblExit.setForeground(Color.white);
+    }//GEN-LAST:event_lblExitMouseEntered
+
+    private void lblExitMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseExited
+        lblExit.setBackground(Color.white);
+        lblExit.setForeground(Color.black);
+    }//GEN-LAST:event_lblExitMouseExited
+
+    private void txtUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuarioMousePressed
+        if (txtUsuario.getText().equals("Ingrese su nombre de usuario")){
+            txtUsuario.setText("");
+            txtUsuario.setForeground(Color.black);
+        }
+        if (String.valueOf(jPassTxt.getPassword()).isEmpty()){
+            jPassTxt.setText("********");
+            jPassTxt.setForeground(Color.gray);
+        }
+    }//GEN-LAST:event_txtUsuarioMousePressed
+
+    private void jPassTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPassTxtMousePressed
+        if (String.valueOf(jPassTxt.getPassword()).equals("********")){
+            jPassTxt.setText("");
+            jPassTxt.setForeground(Color.black);
+        }
+        if (txtUsuario.getText().isEmpty()){
+            txtUsuario.setText("Ingrese su nombre de usuario");
+            txtUsuario.setForeground(Color.gray);
+        }
+        
+    }//GEN-LAST:event_jPassTxtMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -227,10 +363,13 @@ public class VistaLogin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PnlPrincipal;
     private javax.swing.JButton btnIngresar;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel extBtn;
+    private javax.swing.JPanel jHeader;
     private javax.swing.JPasswordField jPassTxt;
     private javax.swing.JSeparator jSeparadorPas;
     private javax.swing.JSeparator jSseparadorUser;
+    private javax.swing.JLabel lblExit;
+    private javax.swing.JLabel lblImg;
     private javax.swing.JLabel lblPass;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblUsuario;
