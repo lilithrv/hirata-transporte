@@ -135,7 +135,7 @@ public class Vehiculo {
             throw new IllegalArgumentException("ERROR: El modelo del vehículo no puede tener más de 50 caracteres.");
         }
 
-        if (!modeloLimpia.matches("^[A-Z0-9ÁÉÍÓÚÑ\\s\\-]+$")) {
+        if (!modeloLimpia.matches("^[A-Z0-9ÁÉÍÓÚÑ\\s\\-\\.]+$")) {
             throw new IllegalArgumentException("ERROR: El modelo del vehículo solo debe contener letras, números, espacios o guiones.");
         }
 
