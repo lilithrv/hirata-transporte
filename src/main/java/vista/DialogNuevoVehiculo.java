@@ -8,9 +8,17 @@ import dao.KilometrajeDAO;
 import dao.MantenimientoDAO;
 import dao.UsuarioDAO;
 import dao.VehiculoDAO;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.border.Border;
 import modelo.Usuario;
+import modelo.Vehiculo;
 
 /**
  *
@@ -26,12 +34,17 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
     private VehiculoDAO vehiculoDAO;
     private UsuarioDAO usuarioDAO;
     private HashMap<String, Usuario> mapaUsuarios;
+    private Border bordeOriginal;
+    private Color colorOriginal;
 
     public DialogNuevoVehiculo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
         this.setSize(460, 550);
+
+        bordeOriginal = txtPatenteNuevo.getBorder();
+        colorOriginal = lblMensajePatente.getForeground();
 
         this.setLocationRelativeTo(parent);
         this.setTitle("Agregar Vehículo");
@@ -57,6 +70,40 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
             cmbAsignarNuevo.addItem(nombre);
             mapaUsuarios.put(nombre, u);
         }
+    }
+
+    private Border crearBordeError(Border bordeOriginal) {
+        return BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.RED, 2),
+                bordeOriginal
+        );
+    }
+
+    //fx para validar campos no nulos
+    private void validarTexto(JTextField campo, JLabel label) {
+        if (campo.getText().trim().isEmpty()) {
+            campo.setBorder(crearBordeError(bordeOriginal));
+            label.setForeground(Color.RED);
+        } else {
+            campo.setBorder(bordeOriginal);
+        }
+    }
+
+    //restaurar validacion
+    private void restaurarValidacion() {
+
+        // Restaurar bordes originales 
+        txtPatenteNuevo.setBorder(bordeOriginal);
+
+        // Ocultar mensajes de error
+        //Color fondo = pnlContenido.getBackground();
+        lblMensajePatente.setForeground(colorOriginal);
+
+        // Restaurar la tabla completa
+        //cargarTabla();
+
+        //  Mostrar mensaje
+        //JOptionPane.showMessageDialog(this, "Formulario y tabla restaurados. Mostrando todos los mantenimientos.");
     }
 
     /**
@@ -89,6 +136,7 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
         lblMensajeAnio = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
 
         lblNuevo.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         lblNuevo.setText("NUEVO VEHÍCULO");
@@ -107,22 +155,34 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
 
         lblKmInicialNuevo.setText("KM INICIAL");
 
+        btnAgregarNuevo.setBackground(new java.awt.Color(0, 0, 0));
         btnAgregarNuevo.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        btnAgregarNuevo.setForeground(new java.awt.Color(255, 255, 255));
         btnAgregarNuevo.setText("AGREGAR");
+        btnAgregarNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarNuevoActionPerformed(evt);
+            }
+        });
 
         lblMensajePatente.setFont(new java.awt.Font("Liberation Sans", 0, 10)); // NOI18N
+        lblMensajePatente.setForeground(new java.awt.Color(255, 255, 255));
         lblMensajePatente.setText("Campo requerido");
 
         lblMensajeMarca.setFont(new java.awt.Font("Liberation Sans", 0, 10)); // NOI18N
+        lblMensajeMarca.setForeground(new java.awt.Color(255, 255, 255));
         lblMensajeMarca.setText("Campo requerido");
 
         lblMensajeModelo.setFont(new java.awt.Font("Liberation Sans", 0, 10)); // NOI18N
+        lblMensajeModelo.setForeground(new java.awt.Color(255, 255, 255));
         lblMensajeModelo.setText("Campo requerido");
 
         lblMensajeKmInicial.setFont(new java.awt.Font("Liberation Sans", 0, 10)); // NOI18N
+        lblMensajeKmInicial.setForeground(new java.awt.Color(255, 255, 255));
         lblMensajeKmInicial.setText("Campo requerido");
 
         lblMensajeAnio.setFont(new java.awt.Font("Liberation Sans", 0, 10)); // NOI18N
+        lblMensajeAnio.setForeground(new java.awt.Color(255, 255, 255));
         lblMensajeAnio.setText("Campo requerido");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -153,8 +213,8 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
                                     .addComponent(txtAnioNuevo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(cmbAsignarNuevo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtKmInicialNuevo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAgregarNuevo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblMensajeKmInicial, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lblMensajeKmInicial, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnAgregarNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(6, 6, 6))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
@@ -208,13 +268,104 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
                     .addComponent(lblKmInicialNuevo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblMensajeKmInicial)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAgregarNuevo)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAgregarNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarNuevoActionPerformed
+        // TODO add your handling code here:
+        String patente = txtPatenteNuevo.getText().trim();
+        String marca = txtMarcaNuevo.getText().trim();
+        String modelo = txtModeloNuevo.getText().trim();
+        String anioStr = txtAnioNuevo.getText().trim();
+        String conductorSeleccionado = (String) cmbAsignarNuevo.getSelectedItem();
+        String kmStr = txtKmInicialNuevo.getText().trim();
+
+        validarTexto(txtPatenteNuevo, lblMensajePatente);
+        validarTexto(txtMarcaNuevo, lblMensajeMarca);
+        validarTexto(txtModeloNuevo, lblMensajeModelo);
+        validarTexto(txtAnioNuevo, lblMensajeAnio);
+        validarTexto(txtKmInicialNuevo, lblMensajeKmInicial);
+
+        // Validar año
+        if (anioStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El año es obligatorio.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int anio;
+        try {
+            anio = Integer.parseInt(anioStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El año debe ser un número entero positivo.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validar km inicial
+        if (kmStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El kilometraje inicial es obligatorio.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int kmInicial;
+        try {
+            kmInicial = Integer.parseInt(kmStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El kilometraje debe ser un número entero positivo.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verificar si no se asignó conductor
+        if (conductorSeleccionado == null || conductorSeleccionado.equals("Asignar")) {
+            int respuesta = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro que desea continuar sin asignar un conductor?",
+                    "Sin conductor",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            if (respuesta == JOptionPane.NO_OPTION) {
+                return;
+            }
+        }
+
+        try {
+
+            Vehiculo v = new Vehiculo();
+            v.setPatente(patente);
+            v.setMarca(marca);
+            v.setModelo(modelo);
+            v.setAnio(anio);
+            v.setKilometrajeInicial(Integer.parseInt(txtKmInicialNuevo.getText().trim()));
+            v.setFechaRegistro(new java.sql.Date(System.currentTimeMillis()));
+
+            // Si seleccionó conductor, asignarlo
+            if (conductorSeleccionado != null && !conductorSeleccionado.equals("Asignar")) {
+                Usuario conductor = mapaUsuarios.get(conductorSeleccionado);
+                v.setConductor(conductor);
+            }
+
+            boolean registrado = vehiculoDAO.registrar(v);
+
+           restaurarValidacion();
+
+            if (registrado) {
+                JOptionPane.showMessageDialog(this, "Vehículo agregado correctamente.");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo registrar el vehículo.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (IllegalArgumentException e) {
+            // errores en las reglas de negocio se muestran aca
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace(); // Imprime toda la traza del error
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAgregarNuevoActionPerformed
 
     /**
      * @param args the command line arguments
