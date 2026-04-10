@@ -61,11 +61,10 @@ public class VehiculoDAO {
     public boolean registrar(Vehiculo vehiculo) {
 
         if (buscarPorPatente(vehiculo.getPatente()) != null) {
-            System.out.println("Error: La patente " + vehiculo.getPatente() + " ya está registrada en el sistema.");
-            return false; // Retornamos false para que la Vista sepa que no se guardó
+            throw new IllegalArgumentException("La patente " + vehiculo.getPatente() + " ya está registrada.");
         }
 
-        String sql = "INSERT INTO vehiculos (patente, marca, modelo, anio, kilometraje) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO vehiculos (patente, marca, modelo, anio, kilometraje_inicial, id_conductor) VALUES (?, ?, ?, ?, ?, ?)";
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -74,6 +73,13 @@ public class VehiculoDAO {
             ps.setString(3, vehiculo.getModelo());
             ps.setInt(4, vehiculo.getAnio());
             ps.setInt(5, vehiculo.getKilometrajeInicial());
+
+            // Si no tiene conductor, insertar NULL
+            if (vehiculo.getConductor() != null) {
+                ps.setInt(6, vehiculo.getConductor().getIdUsuario());
+            } else {
+                ps.setNull(6, java.sql.Types.INTEGER);
+            }
 
             int filas = ps.executeUpdate();
             return filas > 0;

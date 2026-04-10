@@ -7,12 +7,14 @@ package vista;
 import dao.KilometrajeDAO;
 import dao.UsuarioDAO;
 import dao.VehiculoDAO;
+import java.awt.Color;
 import java.awt.Component;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import modelo.Kilometraje;
@@ -202,9 +204,11 @@ public class VistaAdminFlota extends javax.swing.JFrame {
         btnLimpiarFlota = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1260, 760));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        lblConductorFlota.setBackground(new java.awt.Color(255, 255, 255));
         lblConductorFlota.setPreferredSize(new java.awt.Dimension(1260, 760));
 
         jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
@@ -244,8 +248,14 @@ public class VistaAdminFlota extends javax.swing.JFrame {
 
         jLabel4.setText("KM INICIAL");
 
+        btnAsignar.setBackground(new java.awt.Color(0, 0, 0));
+        btnAsignar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        btnAsignar.setForeground(new java.awt.Color(255, 255, 255));
         btnAsignar.setText("ASIGNAR");
 
+        btnActualizarFlota.setBackground(new java.awt.Color(0, 0, 0));
+        btnActualizarFlota.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        btnActualizarFlota.setForeground(new java.awt.Color(255, 255, 255));
         btnActualizarFlota.setText("ACTUALIZAR VEHÍCULO");
         btnActualizarFlota.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -253,6 +263,9 @@ public class VistaAdminFlota extends javax.swing.JFrame {
             }
         });
 
+        btnAgregarFlota.setBackground(new java.awt.Color(0, 0, 0));
+        btnAgregarFlota.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        btnAgregarFlota.setForeground(new java.awt.Color(255, 255, 255));
         btnAgregarFlota.setText("NUEVO VEHÍCULO");
         btnAgregarFlota.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -260,6 +273,9 @@ public class VistaAdminFlota extends javax.swing.JFrame {
             }
         });
 
+        btnEliminarFlota.setBackground(new java.awt.Color(255, 0, 51));
+        btnEliminarFlota.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        btnEliminarFlota.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminarFlota.setText("ELIMINAR VEHÍCULO");
         btnEliminarFlota.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -267,6 +283,9 @@ public class VistaAdminFlota extends javax.swing.JFrame {
             }
         });
 
+        btnAgregarConductor.setBackground(new java.awt.Color(0, 0, 0));
+        btnAgregarConductor.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btnAgregarConductor.setForeground(new java.awt.Color(255, 255, 255));
         btnAgregarConductor.setText("AGREGAR CONDUCTOR");
         btnAgregarConductor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -274,6 +293,9 @@ public class VistaAdminFlota extends javax.swing.JFrame {
             }
         });
 
+        btnLimpiarFlota.setBackground(new java.awt.Color(0, 0, 0));
+        btnLimpiarFlota.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        btnLimpiarFlota.setForeground(new java.awt.Color(255, 255, 255));
         btnLimpiarFlota.setText("LIMPIAR CAMPOS");
         btnLimpiarFlota.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -285,10 +307,6 @@ public class VistaAdminFlota extends javax.swing.JFrame {
         lblConductorFlota.setLayout(lblConductorFlotaLayout);
         lblConductorFlotaLayout.setHorizontalGroup(
             lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblConductorFlotaLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(309, 309, 309))
             .addGroup(lblConductorFlotaLayout.createSequentialGroup()
                 .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(lblConductorFlotaLayout.createSequentialGroup()
@@ -311,14 +329,14 @@ public class VistaAdminFlota extends javax.swing.JFrame {
                                     .addComponent(txtAnioFlota)
                                     .addComponent(cmbConductorFlota, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(txtKmInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(283, 283, 283)
-                                .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnEliminarFlota, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnAgregarFlota, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(46, 46, 46)
-                                .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnActualizarFlota, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnLimpiarFlota, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addGap(217, 217, 217)
+                                .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnAgregarFlota, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnEliminarFlota))
+                                .addGap(49, 49, 49)
+                                .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnLimpiarFlota, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnActualizarFlota)))))
                     .addGroup(lblConductorFlotaLayout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 991, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -326,8 +344,11 @@ public class VistaAdminFlota extends javax.swing.JFrame {
                         .addComponent(btnAgregarConductor))
                     .addGroup(lblConductorFlotaLayout.createSequentialGroup()
                         .addGap(251, 251, 251)
-                        .addComponent(btnAsignar)))
-                .addContainerGap(11, Short.MAX_VALUE))
+                        .addComponent(btnAsignar))
+                    .addGroup(lblConductorFlotaLayout.createSequentialGroup()
+                        .addGap(415, 415, 415)
+                        .addComponent(jLabel1)))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         lblConductorFlotaLayout.setVerticalGroup(
             lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -345,26 +366,32 @@ public class VistaAdminFlota extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnActualizarFlota, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnAgregarFlota, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblPatenteFlota)
-                        .addComponent(txtPatenteFlota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(1, 1, 1)
-                .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblMarcaFlota)
-                    .addComponent(txtMarcaFlota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblModeloFlota)
-                    .addComponent(txtModeloFlota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEliminarFlota, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLimpiarFlota, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAnioFlota)
-                    .addComponent(txtAnioFlota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(lblConductorFlotaLayout.createSequentialGroup()
+                        .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblPatenteFlota)
+                            .addComponent(txtPatenteFlota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblMarcaFlota)
+                            .addComponent(txtMarcaFlota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAgregarFlota, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnActualizarFlota, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(lblConductorFlotaLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblModeloFlota)
+                            .addComponent(txtModeloFlota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblAnioFlota)
+                            .addComponent(txtAnioFlota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(lblConductorFlotaLayout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEliminarFlota, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnLimpiarFlota, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbConductorFlota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -467,7 +494,7 @@ public class VistaAdminFlota extends javax.swing.JFrame {
             vehiculoDAO.eliminar(patente);
 
             JOptionPane.showMessageDialog(this,
-                    "Mantenimiento eliminado correctamente",
+                    "Vehículo eliminado correctamente",
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
 
@@ -476,7 +503,7 @@ public class VistaAdminFlota extends javax.swing.JFrame {
             cargarTabla();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                    "Error al eliminar país: " + e.getMessage(),
+                    "Error al eliminar vehículoú: " + e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -522,6 +549,8 @@ public class VistaAdminFlota extends javax.swing.JFrame {
     private void btnAgregarFlotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarFlotaActionPerformed
         // TODO add your handling code here:
         DialogNuevoVehiculo dialog = new DialogNuevoVehiculo(this, true);
+        
+         dialog.getContentPane().setBackground(new Color(255,255,255));
         dialog.setVisible(true);
         cargarTabla();
     }//GEN-LAST:event_btnAgregarFlotaActionPerformed

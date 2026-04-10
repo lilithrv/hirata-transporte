@@ -41,11 +41,13 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
     private VehiculoDAO vehiculoDAO;
     private Mantenimiento mantenimientoSeleccionado;
     private Border bordeOriginal;
+    private Color colorOriginal;
 
     public VistaAdminMantenimiento() {
         initComponents();
 
         bordeOriginal = txtPaneDescripcion.getBorder();
+        colorOriginal = lblMensajeDescripcion.getForeground();
 
         this.setSize(1260, 750);
 
@@ -211,7 +213,7 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
     private void validarTexto(JTextPane campo, JLabel label) {
         if (campo.getText().trim().isEmpty()) {
             campo.setBorder(crearBordeError(bordeOriginal));
-            label.setForeground(Color.BLACK);
+            label.setForeground(Color.RED);
         } else {
             campo.setBorder(bordeOriginal);
             label.setForeground(pnlContenido.getBackground());
@@ -266,6 +268,8 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(664, 70));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        pnlContenido.setBackground(new java.awt.Color(255, 255, 255));
+
         lblMantenimiento.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         lblMantenimiento.setText("MENÚ MANTENIMIENTO");
 
@@ -288,6 +292,8 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tablaMantenimiento);
 
         lblDatos.setText("Datos Mantenimiento");
+
+        pnlDatos.setBackground(new java.awt.Color(255, 255, 255));
 
         lblPatente.setText("PATENTE");
 
@@ -317,6 +323,9 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(txtPaneDescripcion);
 
+        btnActualizar.setBackground(new java.awt.Color(0, 0, 0));
+        btnActualizar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        btnActualizar.setForeground(new java.awt.Color(255, 255, 255));
         btnActualizar.setText("ACTUALIZAR");
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -324,6 +333,9 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
             }
         });
 
+        btnLimpiar.setBackground(new java.awt.Color(0, 0, 0));
+        btnLimpiar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        btnLimpiar.setForeground(new java.awt.Color(255, 255, 255));
         btnLimpiar.setText("LIMPIAR");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -332,9 +344,12 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
         });
 
         lblMensajeDescripcion.setFont(new java.awt.Font("Liberation Sans", 1, 10)); // NOI18N
-        lblMensajeDescripcion.setForeground(new java.awt.Color(242, 242, 242));
+        lblMensajeDescripcion.setForeground(new java.awt.Color(255, 255, 255));
         lblMensajeDescripcion.setText("Campo requerido");
 
+        btnEliminar.setBackground(new java.awt.Color(255, 0, 0));
+        btnEliminar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("ELIMINAR");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -376,13 +391,6 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
                             .addComponent(cmbTipoMantenimiento, 0, 165, Short.MAX_VALUE)
                             .addComponent(cmbOrigenMantenimiento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlDatosLayout.createSequentialGroup()
-                        .addGap(133, 133, 133)
-                        .addComponent(lblDescripcion)
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblMensajeDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDatosLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -393,7 +401,16 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
                                 .addContainerGap())
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDatosLayout.createSequentialGroup()
                                 .addComponent(btnEliminar)
-                                .addGap(75, 75, 75))))))
+                                .addGap(75, 75, 75))))
+                    .addGroup(pnlDatosLayout.createSequentialGroup()
+                        .addGap(133, 133, 133)
+                        .addComponent(lblDescripcion)
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlDatosLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(lblMensajeDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)))))
         );
         pnlDatosLayout.setVerticalGroup(
             pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -413,7 +430,8 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblModelo)
-                            .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblMensajeDescripcion))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblAnio)
@@ -441,9 +459,7 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
                         .addGap(39, 39, 39))
                     .addGroup(pnlDatosLayout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblMensajeDescripcion)
-                        .addGap(18, 18, 18)
+                        .addGap(37, 37, 37)
                         .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnActualizar)
                             .addComponent(btnLimpiar))
@@ -452,6 +468,9 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
+        btnCorrectivo.setBackground(new java.awt.Color(0, 0, 0));
+        btnCorrectivo.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btnCorrectivo.setForeground(new java.awt.Color(255, 255, 255));
         btnCorrectivo.setText("<html>PROGRAMAR<br>MANTENIMIENTO</html>");
         btnCorrectivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -566,6 +585,7 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
 
         // Ocultar mensajes de error
         Color fondo = pnlContenido.getBackground();
+        lblMensajeDescripcion.setForeground(colorOriginal);
 
         // Restaurar la tabla completa
         cargarTabla();
