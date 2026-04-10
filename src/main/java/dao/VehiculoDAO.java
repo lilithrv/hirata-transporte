@@ -84,15 +84,22 @@ public class VehiculoDAO {
     }
 
     public boolean actualizar(Vehiculo vehiculo) {
-        String sql = "UPDATE vehiculos SET marca = ?, modelo = ?, anio = ?, kilometraje = ? WHERE id_vehiculo = ?";
+        Vehiculo existente = buscarPorPatente(vehiculo.getPatente());
+
+        if (existente != null && existente.getIdVehiculo() != vehiculo.getIdVehiculo()) {
+            throw new IllegalArgumentException("ERROR: La patente " + vehiculo.getPatente() + " ya está registrada en otro vehículo.");
+        }
+
+        String sql = "UPDATE vehiculos SET patente = ?, marca = ?, modelo = ?, anio = ?, kilometraje_inicial = ? WHERE id_vehiculo = ?";
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, vehiculo.getMarca());
-            ps.setString(2, vehiculo.getModelo());
-            ps.setInt(3, vehiculo.getAnio());
-            ps.setInt(4, vehiculo.getKilometrajeInicial());
-            ps.setInt(5, vehiculo.getIdVehiculo());
+            ps.setString(1, vehiculo.getPatente());
+            ps.setString(2, vehiculo.getMarca());
+            ps.setString(3, vehiculo.getModelo());
+            ps.setInt(4, vehiculo.getAnio());
+            ps.setInt(5, vehiculo.getKilometrajeInicial());
+            ps.setInt(6, vehiculo.getIdVehiculo());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -117,7 +124,7 @@ public class VehiculoDAO {
                     v.setMarca(rs.getString("marca"));
                     v.setModelo(rs.getString("modelo"));
                     v.setAnio(rs.getInt("anio"));
-                    v.setKilometrajeInicial(rs.getInt("kilometraje"));
+                    v.setKilometrajeInicial(rs.getInt("kilometraje_inicial"));
                     return v;
                 }
             }
@@ -242,6 +249,5 @@ public class VehiculoDAO {
 
         return v;
     }
-    
 
 } // Class

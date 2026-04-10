@@ -233,7 +233,7 @@ public class UsuarioDAO {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 Usuario u = new Usuario();
                 u.setIdUsuario(rs.getInt("id_usuario"));
@@ -244,6 +244,35 @@ public class UsuarioDAO {
 
         } catch (SQLException e) {
             System.out.println("Error al listar conductores: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    public List<Usuario> listarConductoresSinAsignacion() {
+        List<Usuario> lista = new ArrayList<>();
+
+        String sql = "SELECT u.id_usuario, u.nombre, u.email "
+                + "FROM usuarios u "
+                + "JOIN roles r ON u.id_rol = r.id_rol "
+                + "WHERE r.nombre = 'Conductor' "
+                + "AND u.id_usuario NOT IN (SELECT id_conductor FROM vehiculos WHERE id_conductor IS NOT NULL) "
+                + "ORDER BY u.nombre ASC";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("id_usuario"));
+                u.setNombreUsuario(rs.getString("nombre"));
+                u.setEmail(rs.getString("email"));
+                lista.add(u);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al listar conductores sin asignación: " + e.getMessage());
         }
         return lista;
     }
