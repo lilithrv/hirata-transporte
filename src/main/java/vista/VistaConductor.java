@@ -119,6 +119,7 @@ public class VistaConductor extends javax.swing.JFrame {
         txtKmUltimoRegistrado = new javax.swing.JTextField();
         lblPatente = new javax.swing.JLabel();
         txtPatente = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1000, 650));
@@ -221,6 +222,14 @@ public class VistaConductor extends javax.swing.JFrame {
         txtPatente.setPreferredSize(new java.awt.Dimension(220, 23));
         pnlPrincipal.add(txtPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
 
+        jButton1.setText("CERRAR SESIÓN");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        pnlPrincipal.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -277,7 +286,7 @@ public class VistaConductor extends javax.swing.JFrame {
                 int kmReferenciaMant = (kmUltimoMant != null) ? kmUltimoMant : vehiculo.getKilometrajeInicial();
 
                 int diferencia = kmNuevo - kmReferenciaMant;
-                
+
                 if (diferencia >= 5000) {
                     // Insertar mantenimiento
                     Mantenimiento mant = new Mantenimiento();
@@ -305,6 +314,21 @@ public class VistaConductor extends javax.swing.JFrame {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEnviarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que desea cerrar sesión?",
+                "Cerrar sesión",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            util.Sesion.cerrarSesion(); // limpiar sesión
+            new VistaLogin().setVisible(true); // abrir login
+            this.dispose(); // cerrar vista actual
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -343,6 +367,7 @@ public class VistaConductor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblAnio;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblKilometroF;
