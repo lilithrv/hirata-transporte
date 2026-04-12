@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
- * @author Jonathan Fuentealba, Gustavo Gallegos, Leslie Reyes
+ * @author Jonathan Fuentealba, Gustavo Gallegos, Rodolfo Guerrero, Leslie Reyes
  */
 public class UsuarioTest {
 
