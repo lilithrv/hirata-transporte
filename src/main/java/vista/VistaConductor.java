@@ -7,8 +7,14 @@ package vista;
 import dao.KilometrajeDAO;
 import dao.MantenimientoDAO;
 import dao.VehiculoDAO;
+import java.awt.Component;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import modelo.Kilometraje;
 import modelo.Mantenimiento;
 import modelo.Usuario;
@@ -49,6 +55,65 @@ public class VistaConductor extends javax.swing.JFrame {
 
         //cargar datos conductor
         cargarDatos();
+        cargarTablaViajes();
+    }
+
+    private void cargarTablaViajes() {
+        KilometrajeDAO dao = new KilometrajeDAO();
+        Usuario conductorLogueado = Sesion.getUsuarioActivo();
+        List<Kilometraje> viajes = dao.historialPorConductor(conductorLogueado.getIdUsuario());
+
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[]{
+            "Patente", "Marca", "Modelo", "Origen", "Destino", "Km", "Fecha"
+        });
+
+        if (viajes.isEmpty()) {
+           jScrollPane1.setVisible(false);      // ocultar tabla
+            lblSinViajes.setText("No tienes viajes registrados aún");
+            lblSinViajes.setVisible(true);          
+            return;
+        }
+
+        // Si hay datos
+        lblSinViajes.setVisible(false);            // ocultar label
+       jScrollPane1.setVisible(true);            // mostrar tabla
+        for (Kilometraje k : viajes) {
+            modelo.addRow(new Object[]{
+                k.getVehiculo().getPatente(),
+                k.getVehiculo().getMarca(),
+                k.getVehiculo().getModelo(),
+                k.getDireccionOrigen(),
+                k.getDireccionTermino(),
+                k.getKilometros(),
+                k.getFechaRegistro()
+            });
+        }
+
+        tablaConductor.setModel(modelo);
+
+        // Ajusta cada columna al contenido más ancho
+        tablaConductor.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        for (int col = 0; col < tablaConductor.getColumnCount(); col++) {
+            int maxAncho = 0;
+
+            // Medir el header
+            TableColumn columna = tablaConductor.getColumnModel().getColumn(col);
+            TableCellRenderer headerRenderer = tablaConductor.getTableHeader().getDefaultRenderer();
+            Component headerComp = headerRenderer.getTableCellRendererComponent(
+                    tablaConductor, columna.getHeaderValue(), false, false, 0, col);
+            maxAncho = headerComp.getPreferredSize().width;
+
+            // Medir cada celda de esa columna
+            for (int fila = 0; fila < tablaConductor.getRowCount(); fila++) {
+                TableCellRenderer renderer = tablaConductor.getCellRenderer(fila, col);
+                Component comp = tablaConductor.prepareRenderer(renderer, fila, col);
+                maxAncho = Math.max(maxAncho, comp.getPreferredSize().width);
+            }
+
+            columna.setPreferredWidth(maxAncho + 8);
+        }
     }
 
     private void bloquearCampos() {
@@ -100,8 +165,6 @@ public class VistaConductor extends javax.swing.JFrame {
 
         pnlPrincipal = new javax.swing.JPanel();
         lblInfo = new javax.swing.JLabel();
-        lblNombre = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
         txtMarca = new javax.swing.JTextField();
         lblMarca = new javax.swing.JLabel();
         lblModelo = new javax.swing.JLabel();
@@ -119,6 +182,10 @@ public class VistaConductor extends javax.swing.JFrame {
         txtKmUltimoRegistrado = new javax.swing.JTextField();
         lblPatente = new javax.swing.JLabel();
         txtPatente = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaConductor = new javax.swing.JTable();
+        lblSinViajes = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1000, 650));
@@ -134,58 +201,45 @@ public class VistaConductor extends javax.swing.JFrame {
         lblInfo.setText("Información del Conductor");
         pnlPrincipal.add(lblInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, -1));
 
-        lblNombre.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        lblNombre.setText("Nombre");
-        pnlPrincipal.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, -1, -1));
-
-        txtNombre.setMaximumSize(new java.awt.Dimension(80, 23));
-        txtNombre.setPreferredSize(new java.awt.Dimension(220, 23));
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
-            }
-        });
-        pnlPrincipal.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, -1, -1));
-
         txtMarca.setMaximumSize(new java.awt.Dimension(80, 23));
         txtMarca.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(txtMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, -1, -1));
+        pnlPrincipal.add(txtMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 350, -1, -1));
 
         lblMarca.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         lblMarca.setText("Marca");
-        pnlPrincipal.add(lblMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, -1, -1));
+        pnlPrincipal.add(lblMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 360, -1, -1));
 
         lblModelo.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         lblModelo.setText("Modelo");
-        pnlPrincipal.add(lblModelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, -1, -1));
+        pnlPrincipal.add(lblModelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 410, -1, -1));
 
         lblAnio.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         lblAnio.setText("Año");
-        pnlPrincipal.add(lblAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, -1));
+        pnlPrincipal.add(lblAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, -1, -1));
 
         txtModelo.setMaximumSize(new java.awt.Dimension(80, 23));
         txtModelo.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(txtModelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, -1, -1));
+        pnlPrincipal.add(txtModelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 440, -1, -1));
 
         txtAnio.setMaximumSize(new java.awt.Dimension(80, 23));
         txtAnio.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(txtAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 300, -1, -1));
+        pnlPrincipal.add(txtAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 410, -1, -1));
 
         lblKmUltimoRegistro.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         lblKmUltimoRegistro.setText("Fecha ultimo registro´");
-        pnlPrincipal.add(lblKmUltimoRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, -1, -1));
+        pnlPrincipal.add(lblKmUltimoRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 530, -1, -1));
 
         txtKilometroI.setMaximumSize(new java.awt.Dimension(80, 23));
         txtKilometroI.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(txtKilometroI, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 330, -1, -1));
+        pnlPrincipal.add(txtKilometroI, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 450, -1, -1));
 
         txtFechaUltimoKm.setMaximumSize(new java.awt.Dimension(80, 23));
         txtFechaUltimoKm.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(txtFechaUltimoKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 400, -1, -1));
+        pnlPrincipal.add(txtFechaUltimoKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 520, -1, -1));
 
         lblKilometroF.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         lblKilometroF.setText("Kilómetro Final");
-        pnlPrincipal.add(lblKilometroF, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 450, -1, -1));
+        pnlPrincipal.add(lblKilometroF, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 500, -1, -1));
 
         btnEnviar.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         btnEnviar.setForeground(new java.awt.Color(255, 255, 255));
@@ -195,31 +249,57 @@ public class VistaConductor extends javax.swing.JFrame {
                 btnEnviarActionPerformed(evt);
             }
         });
-        pnlPrincipal.add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 520, 180, 40));
+        pnlPrincipal.add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 560, 180, 40));
 
         lblKilometroI1.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         lblKilometroI1.setText("Kilómetro Inicial");
-        pnlPrincipal.add(lblKilometroI1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
+        pnlPrincipal.add(lblKilometroI1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, -1, -1));
 
         txtNuevoKm.setMaximumSize(new java.awt.Dimension(80, 23));
         txtNuevoKm.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(txtNuevoKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 450, -1, -1));
+        pnlPrincipal.add(txtNuevoKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 500, -1, -1));
 
         lblKmUltimoRegistro1.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         lblKmUltimoRegistro1.setText("último km registrado");
-        pnlPrincipal.add(lblKmUltimoRegistro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, -1, -1));
+        pnlPrincipal.add(lblKmUltimoRegistro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 490, -1, -1));
 
         txtKmUltimoRegistrado.setMaximumSize(new java.awt.Dimension(80, 23));
         txtKmUltimoRegistrado.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(txtKmUltimoRegistrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 370, -1, -1));
+        pnlPrincipal.add(txtKmUltimoRegistrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 480, -1, -1));
 
         lblPatente.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         lblPatente.setText("Patente");
-        pnlPrincipal.add(lblPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, -1, -1));
+        pnlPrincipal.add(lblPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 370, -1, -1));
 
         txtPatente.setMaximumSize(new java.awt.Dimension(80, 23));
         txtPatente.setPreferredSize(new java.awt.Dimension(220, 23));
-        pnlPrincipal.add(txtPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
+        pnlPrincipal.add(txtPatente, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 380, -1, -1));
+
+        jButton1.setText("CERRAR SESIÓN");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        pnlPrincipal.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, -1, -1));
+
+        tablaConductor.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tablaConductor);
+
+        pnlPrincipal.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 840, 130));
+
+        lblSinViajes.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        pnlPrincipal.add(lblSinViajes, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, 730, 90));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -234,10 +314,6 @@ public class VistaConductor extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreActionPerformed
 
     private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
         // TODO add your handling code here:
@@ -277,7 +353,7 @@ public class VistaConductor extends javax.swing.JFrame {
                 int kmReferenciaMant = (kmUltimoMant != null) ? kmUltimoMant : vehiculo.getKilometrajeInicial();
 
                 int diferencia = kmNuevo - kmReferenciaMant;
-                
+
                 if (diferencia >= 5000) {
                     // Insertar mantenimiento
                     Mantenimiento mant = new Mantenimiento();
@@ -305,6 +381,21 @@ public class VistaConductor extends javax.swing.JFrame {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEnviarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que desea cerrar sesión?",
+                "Cerrar sesión",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            util.Sesion.cerrarSesion(); // limpiar sesión
+            new VistaLogin().setVisible(true); // abrir login
+            this.dispose(); // cerrar vista actual
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -343,6 +434,8 @@ public class VistaConductor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviar;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAnio;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblKilometroF;
@@ -351,16 +444,16 @@ public class VistaConductor extends javax.swing.JFrame {
     private javax.swing.JLabel lblKmUltimoRegistro1;
     private javax.swing.JLabel lblMarca;
     private javax.swing.JLabel lblModelo;
-    private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblPatente;
+    private javax.swing.JLabel lblSinViajes;
     private javax.swing.JPanel pnlPrincipal;
+    private javax.swing.JTable tablaConductor;
     private javax.swing.JTextField txtAnio;
     private javax.swing.JTextField txtFechaUltimoKm;
     private javax.swing.JTextField txtKilometroI;
     private javax.swing.JTextField txtKmUltimoRegistrado;
     private javax.swing.JTextField txtMarca;
     private javax.swing.JTextField txtModelo;
-    private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtNuevoKm;
     private javax.swing.JTextField txtPatente;
     // End of variables declaration//GEN-END:variables

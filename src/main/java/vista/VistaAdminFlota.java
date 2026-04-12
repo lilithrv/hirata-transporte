@@ -202,6 +202,7 @@ public class VistaAdminFlota extends javax.swing.JFrame {
         btnEliminarFlota = new javax.swing.JButton();
         btnAgregarConductor = new javax.swing.JButton();
         btnLimpiarFlota = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -303,6 +304,13 @@ public class VistaAdminFlota extends javax.swing.JFrame {
             }
         });
 
+        btnLogout.setText("CERRAR SESIÓN");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout lblConductorFlotaLayout = new javax.swing.GroupLayout(lblConductorFlota);
         lblConductorFlota.setLayout(lblConductorFlotaLayout);
         lblConductorFlotaLayout.setHorizontalGroup(
@@ -344,17 +352,25 @@ public class VistaAdminFlota extends javax.swing.JFrame {
                         .addComponent(btnAgregarConductor))
                     .addGroup(lblConductorFlotaLayout.createSequentialGroup()
                         .addGap(251, 251, 251)
-                        .addComponent(btnAsignar))
-                    .addGroup(lblConductorFlotaLayout.createSequentialGroup()
-                        .addGap(415, 415, 415)
-                        .addComponent(jLabel1)))
+                        .addComponent(btnAsignar)))
                 .addContainerGap(21, Short.MAX_VALUE))
+            .addGroup(lblConductorFlotaLayout.createSequentialGroup()
+                .addGap(415, 415, 415)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLogout)
+                .addGap(33, 33, 33))
         );
         lblConductorFlotaLayout.setVerticalGroup(
             lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(lblConductorFlotaLayout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(jLabel1)
+                .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(lblConductorFlotaLayout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel1))
+                    .addGroup(lblConductorFlotaLayout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(btnLogout)))
                 .addGap(18, 18, 18)
                 .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(lblConductorFlotaLayout.createSequentialGroup()
@@ -462,6 +478,11 @@ public class VistaAdminFlota extends javax.swing.JFrame {
 
     private void btnAgregarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarConductorActionPerformed
         // TODO add your handling code here:
+        DialogAgregarConductor dialog = new DialogAgregarConductor(this, true);
+
+        dialog.getContentPane().setBackground(new Color(255, 255, 255));
+        dialog.setVisible(true);
+        cargarComboConductor();
     }//GEN-LAST:event_btnAgregarConductorActionPerformed
 
     private void btnEliminarFlotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarFlotaActionPerformed
@@ -549,11 +570,26 @@ public class VistaAdminFlota extends javax.swing.JFrame {
     private void btnAgregarFlotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarFlotaActionPerformed
         // TODO add your handling code here:
         DialogNuevoVehiculo dialog = new DialogNuevoVehiculo(this, true);
-        
-         dialog.getContentPane().setBackground(new Color(255,255,255));
+
+        dialog.getContentPane().setBackground(new Color(255, 255, 255));
         dialog.setVisible(true);
         cargarTabla();
     }//GEN-LAST:event_btnAgregarFlotaActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que desea cerrar sesión?",
+                "Cerrar sesión",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            util.Sesion.cerrarSesion(); // limpiar sesión
+            new VistaLogin().setVisible(true); // abrir login
+            this.dispose(); // cerrar vista actual
+        }
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -597,6 +633,7 @@ public class VistaAdminFlota extends javax.swing.JFrame {
     private javax.swing.JButton btnAsignar;
     private javax.swing.JButton btnEliminarFlota;
     private javax.swing.JButton btnLimpiarFlota;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JComboBox<String> cmbConductorFlota;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

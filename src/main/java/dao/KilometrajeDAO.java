@@ -133,4 +133,53 @@ public class KilometrajeDAO {
 
         return kilometraje; // si no hay km registrados, retorna null
     }
+
+    public List<Kilometraje> historialPorConductor(int idConductor) {
+        List<Kilometraje> lista = new ArrayList<>();
+
+        String sql = "SELECT k.id_kilometraje, k.kilometros, k.fecha_registro, "
+                + "k.direccion_origen, k.direccion_termino, "
+                + "u.id_usuario, u.nombre AS nombre_conductor, "
+                + "v.id_vehiculo, v.patente, v.marca, v.modelo "
+                + "FROM kilometraje k "
+                + "JOIN usuarios u ON k.id_conductor = u.id_usuario "
+                + "JOIN vehiculos v ON k.id_vehiculo = v.id_vehiculo "
+                + "WHERE k.id_conductor = ? " // <-- única diferencia con verTodos()
+                + "ORDER BY k.fecha_registro DESC";
+
+        Connection conn = Conexion.getInstancia();
+        try {
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, idConductor);                   
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Usuario conductor = new Usuario();
+                conductor.setIdUsuario(rs.getInt("id_usuario"));
+                conductor.setNombreUsuario(rs.getString("nombre_conductor"));
+
+                Vehiculo vehiculo = new Vehiculo();
+                vehiculo.setIdVehiculo(rs.getInt("id_vehiculo"));
+                vehiculo.setPatente(rs.getString("patente"));
+                vehiculo.setMarca(rs.getString("marca"));
+                vehiculo.setModelo(rs.getString("modelo"));
+
+                Kilometraje k = new Kilometraje();
+                k.setIdKilometraje(rs.getInt("id_kilometraje"));
+                k.setConductor(conductor);
+                k.setVehiculo(vehiculo);
+                k.setKilometros(rs.getInt("kilometros"));
+                k.setDireccionOrigen(rs.getString("direccion_origen"));
+                k.setDireccionTermino(rs.getString("direccion_termino"));
+                k.setFechaRegistro(rs.getTimestamp("fecha_registro"));
+
+                lista.add(k);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener historial: " + e.getMessage());
+        }
+
+        return lista;
+    }
 }
