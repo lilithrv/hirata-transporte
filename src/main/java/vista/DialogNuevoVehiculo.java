@@ -86,6 +86,7 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
             label.setForeground(Color.RED);
         } else {
             campo.setBorder(bordeOriginal);
+            label.setForeground(colorOriginal);
         }
     }
 
@@ -96,14 +97,7 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
         txtPatenteNuevo.setBorder(bordeOriginal);
 
         // Ocultar mensajes de error
-        //Color fondo = pnlContenido.getBackground();
         lblMensajePatente.setForeground(colorOriginal);
-
-        // Restaurar la tabla completa
-        //cargarTabla();
-
-        //  Mostrar mensaje
-        //JOptionPane.showMessageDialog(this, "Formulario y tabla restaurados. Mostrando todos los mantenimientos.");
     }
 
     /**
@@ -291,12 +285,12 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
         validarTexto(txtAnioNuevo, lblMensajeAnio);
         validarTexto(txtKmInicialNuevo, lblMensajeKmInicial);
 
-        // Validar año
-        if (anioStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El año es obligatorio.", "Error", JOptionPane.WARNING_MESSAGE);
-            return;
+        if (patente.isEmpty() || marca.isEmpty() || modelo.isEmpty()
+                || anioStr.isEmpty() || kmStr.isEmpty()) {
+            return; // los campos ya están marcados en rojo
         }
 
+        // Validar año
         int anio;
         try {
             anio = Integer.parseInt(anioStr);
@@ -306,10 +300,6 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
         }
 
         // Validar km inicial
-        if (kmStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El kilometraje inicial es obligatorio.", "Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
 
         int kmInicial;
         try {
@@ -350,7 +340,7 @@ public class DialogNuevoVehiculo extends javax.swing.JDialog {
 
             boolean registrado = vehiculoDAO.registrar(v);
 
-           restaurarValidacion();
+            restaurarValidacion();
 
             if (registrado) {
                 JOptionPane.showMessageDialog(this, "Vehículo agregado correctamente.");
