@@ -1,15 +1,17 @@
+
 /* 
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Other/SQLTemplate.sql to edit this template
  */
 /**
- * Author:  leslie
- * Created: 9 abr 2026
+ * Author:  Jonathan Fuentealba, Gustavo Gallegos, Rodolfo Guerrero, Rodolfo Guerrero, Leslie Reyes
+ * Created: 14 mar 2026
  */
 
-CREATE DATABASE IF NOT EXISTS transporte_hirata;
+CREATE DATABASE IF NOT EXISTS mantenimiento_test;
 
-USE transporte_hirata;
+USE mantenimiento_test;
+
 
 CREATE TABLE roles (
     id_rol INT AUTO_INCREMENT PRIMARY KEY,
@@ -414,4 +416,3 @@ INSERT INTO mantenimiento (id_vehiculo, estado, tipo_mantenimiento, origen, desc
 (47, 'Programado', 'Correctivo', 'Sistema', 'Cambio de inyectores', 242860, 11),
 (10, 'Programado', 'Preventivo', 'Sistema', 'Revisión de frenos y suspensión', 195380, 2),
 (57, 'Programado', 'Correctivo', 'Sistema', 'Cambio de embrague', 93308, 2);
-

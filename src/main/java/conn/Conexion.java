@@ -4,60 +4,93 @@
  */
 package conn;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  *
  * @author Jonathan Fuentealba, Gustavo Gallegos, Rodolfo Guerrero, Leslie Reyes
  */
 public class Conexion {
-    private static final String NAME_DB = "transporte_hirata";
-    private static final String USER = "root";
-    private static final String PASSWORD = "root";
-    private static final String HOST = "localhost";
-    private static final String PORT = "3306";
-    private static final String CONN = "jdbc:mysql://" + HOST + ":" + PORT + "/" + NAME_DB + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    
-// comenzar con el patron singleton
+
+    private static final Properties props = new Properties();
+    private static String dbActual;
     private static Connection conn;
 
+    // Bloque estático para cargar las propiedades una sola vez al iniciar la clase
+    static {
+        try (InputStream input = Conexion.class.getClassLoader().getResourceAsStream("config/dbConfig.properties")) {
+            if (input == null) {
+                System.out.println("❌ No se encontró config/dbConfig.properties. Usando valores por defecto.");
+                dbActual = "transporte_hirata";
+            } else {
+                props.load(input);
+                dbActual = props.getProperty("db.name");
+                System.out.println("⚙️ Configuración de base de datos cargada.");
+            }
+        } catch (IOException e) {
+            System.err.println("❌ Error al leer el archivo de configuración: " + e.getMessage());
+        }
+    }
+
+    // Constructor privado para cumplir con el patrón Singleton estrictamente
     private Conexion() {
         try {
-            // Cargar el driver (opcional desde JDBC 4.0, pero se puede incluir)
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            // Crear la conexión
-            conn = DriverManager.getConnection(CONN, USER, PASSWORD);
-            System.out.println("✅ Conexión exitosa a MySQL 8.0.33");
-        } catch (ClassNotFoundException e) {
-            System.out.println("❌ No se encontró el driver JDBC");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            System.out.println("❌ Error al conectar con la base de datos");
+            // Construimos la URL usando las propiedades del archivo
+            String host = props.getProperty("db.host", "localhost");
+            String port = props.getProperty("db.port", "3306");
+            String user = props.getProperty("db.user", "root");
+            String pass = props.getProperty("db.pass", "root");
+
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + dbActual
+                    + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+
+            conn = DriverManager.getConnection(url, user, pass);
+            System.out.println("✅ Singleton conectado exitosamente a: " + dbActual);
+
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println("❌ Error en la conexión Singleton");
             e.printStackTrace();
         }
     }
 
-    // Método para obtener la instancia única
+    /**
+     * El "Interruptor" para los Tests Unitarios. Cambia el nombre de la DB y
+     * reinicia la instancia.
+     */
+    public static void setModoTest(boolean esTest) {
+        dbActual = esTest ? props.getProperty("db.test_name", "mantenimiento_test")
+                : props.getProperty("db.name", "transporte_hirata");
+        // Forzamos el cierre para que la próxima llamada a getInstancia cree una nueva con la otra DB
+        close();
+    }
+
+    // Método para obtener la instancia única (Lazy Initialization)
     public static Connection getInstancia() {
         if (conn == null) {
             new Conexion();
         }
         return conn;
     }
-    
-    // Cierre
-    public static void close() throws SQLException {
+
+    // Cierre de conexión seguro
+    public static void close() {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
-                conn = null;
-                System.out.println("Conexión cerrada correctamente");
+                System.out.println("🔌 Conexión [" + dbActual + "] cerrada correctamente.");
             }
         } catch (SQLException e) {
-            System.out.println("Error al cerrar: " + e.getMessage());
+            System.out.println("❌ Error al cerrar: " + e.getMessage());
+        } finally {
+            conn = null; // Fundamental para que el Singleton pueda reiniciarse si cambiamos de DB
         }
     }
+
 }
