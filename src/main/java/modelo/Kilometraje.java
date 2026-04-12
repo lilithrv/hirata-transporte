@@ -9,6 +9,8 @@ public class Kilometraje {
     private Vehiculo vehiculo;
     private int kilometros;
     private Date fechaRegistro;
+    private String direccionOrigen;
+    private String direccionTermino;
 
     // constructor vacio
     public Kilometraje() {
@@ -51,6 +53,14 @@ public class Kilometraje {
         return kilometros;
     }
 
+    public String getDireccionOrigen() {
+        return direccionOrigen;
+    }
+
+    public String getDireccionTermino() {
+        return direccionTermino;
+    }
+  
     public void setKilometros(int kilometros) {
         if (kilometros < 0) {
             throw new IllegalArgumentException("ERROR: El kilometraje no puede ser menor a cero.");
@@ -64,6 +74,14 @@ public class Kilometraje {
 
     public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public void setDireccionOrigen(String direccionOrigen) {
+        this.direccionOrigen = direccionOrigen;
+    }
+
+    public void setDireccionTermino(String direccionTermino) {
+        this.direccionTermino = direccionTermino;
     }
 
     @Override
