@@ -308,6 +308,10 @@ public class VistaAdminFlota extends javax.swing.JFrame {
         lblConductorFlotaLayout.setHorizontalGroup(
             lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(lblConductorFlotaLayout.createSequentialGroup()
+                .addGap(415, 415, 415)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(lblConductorFlotaLayout.createSequentialGroup()
                 .addGroup(lblConductorFlotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(lblConductorFlotaLayout.createSequentialGroup()
                         .addGap(70, 70, 70)
@@ -344,10 +348,7 @@ public class VistaAdminFlota extends javax.swing.JFrame {
                         .addComponent(btnAgregarConductor))
                     .addGroup(lblConductorFlotaLayout.createSequentialGroup()
                         .addGap(251, 251, 251)
-                        .addComponent(btnAsignar))
-                    .addGroup(lblConductorFlotaLayout.createSequentialGroup()
-                        .addGap(415, 415, 415)
-                        .addComponent(jLabel1)))
+                        .addComponent(btnAsignar)))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         lblConductorFlotaLayout.setVerticalGroup(
@@ -462,6 +463,11 @@ public class VistaAdminFlota extends javax.swing.JFrame {
 
     private void btnAgregarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarConductorActionPerformed
         // TODO add your handling code here:
+        DialogAgregarConductor dialog = new DialogAgregarConductor(this, true);
+
+        dialog.getContentPane().setBackground(new Color(255, 255, 255));
+        dialog.setVisible(true);
+        cargarComboConductor();
     }//GEN-LAST:event_btnAgregarConductorActionPerformed
 
     private void btnEliminarFlotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarFlotaActionPerformed
@@ -549,8 +555,8 @@ public class VistaAdminFlota extends javax.swing.JFrame {
     private void btnAgregarFlotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarFlotaActionPerformed
         // TODO add your handling code here:
         DialogNuevoVehiculo dialog = new DialogNuevoVehiculo(this, true);
-        
-         dialog.getContentPane().setBackground(new Color(255,255,255));
+
+        dialog.getContentPane().setBackground(new Color(255, 255, 255));
         dialog.setVisible(true);
         cargarTabla();
     }//GEN-LAST:event_btnAgregarFlotaActionPerformed

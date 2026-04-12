@@ -28,7 +28,7 @@ public class VehiculoDAO {
                 + "u.id_usuario, u.nombre, u.email "
                 + "FROM vehiculos v "
                 + "LEFT JOIN usuarios u ON v.id_conductor = u.id_usuario "
-                + "ORDER BY v.patente ASC ";
+                + "ORDER BY v.id_vehiculo ASC ";
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
