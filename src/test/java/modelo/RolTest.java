@@ -16,33 +16,12 @@ public class RolTest {
     public RolTest() {
     }
 
-    /**
-     * Test of getIdRol method, of class Rol.
-     */
-    @Test
-    public void testGetIdRol() {
-    }
-
-    /**
-     * Test of getNombreRol method, of class Rol.
-     */
-    @Test
-    public void testGetNombreRol() {
-    }
-
-   
-    /**
-     * Test of setNombreRol method, of class Rol.
-     */
-    @Test
-    public void testSetNombreRol() {
-    }
-
-    /**
-     * Test of toString method, of class Rol.
-     */
     @Test
     public void testToString() {
+        Rol rol = new Rol(1, "Administrador");
+        String resultado = rol.toString();
+        assertNotNull(resultado);
+        assertTrue(resultado.contains("Administrador"));
     }
 
     @Test
@@ -61,7 +40,7 @@ public class RolTest {
     @Test
     public void testSetIdRol() {
         Rol rol = new Rol();
-        rol.setIdRol(10); 
+        rol.setIdRol(10);
         assertEquals(10, rol.getIdRol());
     }
 
@@ -84,7 +63,7 @@ public class RolTest {
     @Test
     public void testSetNombreRolExitoso() {
         Rol rol = new Rol();
-        
+
         rol.setNombreRol("Conductor");
         assertEquals("Conductor", rol.getNombreRol());
     }
