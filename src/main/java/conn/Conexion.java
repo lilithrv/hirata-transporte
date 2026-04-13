@@ -21,28 +21,29 @@ public class Conexion {
     private static String dbActual;
     private static Connection conn;
 
-    // Bloque estático para cargar las propiedades una sola vez al iniciar la clase
     static {
         try (InputStream input = Conexion.class.getClassLoader().getResourceAsStream("config/dbConfig.properties")) {
             if (input == null) {
-                System.out.println("❌ No se encontró config/dbConfig.properties. Usando valores por defecto.");
+                System.out.println("❌ No se encontró config/dbConfig.properties. Usando transporte_hirata.");
                 dbActual = "transporte_hirata";
             } else {
                 props.load(input);
                 dbActual = props.getProperty("db.name");
-                System.out.println("⚙️ Configuración de base de datos cargada.");
+                System.out.println("⚙️ Configuración cargada con éxito.");
             }
         } catch (IOException e) {
-            System.err.println("❌ Error al leer el archivo de configuración: " + e.getMessage());
+            System.err.println("❌ Error crítico al leer configuración: " + e.getMessage());
         }
     }
 
-    // Constructor privado para cumplir con el patrón Singleton estrictamente
     private Conexion() {
+        conectar();
+    }
+
+    // Encapsulamos la lógica de conexión para poder llamarla al re-conectar
+    private static void conectar() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // Construimos la URL usando las propiedades del archivo
             String host = props.getProperty("db.host", "localhost");
             String port = props.getProperty("db.port", "3306");
             String user = props.getProperty("db.user", "root");
@@ -52,44 +53,44 @@ public class Conexion {
                     + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
 
             conn = DriverManager.getConnection(url, user, pass);
-            System.out.println("✅ Singleton conectado exitosamente a: " + dbActual);
-
+            System.out.println("✅ Conectado a la base de datos: " + dbActual);
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("❌ Error en la conexión Singleton");
-            e.printStackTrace();
+            System.out.println("❌ Error crítico en el Driver o SQL: " + e.getMessage());
         }
     }
 
-    /**
-     * El "Interruptor" para los Tests Unitarios. Cambia el nombre de la DB y
-     * reinicia la instancia.
-     */
     public static void setModoTest(boolean esTest) {
         dbActual = esTest ? props.getProperty("db.test_name", "mantenimiento_test")
                 : props.getProperty("db.name", "transporte_hirata");
-        // Forzamos el cierre para que la próxima llamada a getInstancia cree una nueva con la otra DB
-        close();
+        close(); // Cerramos para que getInstancia() fuerce una nueva conexión a la otra DB
     }
 
-    // Método para obtener la instancia única (Lazy Initialization)
+    /**
+     * MÉTODO CLAVE: Ahora verifica si la conexión está cerrada o es null.
+     */
     public static Connection getInstancia() {
-        if (conn == null) {
-            new Conexion();
+        try {
+            // Si no existe O si existe pero se cerró por error, volvemos a conectar
+            if (conn == null || conn.isClosed()) {
+                conectar();
+            }
+        } catch (SQLException e) {
+            System.err.println("⚠️ Re-conectando por error de estado: " + e.getMessage());
+            conectar();
         }
         return conn;
     }
 
-    // Cierre de conexión seguro
     public static void close() {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
-                System.out.println("🔌 Conexión [" + dbActual + "] cerrada correctamente.");
+                System.out.println("🔌 Conexión [" + dbActual + "] cerrada.");
             }
         } catch (SQLException e) {
             System.out.println("❌ Error al cerrar: " + e.getMessage());
         } finally {
-            conn = null; // Fundamental para que el Singleton pueda reiniciarse si cambiamos de DB
+            conn = null;
         }
     }
 
