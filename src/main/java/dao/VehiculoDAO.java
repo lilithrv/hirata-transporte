@@ -96,7 +96,8 @@ public class VehiculoDAO {
             throw new IllegalArgumentException("ERROR: La patente " + vehiculo.getPatente() + " ya está registrada en otro vehículo.");
         }
 
-        String sql = "UPDATE vehiculos SET patente = ?, marca = ?, modelo = ?, anio = ?, kilometraje_inicial = ? WHERE id_vehiculo = ?";
+        // Agregamos id_conductor al SQL
+        String sql = "UPDATE vehiculos SET patente = ?, marca = ?, modelo = ?, anio = ?, kilometraje_inicial = ?, id_conductor = ? WHERE id_vehiculo = ?";
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -105,7 +106,15 @@ public class VehiculoDAO {
             ps.setString(3, vehiculo.getModelo());
             ps.setInt(4, vehiculo.getAnio());
             ps.setInt(5, vehiculo.getKilometrajeInicial());
-            ps.setInt(6, vehiculo.getIdVehiculo());
+
+            // Seteamos el conductor (manejando el NULL)
+            if (vehiculo.getConductor() != null) {
+                ps.setInt(6, vehiculo.getConductor().getIdUsuario());
+            } else {
+                ps.setNull(6, java.sql.Types.INTEGER);
+            }
+
+            ps.setInt(7, vehiculo.getIdVehiculo()); // El ID ahora es el parámetro 7
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
