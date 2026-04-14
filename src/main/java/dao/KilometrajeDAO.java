@@ -15,7 +15,9 @@ public class KilometrajeDAO {
 
     public boolean insertarKilometraje(Kilometraje kil) {
 
-        String sql = "INSERT INTO kilometraje (id_conductor, id_vehiculo, kilometros) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO kilometraje "
+                + "(id_conductor, id_vehiculo, kilometros, direccion_origen, direccion_termino) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -23,6 +25,8 @@ public class KilometrajeDAO {
             ps.setInt(1, kil.getConductor().getIdUsuario());
             ps.setInt(2, kil.getVehiculo().getIdVehiculo());
             ps.setInt(3, kil.getKilometros());
+            ps.setString(4, kil.getDireccionOrigen());
+            ps.setString(5, kil.getDireccionTermino());
 
             int filas = ps.executeUpdate();
 
@@ -151,7 +155,7 @@ public class KilometrajeDAO {
         try {
 
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, idConductor);                   
+            ps.setInt(1, idConductor);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
