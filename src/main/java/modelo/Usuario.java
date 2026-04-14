@@ -90,6 +90,12 @@ public class Usuario {
         if (password.trim().isEmpty()) {
             throw new IllegalArgumentException("La contraseña es requerida");
         }
+
+        String regexEmail = "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$";
+        if (!email.trim().matches(regexEmail)) {
+            throw new IllegalArgumentException("El formato del correo no es válido");
+        }
+
         this.password = password;
     }
 
