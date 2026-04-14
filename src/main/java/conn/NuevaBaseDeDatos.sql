@@ -64,7 +64,6 @@ CREATE TABLE mantenimiento (
     FOREIGN KEY (id_usuario_mantenimiento) REFERENCES usuarios(id_usuario)
 );
 
-SELECT * FROM usuarios;
 -- ROLES DISPONIBLES
 INSERT INTO roles (nombre) VALUES 
     ('Administrador de Flota'),
@@ -182,6 +181,7 @@ INSERT INTO usuarios (nombre, email, password, id_rol) VALUES
 -- VEHÍCULOS (120 en total: 78 con conductor, 40 sin conductor)
 -- ────────────────────────────────────────────────────────────
 INSERT INTO vehiculos (id_conductor, patente, marca, modelo, anio, kilometraje_inicial) VALUES
+(3, 'BJKP45', 'MERCEDES BENZ', 'ACTROS 3348', 2019, 98000),
 (89, 'ZYXF42', 'MERCEDES BENZ', 'ACTROS 3348', 2020, 180955),
 (18, 'FBKY72', 'MAN', 'TGS 26.440', 2020, 246569),
 (84, 'DHZR55', 'IVECO', 'S-WAY 570', 2022, 183505),
@@ -306,6 +306,7 @@ INSERT INTO vehiculos (id_conductor, patente, marca, modelo, anio, kilometraje_i
 -- KILOMETRAJE (para los 20 vehículos en mantenimiento)
 -- ────────────────────────────────────────────────────────────
 INSERT INTO kilometraje (id_conductor, id_vehiculo, kilometros, fecha_registro, direccion_origen, direccion_termino) VALUES
+(3, 1, 99000, DATE_SUB(NOW(), INTERVAL 20 DAY), 'Av. Lonquén 10500, San Bernardo', 'Ruta 5 Sur Km 400, Los Ángeles'),
 (37, 16, 183847, DATE_SUB(NOW(), INTERVAL 80 DAY), 'Ruta 57 Km 10, Colina', 'Av. Argentina 1600, Valparaíso'),
 (37, 16, 187218, DATE_SUB(NOW(), INTERVAL 92 DAY), 'Av. Vicuña Mackenna 7200, La Florida', 'Av. Argentina 1600, Valparaíso'),
 (37, 16, 191984, DATE_SUB(NOW(), INTERVAL 69 DAY), 'Ruta 5 Norte Km 15, Lampa', 'Av. Circunvalación 3400, Chillán'),
