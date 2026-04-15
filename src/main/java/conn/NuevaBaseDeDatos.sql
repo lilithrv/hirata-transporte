@@ -392,27 +392,33 @@ INSERT INTO kilometraje (id_conductor, id_vehiculo, kilometros, fecha_registro, 
 (58, 57, 91785, DATE_SUB(NOW(), INTERVAL 17 DAY), 'Ruta 57 Km 10, Colina', 'Ruta 68 Km 95, Casablanca');
 
 -- ────────────────────────────────────────────────────────────
--- MANTENIMIENTO (20 registros, estado Programado)
+-- MANTENIMIENTO (estado Programado)
 -- ────────────────────────────────────────────────────────────
 INSERT INTO mantenimiento (id_vehiculo, estado, tipo_mantenimiento, origen, descripcion, kilometraje, id_usuario_mantenimiento) VALUES
-(16, 'Programado', 'Preventivo', 'Sistema', 'Revisión de frenos y suspensión', 200427, 11),
-(65, 'Programado', 'Correctivo', 'Sistema', 'Cambio de inyectores', 67715, 2),
-(59, 'Programado', 'Preventivo', 'Sistema', 'Cambio de neumáticos', 95123, 9),
-(12, 'Programado', 'Preventivo', 'Sistema', 'Cambio de aceite y filtros', 78756, 9),
-(13, 'Programado', 'Correctivo', 'Sistema', 'Reparación de transmisión', 249549, 9),
-(44, 'Programado', 'Correctivo', 'Sistema', 'Cambio de embrague', 39253, 11),
-(21, 'Programado', 'Correctivo', 'Sistema', 'Cambio de alternador', 73125, 2),
-(11, 'Programado', 'Preventivo', 'Sistema', 'Revisión de frenos y suspensión', 47894, 12),
-(19, 'Programado', 'Preventivo', 'Sistema', 'Revisión de frenos y suspensión', 224260, 9),
-(38, 'Programado', 'Preventivo', 'Sistema', 'Cambio de correa de distribución', 161463, 12),
-(75, 'Programado', 'Preventivo', 'Sistema', 'Cambio de correa de distribución', 180614, 12),
-(51, 'Programado', 'Correctivo', 'Sistema', 'Reparación de motor turbo', 96395, 11),
-(40, 'Programado', 'Correctivo', 'Sistema', 'Reparación de sistema hidráulico', 162504, 12),
-(61, 'Programado', 'Preventivo', 'Sistema', 'Alineación y balanceo', 226787, 10),
-(58, 'Programado', 'Preventivo', 'Sistema', 'Revisión general de motor', 152091, 11),
-(9, 'Programado', 'Preventivo', 'Sistema', 'Revisión sistema eléctrico', 173414, 11),
-(53, 'Programado', 'Correctivo', 'Sistema', 'Cambio de alternador', 56802, 12),
-(47, 'Programado', 'Correctivo', 'Sistema', 'Cambio de inyectores', 242860, 11),
-(10, 'Programado', 'Preventivo', 'Sistema', 'Revisión de frenos y suspensión', 195380, 2),
-(57, 'Programado', 'Correctivo', 'Sistema', 'Cambio de embrague', 93308, 2);
+(16, 'Programado', 'Preventivo', 'Sistema', '', 200427,  null),
+(65, 'Programado', 'Correctivo', 'Manual', '', 67715, null),
+(59, 'Programado', 'Preventivo', 'Sistema', '', 95123, null),
+(13, 'Programado', 'Correctivo', 'Manual', '', 249549, null),
+(44, 'Programado', 'Correctivo', 'Manual', '', 39253, null),
+(11, 'Programado', 'Preventivo', 'Sistema', '', 47894, null),
+(75, 'Programado', 'Preventivo', 'Sistema', '', 180614, null),
+(61, 'Programado', 'Preventivo', 'Sistema', '', 226787, null ),
+(58, 'Programado', 'Preventivo', 'Sistema', '', 152091, null),
+(47, 'Programado', 'Correctivo', 'Manual', '', 242860, null),
+(10, 'Programado', 'Preventivo', 'Sistema', '', 195380, null),
+(57, 'Programado', 'Correctivo', 'Manual', '', 93308, null);
 
+
+-- ────────────────────────────────────────────────────────────
+-- MANTENIMIENTO (estado Completado/Cancelado)
+-- ────────────────────────────────────────────────────────────
+
+INSERT INTO mantenimiento (id_vehiculo, estado, tipo_mantenimiento, origen, descripcion, kilometraje, id_usuario_mantenimiento, fecha_creacion, fecha_completado) VALUES
+(12, 'Completado', 'Preventivo', 'Sistema', 'Cambio de aceite y filtros', 78756, 2, '2026-04-01 07:00:00', '2026-04-05 15:00:32'),
+(21, 'Completado', 'Correctivo', 'Manual', 'Cambio de alternador', 73125, 2, '2026-04-01 08:00:00', '2026-04-05 15:03:32'),
+(19, 'Completado', 'Preventivo', 'Sistema', 'Revisión de frenos y suspensión', 224260, 9, '2026-04-09 07:00:00', '2026-04-10 11:20:32'),
+(38, 'Completado', 'Preventivo', 'Sistema', 'Cambio de correa de distribución', 161463, 12, '2026-04-09 06:00:00', '2026-04-12 15:00:32'),
+(51, 'Cancelado', 'Correctivo', 'Manual', 'Mantención mal programada', 96395, 11, '2026-04-01 07:00:00', '2026-04-05 15:00:32'),
+(40, 'Completado', 'Correctivo', 'Manual', 'Reparación de sistema hidráulico', 162504, 12, '2026-04-15 17:00:00', '2026-04-16 15:00:32'),
+(9, 'Cancelado', 'Preventivo', 'Sistema', 'Se posterga para 1000km más', 173414, 11, '2026-03-31 07:00:00', '2026-04-02 10:10:32'),
+(53, 'Completado', 'Correctivo', 'Manual', 'Cambio de alternador', 56802, 12, '2026-04-01 07:00:00', '2026-04-03 15:00:32');
