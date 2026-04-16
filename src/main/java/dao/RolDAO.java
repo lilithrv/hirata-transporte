@@ -37,14 +37,13 @@ public class RolDAO {
 
     //ACTUALIZAR
     public void actualizar(Rol rol) {
-        String sql = "UPDATE roles SET nombre = ? "
-                + "WHERE id_rol = ?";
-
+        String sql = "UPDATE roles SET nombre = ? WHERE id_rol = ?";
         Connection conn = Conexion.getInstancia();
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, rol.getNombreRol());
-
-            int filas = ps.executeUpdate();
+            ps.setInt(2, rol.getIdRol());   // <- faltaba esto
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println("Error al actualizar idioma: " + e.getMessage());
@@ -52,17 +51,15 @@ public class RolDAO {
     }
 
     public boolean actualizar2(Rol rol) {
-        String sql = "UPDATE roles SET nombre = ? "
-                + "WHERE id_rol = ?";
-
+        String sql = "UPDATE roles SET nombre = ? WHERE id_rol = ?";
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        
             ps.setString(1, rol.getNombreRol());
-
+            ps.setInt(2, rol.getIdRol());   // <- faltaba esto
             int filas = ps.executeUpdate();
-
             return filas > 0;
-
+        
         } catch (SQLException e) {
             System.out.println("Error al actualizar idioma: " + e.getMessage());
             return false;
