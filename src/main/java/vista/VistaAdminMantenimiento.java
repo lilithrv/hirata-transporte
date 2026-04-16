@@ -513,7 +513,7 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
                     .addGroup(pnlContenidoLayout.createSequentialGroup()
                         .addGap(547, 547, 547)
                         .addComponent(lblMantenimiento)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlContenidoLayout.setVerticalGroup(
             pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -530,7 +530,7 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCorrectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(193, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnCorrectivo.getAccessibleContext().setAccessibleName("PROGRAMAR \nMANTENIMIENTO");
@@ -562,17 +562,23 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
             int idMant = (int) tablaMantenimiento.getValueAt(filaSeleccionada, 0);
 
             Mantenimiento mantSeleccionado = mantenimientoDAO.obtenerPorId(idMant);
+            Usuario conductor = mantSeleccionado.getVehiculo().getConductor();
 
             // Cargar los datos del objeto en los campos de texto
             txtPatente.setText(mantSeleccionado.getVehiculo().getPatente());
             txtMarca.setText(mantSeleccionado.getVehiculo().getMarca());
             txtModelo.setText(mantSeleccionado.getVehiculo().getModelo());
             txtAnio.setText(String.valueOf(mantSeleccionado.getVehiculo().getAnio()));
-            txtConductor.setText(mantSeleccionado.getVehiculo().getConductor().getNombreUsuario());
             cmbTipoMantenimiento.setSelectedItem(mantSeleccionado.getTipoMantenimiento());
             txtKm.setText(String.valueOf(mantSeleccionado.getKilometraje()));
             cmbEstadoMantenimiento.setSelectedItem(mantSeleccionado.getEstado());
             cmbOrigenMantenimiento.setSelectedItem(mantSeleccionado.getOrigen());
+
+            String nombre = (conductor != null)
+                    ? conductor.getNombreUsuario()
+                    : "Sin conductor";
+
+            txtConductor.setText(nombre);
 
             //campos no editables
             txtPatente.setEditable(false);
