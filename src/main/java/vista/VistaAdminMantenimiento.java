@@ -19,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -704,6 +705,9 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
         int id = (int) modeloTablaGeneral.getValueAt(filaSeleccionada, 0);
         String patente = (String) tablaMantenimiento.getValueAt(filaSeleccionada, 1);
 
+        UIManager.put("OptionPane.yesButtonText", "Sí");
+        UIManager.put("OptionPane.noButtonText", "No");
+        
         int confirmacion = JOptionPane.showConfirmDialog(this,
                 "¿Está seguro de eliminar el mantenimiento del auto patente :\n"
                 + patente + "?",
