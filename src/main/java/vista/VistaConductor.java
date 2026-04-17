@@ -408,6 +408,8 @@ public class VistaConductor extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,
                             "Km registrado. Se ha programado un mantenimiento preventivo automáticamente.",
                             "Mantenimiento Programado", JOptionPane.WARNING_MESSAGE);
+                    
+                    bloquearFormulario();
 
                 } else {
                     JOptionPane.showMessageDialog(this,
@@ -415,8 +417,6 @@ public class VistaConductor extends javax.swing.JFrame {
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 }
                 
-                bloquearFormulario();
-
                 //  Refrescar datos 
                 cargarDatos();
                 cargarTablaViajes();
