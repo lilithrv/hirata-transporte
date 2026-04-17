@@ -65,23 +65,31 @@
                                       <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="txtPatenteFlota" max="32767" attributes="0"/>
-                                      <Component id="txtMarcaFlota" max="32767" attributes="0"/>
-                                      <Component id="txtModeloFlota" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtAnioFlota" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="cmbConductorFlota" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtKmInicial" alignment="0" min="-2" pref="148" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="217" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="btnAgregarFlota" min="-2" pref="182" max="-2" attributes="0"/>
-                                      <Component id="btnEliminarFlota" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="btnLimpiarFlota" min="-2" pref="202" max="-2" attributes="0"/>
-                                      <Component id="btnActualizarFlota" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                                          <Component id="btnAsignar" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="txtPatenteFlota" max="32767" attributes="0"/>
+                                              <Component id="txtMarcaFlota" max="32767" attributes="0"/>
+                                              <Component id="txtModeloFlota" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="txtAnioFlota" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="cmbConductorFlota" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="txtKmInicial" alignment="0" min="-2" pref="148" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="217" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Component id="btnAgregarFlota" min="-2" pref="182" max="-2" attributes="0"/>
+                                              <Component id="btnEliminarFlota" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Component id="btnLimpiarFlota" min="-2" pref="202" max="-2" attributes="0"/>
+                                              <Component id="btnActualizarFlota" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                   </Group>
                               </Group>
                           </Group>
@@ -91,10 +99,6 @@
                           <Component id="jScrollPane1" min="-2" pref="991" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="btnAgregarConductor" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="251" max="-2" attributes="0"/>
-                          <Component id="btnAsignar" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace pref="21" max="32767" attributes="0"/>
@@ -295,6 +299,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="ASIGNAR"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAsignarActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnActualizarFlota">
           <Properties>
