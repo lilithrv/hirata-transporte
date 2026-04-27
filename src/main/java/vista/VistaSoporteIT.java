@@ -375,6 +375,9 @@ public class VistaSoporteIT extends javax.swing.JFrame {
         });
         panelSuperior.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        lblTituloVentana.setBackground(new java.awt.Color(255, 255, 255));
+        lblTituloVentana.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        lblTituloVentana.setForeground(new java.awt.Color(255, 255, 255));
         lblTituloVentana.setText("Hirata Transporte  •  Módulo Soporte IT");
         panelSuperior.add(lblTituloVentana, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 8, 360, 28));
 
@@ -396,13 +399,13 @@ public class VistaSoporteIT extends javax.swing.JFrame {
 
         panelRaiz.add(panelSuperior, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 910, 42));
 
-        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
+        lblTitulo.setFont(new java.awt.Font("Roboto", 1, 28)); // NOI18N
         lblTitulo.setText("Registrar mantenimiento de equipos de oficina");
-        panelRaiz.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, 650, 38));
+        panelRaiz.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 47, 600, -1));
 
-        lblSubtitulo.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        lblSubtitulo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         lblSubtitulo.setText("Complete la ficha técnica del mantenimiento realizado por soporte IT.");
-        panelRaiz.add(lblSubtitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(332, 112, 620, 25));
+        panelRaiz.add(lblSubtitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 110, 430, 25));
 
         panelFormulario.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -481,7 +484,7 @@ public class VistaSoporteIT extends javax.swing.JFrame {
                 btnLimpiarActionPerformed(evt);
             }
         });
-        panelAcciones.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 14, 170, 46));
+        panelAcciones.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 170, 46));
 
         btnGuardar.setText("Guardar mantenimiento");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -489,9 +492,9 @@ public class VistaSoporteIT extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        panelAcciones.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(204, 14, 220, 46));
+        panelAcciones.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 220, 46));
 
-        panelRaiz.add(panelAcciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 72, 425, 74));
+        panelRaiz.add(panelAcciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 80, 440, 80));
 
         getContentPane().add(panelRaiz, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 740));
 
