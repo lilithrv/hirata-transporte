@@ -416,3 +416,84 @@ INSERT INTO mantenimiento (id_vehiculo, estado, tipo_mantenimiento, origen, desc
 (10, 'Programado', 'Preventivo', 'Sistema', 'Revisión de frenos y suspensión', 195380, 2),
 (57, 'Programado', 'Correctivo', 'Sistema', 'Cambio de embrague', 93308, 2);
 
+
+-- ETAPA 2: Mantención de equipos de oficina
+-- Requisitos contemplados: RF-06, RF-07, RF-08, RF-09
+-- Esta semana queda implementado RF-06 en Java Swing.
+-- ────────────────────────────────────────────────────────────
+
+INSERT INTO roles (nombre)
+SELECT 'Soporte IT'
+WHERE NOT EXISTS (SELECT 1 FROM roles WHERE nombre = 'Soporte IT');
+
+-- Usuario de prueba para la nueva vista. pass: 1234
+INSERT INTO usuarios (nombre, email, password, id_rol)
+SELECT 'Soporte IT Hirata', 'soporte.it@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', r.id_rol
+FROM roles r
+WHERE r.nombre = 'Soporte IT'
+  AND NOT EXISTS (SELECT 1 FROM usuarios WHERE email = 'soporte.it@hirata.cl');
+
+CREATE TABLE IF NOT EXISTS equipos_oficina (
+    id_equipo INT AUTO_INCREMENT PRIMARY KEY,
+    codigo_inventario VARCHAR(30) NOT NULL UNIQUE,
+    tipo_equipo ENUM('PC', 'Notebook', 'Impresora', 'Servidor', 'Router', 'Otro') NOT NULL,
+    marca VARCHAR(60) NOT NULL,
+    modelo VARCHAR(80) NOT NULL,
+    numero_serie VARCHAR(80) UNIQUE,
+    ubicacion VARCHAR(120) NOT NULL,
+    sistema_operativo VARCHAR(80),
+    estado ENUM('Operativo', 'En mantenimiento', 'Fuera de servicio', 'Dado de baja') NOT NULL DEFAULT 'Operativo',
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS mantenimiento_equipos_oficina (
+    id_mantenimiento_equipo INT AUTO_INCREMENT PRIMARY KEY,
+    id_equipo INT NOT NULL,
+    id_tecnico INT NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tipo_mantenimiento ENUM('Preventivo', 'Correctivo') NOT NULL,
+    descripcion TEXT NOT NULL,
+    acciones_realizadas TEXT NOT NULL,
+    piezas_revisadas TEXT,
+    estado_resultado ENUM('Operativo', 'Operativo con observaciones', 'Requiere seguimiento', 'Fuera de servicio') NOT NULL,
+    observaciones TEXT,
+    FOREIGN KEY (id_equipo) REFERENCES equipos_oficina(id_equipo) ON DELETE CASCADE,
+    FOREIGN KEY (id_tecnico) REFERENCES usuarios(id_usuario)
+);
+
+-- Tablas preparadas para los siguientes requisitos de la etapa 2.
+CREATE TABLE IF NOT EXISTS software_equipos (
+    id_software INT AUTO_INCREMENT PRIMARY KEY,
+    id_equipo INT NOT NULL,
+    nombre_software VARCHAR(100) NOT NULL,
+    version_actual VARCHAR(50),
+    fecha_actualizacion DATE,
+    estado ENUM('Actualizado', 'Pendiente', 'Fallido') NOT NULL DEFAULT 'Pendiente',
+    observaciones TEXT,
+    FOREIGN KEY (id_equipo) REFERENCES equipos_oficina(id_equipo) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS piezas_repuesto (
+    id_pieza INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+    descripcion TEXT,
+    stock INT NOT NULL DEFAULT 0,
+    stock_minimo INT NOT NULL DEFAULT 1,
+    ubicacion VARCHAR(120),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS uso_piezas_mantenimiento (
+    id_uso_pieza INT AUTO_INCREMENT PRIMARY KEY,
+    id_mantenimiento_equipo INT NOT NULL,
+    id_pieza INT NOT NULL,
+    cantidad INT NOT NULL,
+    FOREIGN KEY (id_mantenimiento_equipo) REFERENCES mantenimiento_equipos_oficina(id_mantenimiento_equipo) ON DELETE CASCADE,
+    FOREIGN KEY (id_pieza) REFERENCES piezas_repuesto(id_pieza)
+);
+
+INSERT INTO equipos_oficina (codigo_inventario, tipo_equipo, marca, modelo, numero_serie, ubicacion, sistema_operativo, estado) VALUES
+('OF-PC-001', 'PC', 'Dell', 'OptiPlex 7090', 'HIR-PC-001', 'Administración', 'Windows 11 Pro', 'Operativo'),
+('OF-NB-002', 'Notebook', 'Lenovo', 'ThinkPad E14', 'HIR-NB-002', 'Operaciones', 'Windows 11 Pro', 'Operativo'),
+('OF-IMP-003', 'Impresora', 'HP', 'LaserJet Pro M404', 'HIR-IMP-003', 'Recepción', NULL, 'Operativo')
+ON DUPLICATE KEY UPDATE codigo_inventario = VALUES(codigo_inventario);
