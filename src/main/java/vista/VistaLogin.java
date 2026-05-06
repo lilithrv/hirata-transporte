@@ -13,10 +13,10 @@ import java.awt.Color;
 public class VistaLogin extends javax.swing.JFrame {
 
     int xMouse, yMouse;
-    
+
     public VistaLogin() {
         initComponents();
-        
+
         this.setSize(1000, 650);
 
         // Evita que el usuario cambie el tamaño de la ventana
@@ -24,7 +24,7 @@ public class VistaLogin extends javax.swing.JFrame {
 
         // Centra la ventana en la pantalla
         this.setLocationRelativeTo(null);
-        
+
         this.setTitle("Acceso al Sistema");
     }
 
@@ -231,14 +231,14 @@ public class VistaLogin extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
-        
+
         //Capturamos datos ingresados por el usuario
         String emailUser = txtUsuario.getText().trim();
         String passUser = new String(jPassTxt.getPassword()).trim();
-        
+
         dao.UsuarioDAO daoUsuario = new dao.UsuarioDAO();
-        modelo.Usuario usuario = daoUsuario.verificarCredenciales(emailUser, passUser );
-        
+        modelo.Usuario usuario = daoUsuario.verificarCredenciales(emailUser, passUser);
+
         if (usuario != null) {
             // Guardamos el usuario en la sesión
             util.Sesion.setUsuarioActivo(usuario);
@@ -256,6 +256,9 @@ public class VistaLogin extends javax.swing.JFrame {
                 case "Conductor":
                     new VistaConductor().setVisible(true);
                     break;
+                case "Soporte IT":
+                    new VistaSoporteIT().setVisible(true);
+                    break;
                 default:
                     javax.swing.JOptionPane.showMessageDialog(this, "Rol no reconocido.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     return;
@@ -266,7 +269,7 @@ public class VistaLogin extends javax.swing.JFrame {
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Credenciales incorrectas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
@@ -303,26 +306,26 @@ public class VistaLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_lblExitMouseExited
 
     private void txtUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuarioMousePressed
-        if (txtUsuario.getText().equals("Ingrese su nombre de usuario")){
+        if (txtUsuario.getText().equals("Ingrese su nombre de usuario")) {
             txtUsuario.setText("");
             txtUsuario.setForeground(Color.black);
         }
-        if (String.valueOf(jPassTxt.getPassword()).isEmpty()){
+        if (String.valueOf(jPassTxt.getPassword()).isEmpty()) {
             jPassTxt.setText("********");
             jPassTxt.setForeground(Color.gray);
         }
     }//GEN-LAST:event_txtUsuarioMousePressed
 
     private void jPassTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPassTxtMousePressed
-        if (String.valueOf(jPassTxt.getPassword()).equals("********")){
+        if (String.valueOf(jPassTxt.getPassword()).equals("********")) {
             jPassTxt.setText("");
             jPassTxt.setForeground(Color.black);
         }
-        if (txtUsuario.getText().isEmpty()){
+        if (txtUsuario.getText().isEmpty()) {
             txtUsuario.setText("Ingrese su nombre de usuario");
             txtUsuario.setForeground(Color.gray);
         }
-        
+
     }//GEN-LAST:event_jPassTxtMousePressed
 
     /**
