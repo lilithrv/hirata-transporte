@@ -19,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -51,7 +52,7 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
         bordeOriginal = txtPaneDescripcion.getBorder();
         colorOriginal = lblMensajeDescripcion.getForeground();
 
-        this.setSize(1260, 750);
+        this.setSize(1380, 750);
 
         // Evita que el usuario cambie el tamaño de la ventana
         this.setResizable(false);
@@ -81,8 +82,8 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
 
         modeloTablaGeneral = new DefaultTableModel(
                 new Object[][]{},
-                new String[]{"ID", "Patente", "Marca", "Modelo", "Año", "Conductor", "Tipo Mantenimiento", "Fecha Programación", "Kilometraje", "Estado",
-                    "Realizado por", "Fecha Actualización"}
+                new String[]{"ID", "Patente", "Marca", "Modelo", "Año", "Conductor", "Tipo", "Fecha Programación", "Kilometraje", "Estado",
+                    "Realizado por", "Descripción", "Fecha Actualización"}
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -147,6 +148,7 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
                     mant.getKilometraje(),
                     mant.getEstado(),
                     nombreUsuarioMant, // quién realizó el mantenimiento
+                    mant.getDescripcion(),
                     mant.getFechaCompletado()
                 };
                 modeloTablaGeneral.addRow(fila);
@@ -268,10 +270,11 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
         btnLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1360, 780));
         setPreferredSize(new java.awt.Dimension(664, 70));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pnlContenido.setBackground(new java.awt.Color(255, 255, 255));
+        pnlContenido.setPreferredSize(new java.awt.Dimension(1360, 780));
 
         lblMantenimiento.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         lblMantenimiento.setText("MENÚ MANTENIMIENTO");
@@ -495,48 +498,45 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
             .addGroup(pnlContenidoLayout.createSequentialGroup()
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlContenidoLayout.createSequentialGroup()
+                        .addGap(1155, 1155, 1155)
+                        .addComponent(btnLogout))
+                    .addGroup(pnlContenidoLayout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblDatos)
-                            .addComponent(pnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(pnlContenidoLayout.createSequentialGroup()
+                                .addComponent(pnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(104, 104, 104)
+                                .addComponent(btnCorrectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(pnlContenidoLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlContenidoLayout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1079, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContenidoLayout.createSequentialGroup()
-                                .addComponent(lblMantenimiento)
-                                .addGap(430, 430, 430)))
-                        .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnLogout)
-                            .addComponent(btnCorrectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(41, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1353, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlContenidoLayout.createSequentialGroup()
+                        .addGap(547, 547, 547)
+                        .addComponent(lblMantenimiento)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlContenidoLayout.setVerticalGroup(
             pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContenidoLayout.createSequentialGroup()
-                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlContenidoLayout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(btnLogout)
-                        .addGap(51, 51, 51)
-                        .addComponent(btnCorrectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlContenidoLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(lblMantenimiento)
-                        .addGap(31, 31, 31)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(7, 7, 7)
+                .addComponent(btnLogout)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblMantenimiento)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(lblDatos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(199, Short.MAX_VALUE))
+                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCorrectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnCorrectivo.getAccessibleContext().setAccessibleName("PROGRAMAR \nMANTENIMIENTO");
 
-        getContentPane().add(pnlContenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 1290, 780));
+        getContentPane().add(pnlContenido, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -563,17 +563,23 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
             int idMant = (int) tablaMantenimiento.getValueAt(filaSeleccionada, 0);
 
             Mantenimiento mantSeleccionado = mantenimientoDAO.obtenerPorId(idMant);
+            Usuario conductor = mantSeleccionado.getVehiculo().getConductor();
 
             // Cargar los datos del objeto en los campos de texto
             txtPatente.setText(mantSeleccionado.getVehiculo().getPatente());
             txtMarca.setText(mantSeleccionado.getVehiculo().getMarca());
             txtModelo.setText(mantSeleccionado.getVehiculo().getModelo());
             txtAnio.setText(String.valueOf(mantSeleccionado.getVehiculo().getAnio()));
-            txtConductor.setText(mantSeleccionado.getVehiculo().getConductor().getNombreUsuario());
             cmbTipoMantenimiento.setSelectedItem(mantSeleccionado.getTipoMantenimiento());
             txtKm.setText(String.valueOf(mantSeleccionado.getKilometraje()));
             cmbEstadoMantenimiento.setSelectedItem(mantSeleccionado.getEstado());
             cmbOrigenMantenimiento.setSelectedItem(mantSeleccionado.getOrigen());
+
+            String nombre = (conductor != null)
+                    ? conductor.getNombreUsuario()
+                    : "Sin conductor";
+
+            txtConductor.setText(nombre);
 
             //campos no editables
             txtPatente.setEditable(false);
@@ -699,6 +705,9 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
         int id = (int) modeloTablaGeneral.getValueAt(filaSeleccionada, 0);
         String patente = (String) tablaMantenimiento.getValueAt(filaSeleccionada, 1);
 
+        UIManager.put("OptionPane.yesButtonText", "Sí");
+        UIManager.put("OptionPane.noButtonText", "No");
+        
         int confirmacion = JOptionPane.showConfirmDialog(this,
                 "¿Está seguro de eliminar el mantenimiento del auto patente :\n"
                 + patente + "?",

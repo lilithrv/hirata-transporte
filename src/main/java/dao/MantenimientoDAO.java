@@ -155,7 +155,7 @@ public class MantenimientoDAO {
                 + "JOIN vehiculos v ON m.id_vehiculo = v.id_vehiculo "
                 + "LEFT JOIN usuarios c ON v.id_conductor = c.id_usuario " // <-- JOIN conductor
                 + "LEFT JOIN usuarios u ON m.id_usuario_mantenimiento = u.id_usuario "
-                + "ORDER BY m.fecha_creacion DESC";
+                + "ORDER BY m.estado, m.fecha_creacion DESC";
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

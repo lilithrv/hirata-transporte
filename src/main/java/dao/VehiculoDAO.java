@@ -265,4 +265,19 @@ public class VehiculoDAO {
         return v;
     }
 
-} // Class
+    public boolean asignarConductor(int idVehiculo, int idConductor) {
+        String sql = "UPDATE vehiculos SET id_conductor = ? WHERE id_vehiculo = ?";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idConductor);
+            ps.setInt(2, idVehiculo);
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al asignar conductor: " + e.getMessage());
+            return false;
+        }
+    }
+
+}
