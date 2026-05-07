@@ -173,6 +173,45 @@ CREATE TABLE software_equipo (
 );
 
 -- ============================================================
+-- CHECKLISTS ESPECÍFICOS POR TIPO DE EQUIPO 
+-- ============================================================
+
+-- Checklist para Notebooks y PCs de Escritorio
+CREATE TABLE detalle_mant_computador (
+    id_detalle_pc INT AUTO_INCREMENT PRIMARY KEY,
+    id_mantenimiento INT NOT NULL UNIQUE,
+    desarmado_inicial BOOLEAN DEFAULT FALSE,
+    limpieza_fisica BOOLEAN DEFAULT FALSE,
+    check_ram BOOLEAN DEFAULT FALSE,
+    check_almacenamiento BOOLEAN DEFAULT FALSE,
+    armado_cierre BOOLEAN DEFAULT FALSE,
+    actualizacion_so BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_mantenimiento) REFERENCES mantenimiento_equipos(id_mantenimiento) ON DELETE CASCADE
+);
+
+-- Checklist para Impresoras 
+CREATE TABLE detalle_mant_impresora (
+    id_detalle_imp INT AUTO_INCREMENT PRIMARY KEY,
+    id_mantenimiento INT NOT NULL UNIQUE,
+    limpieza_rodillos BOOLEAN DEFAULT FALSE,
+    revision_toner BOOLEAN DEFAULT FALSE,
+    calibracion_cabezales BOOLEAN DEFAULT FALSE,
+    actualizacion_firmware BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_mantenimiento) REFERENCES mantenimiento_equipos(id_mantenimiento) ON DELETE CASCADE
+);
+
+-- Checklist para Celulares
+CREATE TABLE detalle_mant_celular (
+    id_detalle_cel INT AUTO_INCREMENT PRIMARY KEY,
+    id_mantenimiento INT NOT NULL UNIQUE,
+    revision_pantalla_tactil BOOLEAN DEFAULT FALSE,
+    test_rendimiento_bateria BOOLEAN DEFAULT FALSE,
+    limpieza_puertos_carga BOOLEAN DEFAULT FALSE,
+    actualizacion_android BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_mantenimiento) REFERENCES mantenimiento_equipos(id_mantenimiento) ON DELETE CASCADE
+);
+
+-- ============================================================
 -- NUEVOS ROLES
 -- ============================================================
 
