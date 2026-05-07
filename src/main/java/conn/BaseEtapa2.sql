@@ -87,9 +87,7 @@ CREATE TABLE piezas (
     stock_actual INT NOT NULL DEFAULT 0,
     stock_minimo INT NOT NULL DEFAULT 1,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_tipo_pieza) REFERENCES tipos_pieza(id_tipo_pieza),
-    CONSTRAINT chk_stock_actual CHECK (stock_actual >= 0),
-    CONSTRAINT chk_stock_minimo CHECK (stock_minimo >= 0)
+    FOREIGN KEY (id_tipo_pieza) REFERENCES tipos_pieza(id_tipo_pieza)
 );
 
 -- ============================================================
