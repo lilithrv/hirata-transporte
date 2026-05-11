@@ -18,6 +18,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import modelo.EquipoOficina;
 import modelo.Software;
+import modelo.SoftwareEquipo;
 import modelo.TipoEquipo;
 import modelo.TipoSoftware;
 
@@ -56,9 +57,9 @@ public class VistaSoftware extends javax.swing.JFrame {
         equipoDAO = new EquipoOficinaDAO();
         tipoEquipoDAO = new TipoEquipoDAO();
         mapaTipos = new HashMap<>();
-        
+
         cargarTipos();
- 
+
     }
 
     private void cargarTipos() {
@@ -76,11 +77,10 @@ public class VistaSoftware extends javax.swing.JFrame {
     }
 
     private void cargarTablaEquipos(int idTipo) {
- 
-                
+
         EquipoOficinaDAO dao = new EquipoOficinaDAO();
         List<EquipoOficina> equipos = dao.listarPorTipo(idTipo);
-        
+
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.setColumnIdentifiers(new String[]{
             "ID", "Tipo", "Marca", "Modelo", "N° Serie"
@@ -128,6 +128,52 @@ public class VistaSoftware extends javax.swing.JFrame {
             tablaEquipos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         }
 
+    }
+
+    private void cargarTablaSoftware(int idEquipo) {
+        tablaSoftwareEquipo.setVisible(true);
+
+        SoftwareDAO dao = new SoftwareDAO();
+        List<SoftwareEquipo> lista = dao.listarPorEquipo(idEquipo);
+
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[]{
+            "ID", "Tipo", "Software", "Versión"
+        });
+
+        for (SoftwareEquipo se : lista) {
+            modelo.addRow(new Object[]{
+                se.getIdSwEquipo(),
+                se.getSoftware().getTipoSoftware().getNombre(),
+                se.getSoftware().getNombre(),
+                se.getVersion()
+            });
+        }
+
+        tablaSoftwareEquipo.setModel(modelo);
+
+        // Ajuste de ancho
+        tablaSoftwareEquipo.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        int anchoTotal = 0;
+        for (int col = 0; col < tablaSoftwareEquipo.getColumnCount(); col++) {
+            int maxAncho = 0;
+            TableColumn columna = tablaSoftwareEquipo.getColumnModel().getColumn(col);
+            TableCellRenderer headerRenderer = tablaSoftwareEquipo.getTableHeader().getDefaultRenderer();
+            Component headerComp = headerRenderer.getTableCellRendererComponent(
+                    tablaSoftwareEquipo, columna.getHeaderValue(), false, false, 0, col);
+            maxAncho = headerComp.getPreferredSize().width;
+            for (int fila = 0; fila < tablaSoftwareEquipo.getRowCount(); fila++) {
+                TableCellRenderer renderer = tablaSoftwareEquipo.getCellRenderer(fila, col);
+                Component comp = tablaSoftwareEquipo.prepareRenderer(renderer, fila, col);
+                maxAncho = Math.max(maxAncho, comp.getPreferredSize().width);
+            }
+            columna.setPreferredWidth(maxAncho + 20);
+            anchoTotal += maxAncho + 20;
+        }
+        int anchoVisible = tablaSoftwareEquipo.getParent().getWidth();
+        if (anchoTotal < anchoVisible) {
+            tablaSoftwareEquipo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        }
     }
 
     /**
@@ -217,6 +263,11 @@ public class VistaSoftware extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablaEquipos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaEquiposMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaEquipos);
 
         tablaSoftwareEquipo.setModel(new javax.swing.table.DefaultTableModel(
@@ -323,6 +374,19 @@ public class VistaSoftware extends javax.swing.JFrame {
 
         cargarTablaEquipos(idTipo);
     }//GEN-LAST:event_btnBuscarTipoActionPerformed
+
+    private void tablaEquiposMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEquiposMouseClicked
+        // TODO add your handling code here:
+        int filaSeleccionada = tablaEquipos.getSelectedRow();
+
+        // Verificar si la fila es válida
+        if (filaSeleccionada == -1) {
+            return;
+        }
+
+        int idEquipo = (int) tablaEquipos.getValueAt(filaSeleccionada, 0);
+        cargarTablaSoftware(idEquipo);
+    }//GEN-LAST:event_tablaEquiposMouseClicked
 
     /**
      * @param args the command line arguments
