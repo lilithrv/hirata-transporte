@@ -30,7 +30,7 @@ import modelo.Usuario;
 import util.Sesion;
 import vista.VistaLogin;
 
-public class VistaSoporteIT extends javax.swing.JFrame {
+public class VistaMantenimientoEquipos extends javax.swing.JFrame {
 
     private final Color fondoVentana = new Color(236, 240, 247);
     private final Color azulNoche = new Color(12, 24, 44);
@@ -46,7 +46,7 @@ public class VistaSoporteIT extends javax.swing.JFrame {
     private final EquipoOficinaDAO equipoDAO = new EquipoOficinaDAO();
     private final MantenimientoEquipoOficinaDAO mantenimientoDAO = new MantenimientoEquipoOficinaDAO();
 
-    public VistaSoporteIT() {
+    public VistaMantenimientoEquipos() {
         setUndecorated(true);
         initComponents();
         configurarVentana();
