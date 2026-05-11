@@ -256,8 +256,17 @@ public class VistaLogin extends javax.swing.JFrame {
                 case "Conductor":
                     new VistaConductor().setVisible(true);
                     break;
-                case "Soporte IT":
-                    new VistaSoporteIT().setVisible(true);
+                case "Técnico de mantenimiento":
+                    new VistaMantenimientoEquipos().setVisible(true);
+                    break;
+                case "Técnico de IT":
+                    new VistaSoftware().setVisible(true);
+                    break;
+                case "Administrador de Mantenimiento Equipos":
+                    new VistaHistorialMantenimientoEquipo().setVisible(true);
+                    break;
+                case "Administrador de Inventario":
+                    new VistaInventarioPiezas().setVisible(true);
                     break;
                 default:
                     javax.swing.JOptionPane.showMessageDialog(this, "Rol no reconocido.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);

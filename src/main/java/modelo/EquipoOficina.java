@@ -1,43 +1,105 @@
 package modelo;
 
+import java.sql.Timestamp;
+
 public class EquipoOficina {
+
     private int idEquipo;
-    private String codigoInventario;
-    private String tipoEquipo;
+    private TipoEquipo tipoEquipo;
     private String marca;
     private String modelo;
-    private String ubicacion;
+    private String numeroSerie;
     private String estado;
+    private int idResponsable;
+    private String fechaAdquisicion;
+    private Timestamp fechaRegistro;
 
-    public EquipoOficina() {}
+    public EquipoOficina() {
+    }
 
-    public EquipoOficina(int idEquipo, String codigoInventario, String tipoEquipo, String marca, String modelo, String ubicacion, String estado) {
-        this.idEquipo = idEquipo;
-        this.codigoInventario = codigoInventario;
+    public EquipoOficina(TipoEquipo tipoEquipo, String marca, String modelo,
+            String numeroSerie, String estado) {
         this.tipoEquipo = tipoEquipo;
         this.marca = marca;
         this.modelo = modelo;
-        this.ubicacion = ubicacion;
+        this.numeroSerie = numeroSerie;
         this.estado = estado;
     }
 
-    public int getIdEquipo() { return idEquipo; }
-    public void setIdEquipo(int idEquipo) { this.idEquipo = idEquipo; }
-    public String getCodigoInventario() { return codigoInventario; }
-    public void setCodigoInventario(String codigoInventario) { this.codigoInventario = codigoInventario; }
-    public String getTipoEquipo() { return tipoEquipo; }
-    public void setTipoEquipo(String tipoEquipo) { this.tipoEquipo = tipoEquipo; }
-    public String getMarca() { return marca; }
-    public void setMarca(String marca) { this.marca = marca; }
-    public String getModelo() { return modelo; }
-    public void setModelo(String modelo) { this.modelo = modelo; }
-    public String getUbicacion() { return ubicacion; }
-    public void setUbicacion(String ubicacion) { this.ubicacion = ubicacion; }
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public int getIdEquipo() {
+        return idEquipo;
+    }
+
+    public TipoEquipo getTipoEquipo() {
+        return tipoEquipo;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public String getNumeroSerie() {
+        return numeroSerie;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public int getIdResponsable() {
+        return idResponsable;
+    }
+
+    public String getFechaAdquisicion() {
+        return fechaAdquisicion;
+    }
+
+    public Timestamp getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setIdEquipo(int idEquipo) {
+        this.idEquipo = idEquipo;
+    }
+
+    public void setTipoEquipo(TipoEquipo tipoEquipo) {
+        this.tipoEquipo = tipoEquipo;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public void setNumeroSerie(String numeroSerie) {
+        this.numeroSerie = numeroSerie;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public void setIdResponsable(int idResponsable) {
+        this.idResponsable = idResponsable;
+    }
+
+    public void setFechaAdquisicion(String fechaAdquisicion) {
+        this.fechaAdquisicion = fechaAdquisicion;
+    }
+
+    public void setFechaRegistro(Timestamp fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
 
     @Override
     public String toString() {
-        return codigoInventario + " - " + tipoEquipo + " " + marca + " " + modelo + " (" + ubicacion + ")";
+        return marca + " " + modelo + " (" + numeroSerie + ")";
     }
 }

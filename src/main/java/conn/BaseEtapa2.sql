@@ -218,6 +218,7 @@ CREATE TABLE detalle_mant_celular (
 INSERT INTO roles (nombre) VALUES
     ('Técnico de Mantenimiento'),
     ('Técnico de IT'),
+    ('Administrador de Mantenimiento Equipos'),
     ('Administrador de Inventario');
 
 INSERT INTO usuarios (nombre, email, password, id_rol) VALUES
