@@ -7,6 +7,9 @@
  * 
  */
 
+
+CREATE DATABASE IF NOT EXISTS transporte_hirata;
+
 USE transporte_hirata;
 
 -- Tipos de equipo
