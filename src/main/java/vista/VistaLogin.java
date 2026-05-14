@@ -256,8 +256,8 @@ public class VistaLogin extends javax.swing.JFrame {
                 case "Conductor":
                     new VistaConductor().setVisible(true);
                     break;
-                case "Técnico de mantenimiento":
-                    new VistaMantenimientoEquipos().setVisible(true);
+                case "Técnico de Mantenimiento":
+                    new VistaListaEquipos().setVisible(true);
                     break;
                 case "Técnico de IT":
                     new VistaSoftware().setVisible(true);
