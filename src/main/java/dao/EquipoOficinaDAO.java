@@ -91,4 +91,27 @@ public class EquipoOficinaDAO {
         }
         return lista;
     }
-}
+    
+    
+    public List<String> obtenerEstadosUnicos() {
+        List<String> estados = new ArrayList<>();
+        String sql = "SELECT DISTINCT estado FROM equipos_oficina ORDER BY estado ASC";
+
+        // Usamos tu método getInstancia()
+        Connection conn = Conexion.getInstancia();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                estados.add(rs.getString("estado"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener estados: " + e.getMessage());
+        }
+        return estados;
+    }
+    
+    
+    
+    
+} // Class

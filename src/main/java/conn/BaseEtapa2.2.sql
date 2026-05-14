@@ -156,7 +156,7 @@ INSERT INTO usuarios (nombre, email, password, id_rol) VALUES
 ('Ana Rodríguez', 'a.rodriguez@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 4),
 ('Diego Soto', 'd.soto@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 5),
 ('Valentina Torres', 'v.torres@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 5),
-('Laura San Martín', 'l.sanmartin@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 6)
+('Laura San Martín', 'l.sanmartin@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 6),
 ('Roberto Fuentes', 'r.fuentes@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 7);
 
 -- ============================================================
@@ -351,7 +351,7 @@ INSERT INTO mantenimiento (id_vehiculo, estado, tipo_mantenimiento, origen, desc
 (57, 'Programado', 'Correctivo', 'Manual', '', 93308, null);
 
 -- ============================================================
--- 4. TABLAS ETAPA 2 (SOPORTE IT Y OFICINA)
+-- TABLAS ETAPA 2 (SOPORTE IT Y OFICINA)
 -- ============================================================
 
 CREATE TABLE tipos_equipo (
@@ -499,7 +499,7 @@ CREATE TABLE detalle_mant_celular (
 );
 
 -- ============================================================
--- 5. INSERTS DE ETAPA 2 (Con Variables Dinámicas para no fallar)
+-- INSERTS DE ETAPA 2 (Con Variables Dinámicas para no fallar)
 -- ============================================================
 
 SET @tec_mant1 = (SELECT id_usuario FROM usuarios WHERE email = 'c.mendoza@hirata.cl');
@@ -510,11 +510,22 @@ SET @adm_inv   = (SELECT id_usuario FROM usuarios WHERE email = 'r.fuentes@hirat
 
 -- Equipos Oficina
 INSERT INTO equipos_oficina (id_tipo_equipo, marca, modelo, numero_serie, estado, id_responsable, fecha_adquisicion) VALUES
+-- Equipos en estado ACTIVO (Operativos)
 (1, 'Dell', 'Latitude 5540', 'NB-DELL-001', 'Activo', @tec_it1, '2023-03-10'),
 (1, 'HP', 'ProBook 450 G10', 'NB-HP-001', 'Activo', @tec_it2, '2023-05-15'),
-(2, 'Dell', 'OptiPlex 7010', 'PC-DELL-001', 'Activo', @tec_it1, '2022-08-14'),
-(3, 'HP', 'LaserJet Pro M404dn', 'IMP-HP-001', 'Activo', @tec_mant2, '2022-05-10'),
-(4, 'Samsung', 'Galaxy A54 5G', 'CEL-SAM-001', 'Activo', @tec_mant1, '2023-04-20');
+(4, 'Samsung', 'Galaxy A54 5G', 'CEL-SAM-001', 'Activo', @tec_mant1, '2023-04-20'),
+(4, 'Xiaomi', 'Redmi Note 13', 'CEL-XIA-333', 'Activo', @tec_mant1, '2024-01-10'),
+
+-- Equipos en estado INACTIVO (En bodega / Sin asignar)
+(2, 'Dell', 'OptiPlex 7010', 'PC-DELL-001', 'Inactivo', @tec_it1, '2022-08-14'),
+(2, 'HP', 'Pavilion Desktop', 'PC-HP-888', 'Inactivo', @adm_inv, '2022-11-20'),
+(4, 'Samsung', 'Galaxy S23', 'CEL-SAM-111', 'Inactivo', @adm_inv, '2023-04-14'),
+
+-- Equipos EN MANTENIMIENTO (Para probar Checklists)
+(3, 'HP', 'LaserJet Pro M404dn', 'IMP-HP-001', 'En Mantenimiento', @tec_mant2, '2022-05-10'),
+(1, 'Lenovo', 'ThinkPad X1', 'NB-LEN-999', 'En Mantenimiento', @tec_it1, '2023-01-15'),
+(3, 'Brother', 'HL-L2350DW', 'IMP-BRO-555', 'En Mantenimiento', @tec_mant2, '2023-08-12'),
+(4, 'iPhone', '15 Pro', 'CEL-APP-222', 'En Mantenimiento', @tec_it2, '2023-12-25');
 
 -- Software
 INSERT INTO software (id_tipo_software, nombre, fabricante, descripcion) VALUES

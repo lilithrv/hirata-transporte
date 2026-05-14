@@ -4,9 +4,11 @@
  */
 package vista;
 
+import dao.EquipoOficinaDAO;
+import java.util.List;
 /**
  *
- * @author gust
+ * @author 
  */
 public class VistaListaEquipos extends javax.swing.JFrame {
     
@@ -16,9 +18,8 @@ public class VistaListaEquipos extends javax.swing.JFrame {
      * Creates new form VistaListaEquipos
      */
     public VistaListaEquipos() {
-        initComponents();
         
-                initComponents();
+        initComponents();
 
         this.setSize(1260, 750);
 
@@ -29,7 +30,26 @@ public class VistaListaEquipos extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
         this.setTitle("Inventario Central");
-    }
+        
+        llenarComboEstados();
+    } // Vista Equipos
+    
+    // Este método lo escribes tú manualmente
+    public void llenarComboEstados() {
+        // 1. Instanciamos el DAO (Asegúrate de tener el import dao.EquipoOficinaDAO;)
+        dao.EquipoOficinaDAO dao = new dao.EquipoOficinaDAO();
+
+        // 2. Traemos la lista de la BD
+        java.util.List<String> listaEstados = dao.obtenerEstadosUnicos();
+
+        // 3. Limpiamos y llenamos
+        cmbEstados.removeAllItems();
+        cmbEstados.addItem("Todos"); // Opción inicial
+
+        for (String estado : listaEstados) {
+            cmbEstados.addItem(estado);
+        }
+    } // Llenar combox
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,6 +63,8 @@ public class VistaListaEquipos extends javax.swing.JFrame {
         pnlPrincipal = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         pnlFiltro = new javax.swing.JPanel();
+        lblFiltroPorEstado = new javax.swing.JLabel();
+        cmbEstados = new javax.swing.JComboBox<>();
         pnlTabla = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTabla = new javax.swing.JTable();
@@ -55,19 +77,35 @@ public class VistaListaEquipos extends javax.swing.JFrame {
         lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
         lblTitulo.setText("Mantenimiento de Equipos");
 
+        pnlFiltro.setBackground(new java.awt.Color(102, 102, 102));
         pnlFiltro.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Filtros de Búsqueda", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Noto Sans", 1, 12))); // NOI18N
+
+        lblFiltroPorEstado.setText("Filtrar por Estados:");
+
+        cmbEstados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout pnlFiltroLayout = new javax.swing.GroupLayout(pnlFiltro);
         pnlFiltro.setLayout(pnlFiltroLayout);
         pnlFiltroLayout.setHorizontalGroup(
             pnlFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 342, Short.MAX_VALUE)
+            .addGroup(pnlFiltroLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblFiltroPorEstado)
+                .addGap(29, 29, 29)
+                .addComponent(cmbEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(151, Short.MAX_VALUE))
         );
         pnlFiltroLayout.setVerticalGroup(
             pnlFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGroup(pnlFiltroLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFiltroPorEstado)
+                    .addComponent(cmbEstados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
+        pnlTabla.setBackground(new java.awt.Color(102, 102, 102));
         pnlTabla.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Listado de Equipos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Noto Sans", 1, 12))); // NOI18N
 
         tblTabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -172,7 +210,9 @@ public class VistaListaEquipos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cmbEstados;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblFiltroPorEstado;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JPanel pnlFiltro;
     private javax.swing.JPanel pnlPrincipal;
