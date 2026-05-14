@@ -13,6 +13,7 @@ public class EquipoOficina {
     private int idResponsable;
     private String fechaAdquisicion;
     private Timestamp fechaRegistro;
+    private String nombreResponsable;
 
     public EquipoOficina() {
     }
@@ -62,6 +63,10 @@ public class EquipoOficina {
         return fechaRegistro;
     }
 
+    public String getNombreResponsable() {
+        return nombreResponsable;
+    }
+    
     public void setIdEquipo(int idEquipo) {
         this.idEquipo = idEquipo;
     }
@@ -96,6 +101,10 @@ public class EquipoOficina {
 
     public void setFechaRegistro(Timestamp fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+    
+    public void setNombreResponsable(String nombreResponsable) {
+        this.nombreResponsable = nombreResponsable;
     }
 
     @Override

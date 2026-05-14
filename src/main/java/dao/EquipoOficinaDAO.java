@@ -92,8 +92,7 @@ public class EquipoOficinaDAO {
         return lista;
     }
     
-    
-    public List<String> obtenerEstadosUnicos() {
+     public List<String> obtenerEstadosUnicos() {
         List<String> estados = new ArrayList<>();
         String sql = "SELECT DISTINCT estado FROM equipos_oficina ORDER BY estado ASC";
 
@@ -110,8 +109,52 @@ public class EquipoOficinaDAO {
         }
         return estados;
     }
-    
-    
-    
+
+    public List<EquipoOficina> listarTodo() {
+        List<EquipoOficina> lista = new ArrayList<>();
+        // JOIN para traer los nombres en lugar de solo IDs
+        String sql = "SELECT e.*, t.nombre AS tipo_nombre, u.nombre AS responsable_nombre "
+                + "FROM equipos_oficina e "
+                + "JOIN tipos_equipo t ON e.id_tipo_equipo = t.id_tipo_equipo "
+                + "LEFT JOIN usuarios u ON e.id_responsable = u.id_usuario "
+                + "ORDER BY e.id_equipo";
+
+        try (Connection cn = Conexion.getInstancia(); PreparedStatement ps = cn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                EquipoOficina eq = new EquipoOficina();
+
+                // Datos básicos
+                eq.setIdEquipo(rs.getInt("id_equipo"));
+                eq.setMarca(rs.getString("marca"));
+                eq.setModelo(rs.getString("modelo"));
+                eq.setNumeroSerie(rs.getString("numero_serie"));
+                eq.setEstado(rs.getString("estado"));
+                eq.setIdResponsable(rs.getInt("id_responsable"));
+
+                // MANEJO DE FECHAS 
+                // rs.getDate devuelve un java.sql.Date, lo pasamos a String con .toString()
+                if (rs.getDate("fecha_adquisicion") != null) {
+                    eq.setFechaAdquisicion(rs.getDate("fecha_adquisicion").toString());
+                }
+
+                eq.setFechaRegistro(rs.getTimestamp("fecha_registro"));
+
+                // MANEJO DEL TIPO
+                TipoEquipo tipo = new TipoEquipo();
+                tipo.setIdTipoEquipo(rs.getInt("id_tipo_equipo"));
+                tipo.setNombre(rs.getString("tipo_nombre"));
+                eq.setTipoEquipo(tipo);
+
+                eq.setNombreResponsable(rs.getString("responsable_nombre"));
+
+                lista.add(eq);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al listar: " + e.getMessage());
+        }
+        return lista;
+    } // Listar Todo
+
     
 } // Class
