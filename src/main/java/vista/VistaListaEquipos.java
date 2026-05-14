@@ -5,6 +5,10 @@
 package vista;
 
 import dao.EquipoOficinaDAO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import modelo.EquipoOficina;
@@ -35,6 +39,8 @@ public class VistaListaEquipos extends javax.swing.JFrame {
 
         
         llenarComboEstados();
+        llenarComboTipos();
+        refrescarTabla();
         cargarDatosTabla();
 
         
@@ -94,6 +100,73 @@ public class VistaListaEquipos extends javax.swing.JFrame {
         columnModel.getColumn(6).setPreferredWidth(180); // Responsable
         columnModel.getColumn(7).setPreferredWidth(120); // Adquisición
     }
+
+    public void refrescarTabla() {
+        // Definir los títulos de la tabla
+        String[] titulos = {"ID", "Tipo", "Marca", "Modelo", "Serie", "Estado", "Responsable", "Adquisición"};
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos) {
+            // Hacemos que las celdas no sean editables al hacer doble clic
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        // Capturar lo que el usuario seleccionó en los dos combos
+        // Usamos una validación simple por si el combo de tipos aún no tiene datos
+        String estado = cmbEstados.getSelectedItem() != null ? cmbEstados.getSelectedItem().toString() : "Todos";
+        String tipo = cmbTipo.getSelectedItem() != null ? cmbTipo.getSelectedItem().toString() : "Todos";
+
+        // Consultar al DAO con ambos filtros
+        EquipoOficinaDAO dao = new EquipoOficinaDAO();
+        List<EquipoOficina> lista = dao.listarFiltrado(estado, tipo);
+
+        //  Llenar el modelo con los resultados
+        for (EquipoOficina eq : lista) {
+            Object[] fila = new Object[8];
+            fila[0] = eq.getIdEquipo();
+            fila[1] = (eq.getTipoEquipo() != null) ? eq.getTipoEquipo().getNombre() : "N/A";
+            fila[2] = eq.getMarca();
+            fila[3] = eq.getModelo();
+            fila[4] = eq.getNumeroSerie();
+            fila[5] = eq.getEstado();
+            fila[6] = eq.getNombreResponsable();
+            fila[7] = eq.getFechaAdquisicion();
+            modelo.addRow(fila);
+        }
+
+        // Aplicar el modelo a la tabla
+        tblTabla.setModel(modelo);
+
+        // RE-APLICAR DISEÑO 
+        tblTabla.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        javax.swing.table.TableColumnModel columnModel = tblTabla.getColumnModel();
+
+        columnModel.getColumn(0).setPreferredWidth(40);  // ID
+        columnModel.getColumn(1).setPreferredWidth(100); // Tipo
+        columnModel.getColumn(2).setPreferredWidth(100); // Marca
+        columnModel.getColumn(3).setPreferredWidth(120); // Modelo
+        columnModel.getColumn(4).setPreferredWidth(130); // Serie
+        columnModel.getColumn(5).setPreferredWidth(100); // Estado
+        columnModel.getColumn(6).setPreferredWidth(180); // Responsable
+        columnModel.getColumn(7).setPreferredWidth(120); // Adquisición
+    }
+    
+    public void llenarComboTipos() {
+        cmbTipo.removeAllItems();
+        cmbTipo.addItem("Todos"); // Opción para quitar el filtro
+
+        // Necesitas un método en tu DAO que liste los tipos o usar una consulta rápida aquí
+        try (Connection cn = conn.Conexion.getInstancia(); PreparedStatement ps = cn.prepareStatement("SELECT nombre FROM tipos_equipo"); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                cmbTipo.addItem(rs.getString("nombre"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al llenar combo tipos: " + e.getMessage());
+        }
+    }
+    
     
     
 
@@ -116,6 +189,7 @@ public class VistaListaEquipos extends javax.swing.JFrame {
         pnlTabla = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTabla = new javax.swing.JTable();
+        btnGestionarE = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -131,10 +205,20 @@ public class VistaListaEquipos extends javax.swing.JFrame {
         lblFiltroPorEstado.setText("Filtrar por Estado :");
 
         cmbEstados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbEstados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbEstadosActionPerformed(evt);
+            }
+        });
 
         lblFiltrarTipo.setText("Filtrar por Tipo :");
 
         cmbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTipoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlFiltroLayout = new javax.swing.GroupLayout(pnlFiltro);
         pnlFiltro.setLayout(pnlFiltroLayout);
@@ -204,6 +288,13 @@ public class VistaListaEquipos extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btnGestionarE.setText("Gestionar Equipo");
+        btnGestionarE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGestionarEActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlPrincipalLayout = new javax.swing.GroupLayout(pnlPrincipal);
         pnlPrincipal.setLayout(pnlPrincipalLayout);
         pnlPrincipalLayout.setHorizontalGroup(
@@ -215,9 +306,11 @@ public class VistaListaEquipos extends javax.swing.JFrame {
                         .addComponent(lblTitulo))
                     .addGroup(pnlPrincipalLayout.createSequentialGroup()
                         .addGap(26, 26, 26)
-                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnGestionarE)
+                            .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(pnlFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(pnlTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(502, Short.MAX_VALUE))
         );
         pnlPrincipalLayout.setVerticalGroup(
@@ -229,7 +322,9 @@ public class VistaListaEquipos extends javax.swing.JFrame {
                 .addComponent(pnlFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(pnlTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(111, 111, 111))
+                .addGap(18, 18, 18)
+                .addComponent(btnGestionarE)
+                .addGap(70, 70, 70))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -249,6 +344,56 @@ public class VistaListaEquipos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cmbEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadosActionPerformed
+        // TODO add your handling code here:
+        
+        refrescarTabla();
+    }//GEN-LAST:event_cmbEstadosActionPerformed
+
+    private void cmbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoActionPerformed
+        // TODO add your handling code here:
+        
+        refrescarTabla();
+    }//GEN-LAST:event_cmbTipoActionPerformed
+
+    private void btnGestionarEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarEActionPerformed
+        // TODO add your handling code here:
+        
+        int fila = tblTabla.getSelectedRow();
+
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un equipo de la lista.");
+            return;
+        }
+
+        // Capturamos el ID y el Nombre del Tipo
+        int idEquipo = (int) tblTabla.getValueAt(fila, 0);
+        String tipo = tblTabla.getValueAt(fila, 1).toString();
+
+        // Redirección inteligente
+        switch (tipo) {
+            case "Notebook":
+                new VistaMantenimientoNotebook(idEquipo).setVisible(true);
+                break;
+
+            case "PC Escritorio":
+                new VistaMantenimientoPC(idEquipo).setVisible(true);
+                break;
+
+            case "Celular":
+                new VistaMantenimientoCelular(idEquipo).setVisible(true);
+                break;
+
+            case "Impresora":
+                new VistaMantenimientoImpresora(idEquipo).setVisible(true);
+                break;
+
+            default:
+                javax.swing.JOptionPane.showMessageDialog(this, "El tipo '" + tipo + "' aún no tiene un checklist configurado.");
+                break;
+        }
+    }//GEN-LAST:event_btnGestionarEActionPerformed
 
     /**
      * @param args the command line arguments
@@ -276,6 +421,7 @@ public class VistaListaEquipos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGestionarE;
     private javax.swing.JComboBox<String> cmbEstados;
     private javax.swing.JComboBox<String> cmbTipo;
     private javax.swing.JScrollPane jScrollPane1;
