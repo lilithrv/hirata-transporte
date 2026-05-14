@@ -155,6 +155,59 @@ public class EquipoOficinaDAO {
         }
         return lista;
     } // Listar Todo
+    
+    
+    
+    public List<EquipoOficina> listarFiltrado(String estado, String tipoNombre) {
+        List<EquipoOficina> lista = new ArrayList<>();
+
+        // Base de la consulta con los JOINs que ya funcionan
+        StringBuilder sql = new StringBuilder(
+                "SELECT e.*, t.nombre AS tipo_nombre, u.nombre AS responsable_nombre "
+                + "FROM equipos_oficina e "
+                + "JOIN tipos_equipo t ON e.id_tipo_equipo = t.id_tipo_equipo "
+                + "LEFT JOIN usuarios u ON e.id_responsable = u.id_usuario WHERE 1=1 "
+        );
+
+        // Condicionales dinámicos
+        if (estado != null && !estado.equals("Todos")) {
+            sql.append(" AND e.estado = '").append(estado).append("'");
+        }
+
+        if (tipoNombre != null && !tipoNombre.equals("Todos")) {
+            sql.append(" AND t.nombre = '").append(tipoNombre).append("'");
+        }
+
+        sql.append(" ORDER BY e.id_equipo");
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString()); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                EquipoOficina eq = new EquipoOficina();
+                eq.setIdEquipo(rs.getInt("id_equipo"));
+                eq.setMarca(rs.getString("marca"));
+                eq.setModelo(rs.getString("modelo"));
+                eq.setNumeroSerie(rs.getString("numero_serie"));
+                eq.setEstado(rs.getString("estado"));
+
+                if (rs.getDate("fecha_adquisicion") != null) {
+                    eq.setFechaAdquisicion(rs.getDate("fecha_adquisicion").toString());
+                }
+                eq.setFechaRegistro(rs.getTimestamp("fecha_registro"));
+
+                TipoEquipo tipo = new TipoEquipo();
+                tipo.setNombre(rs.getString("tipo_nombre"));
+                eq.setTipoEquipo(tipo);
+
+                eq.setNombreResponsable(rs.getString("responsable_nombre"));
+                lista.add(eq);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en el filtro combinado: " + e.getMessage());
+        }
+        return lista;
+    }
 
     
 } // Class
