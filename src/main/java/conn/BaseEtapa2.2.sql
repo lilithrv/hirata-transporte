@@ -359,7 +359,8 @@ CREATE TABLE tipos_equipo (
     nombre VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT INTO tipos_equipo (nombre) VALUES ('Notebook'), ('PC Escritorio'), ('Impresora'), ('Celular');
+INSERT INTO tipos_equipo (nombre) VALUES 
+    ('Notebook'), ('PC Escritorio'), ('Impresora'), ('Celular');
 
 CREATE TABLE tipos_pieza (
     id_tipo_pieza INT AUTO_INCREMENT PRIMARY KEY,
