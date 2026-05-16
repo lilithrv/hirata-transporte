@@ -673,6 +673,10 @@ INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, sto
 (11, 'Lexmark', '50F4H00','Tóner 504H Negro MS310', 2,  1),
 (11, 'Xerox', '106R03623','Tóner Phaser 3330 Negro', 2,  1);
 
+-- Otros 
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo)
+VALUES (12, 'Otro', 'Repuesto no catalogado', 'Detallar especificaciones en el cuadro de observaciones', 999, 1);
+
 -- Software Equipos (Capturando IDs dinámicamente)
 SET @sw_win11 = (SELECT id_software FROM software WHERE nombre = 'Windows 11 Pro');
 SET @sw_office = (SELECT id_software FROM software WHERE nombre = 'Microsoft Office 365');

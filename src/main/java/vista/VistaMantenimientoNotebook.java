@@ -13,6 +13,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
     
     
     private int idRecibido;
+    private int contadorPiezas = 1;
     
     /**
      * Creates new form VistaMantenimientoNotebook
@@ -21,6 +22,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         initComponents();
         
         this.idRecibido = idEquipo; // Ahora la ventana ya sabe qué equipo es
+        
         
         this.setSize(900, 800);
 
@@ -58,7 +60,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         cbxArmadoCierre = new javax.swing.JCheckBox();
         jCheckBox1 = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
+        pnlPanelPiezas = new javax.swing.JPanel();
         btnAgregar = new javax.swing.JButton();
         pnlObservaciones = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -133,7 +135,6 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
 
         cbxCheckRam.setForeground(new java.awt.Color(0, 0, 0));
         cbxCheckRam.setText("Checkeo RAM");
-        cbxCheckRam.setActionCommand("Checkeo RAM");
         jpnCheckList.add(cbxCheckRam, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 115, -1, -1));
 
         cbxCambioPasta.setForeground(new java.awt.Color(0, 0, 0));
@@ -155,14 +156,19 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("                                                  "));
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jScrollPane2.setViewportView(jPanel2);
+        pnlPanelPiezas.setBackground(new java.awt.Color(255, 255, 255));
+        pnlPanelPiezas.setLayout(new javax.swing.BoxLayout(pnlPanelPiezas, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane2.setViewportView(pnlPanelPiezas);
 
-        jpnCheckList.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 700, 110));
+        jpnCheckList.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 700, 150));
 
         btnAgregar.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         btnAgregar.setText("+");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
         jpnCheckList.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 200, 60, 50));
 
         pnlObservaciones.setBackground(new java.awt.Color(255, 255, 255));
@@ -186,7 +192,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         );
         pnlObservacionesLayout.setVerticalGroup(
             pnlObservacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
         );
 
         btnGuardarMantnimiento.setBackground(new java.awt.Color(204, 204, 204));
@@ -221,8 +227,8 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(pnlInfoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jpnCheckList, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jpnCheckList, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlObservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,6 +254,53 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+
+        //Panel contenedor de la fila
+        javax.swing.JPanel panelFila = new javax.swing.JPanel();
+        panelFila.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
+        panelFila.setMaximumSize(new java.awt.Dimension(Short.MAX_VALUE, 35));
+        panelFila.setOpaque(false);
+
+        //Label identificador
+        javax.swing.JLabel lblComponente = new javax.swing.JLabel("Componente " + contadorPiezas + ":");
+        lblComponente.setPreferredSize(new java.awt.Dimension(90, 25));
+
+        //ComboBox con los repuestos (Recupera su ancho completo original)
+        javax.swing.JComboBox<String> cmbRepuestos = new javax.swing.JComboBox<>();
+        cmbRepuestos.setPreferredSize(new java.awt.Dimension(550, 25));
+        cmbRepuestos.addItem("-- Seleccione Repuesto --");
+
+        // Cargar los filtros de Notebook desde la base de datos
+        java.util.List<String> filtrosNotebook = java.util.Arrays.asList(
+                "Memoria RAM", "Disco Duro HDD", "Disco Duro SSD", "CPU",
+                "GPU", "Tarjeta Madre", "Ventilador", "Batería", "Pantalla", "Otro"
+        );
+
+        dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
+        java.util.List<String> piezasDisponibles = equipoDAO.obtenerPiezasPorTipos(filtrosNotebook);
+
+        for (String repuesto : piezasDisponibles) {
+            cmbRepuestos.addItem(repuesto);
+        }
+
+        // Armar la fila (Solo el Label y el ComboBox, sin textos extra)
+        panelFila.add(lblComponente);
+        panelFila.add(cmbRepuestos);
+
+        //Inyectar la fila al scrollbar
+        pnlPanelPiezas.add(panelFila);
+
+        // Redibujar la interfaz
+        pnlPanelPiezas.revalidate();
+        pnlPanelPiezas.repaint();
+
+        // Incrementar el contador global
+        contadorPiezas++;
+
+
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -297,13 +350,13 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel jpnCheckList;
     private javax.swing.JLabel lblCodigoSerie;
     private javax.swing.JPanel pnlInfoGeneral;
     private javax.swing.JPanel pnlObservaciones;
+    private javax.swing.JPanel pnlPanelPiezas;
     private javax.swing.JTextField txtCodigoSerie;
     private javax.swing.JTextField txtEstado;
     private javax.swing.JTextField txtTipoMantenimiento;

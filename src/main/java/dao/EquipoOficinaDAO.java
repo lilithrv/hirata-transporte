@@ -208,6 +208,55 @@ public class EquipoOficinaDAO {
         }
         return lista;
     }
+    
+    
+       public List<String> obtenerPiezasPorTipos(List<String> tiposPermitidos) {
+        List<String> listaPiezas = new ArrayList<>();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tiposPermitidos.size(); i++) {
+            sb.append("?");
+            if (i < tiposPermitidos.size() - 1) {
+                sb.append(", ");
+            }
+        }
+
+        // Traemos el nombre del tipo, marca, modelo y descripción
+        String sql = "SELECT tp.nombre AS tipo_nombre, p.marca, p.modelo, p.descripcion "
+                + "FROM piezas p "
+                + "JOIN tipos_pieza tp ON p.id_tipo_pieza = tp.id_tipo_pieza "
+                + "WHERE p.stock_actual > 0 AND tp.nombre IN (" + sb.toString() + ") "
+                + "ORDER BY CASE WHEN tp.nombre = 'Otro' THEN 1 ELSE 0 END ASC, "
+                + "tp.nombre ASC, p.marca ASC";
+
+        Connection conn = Conexion.getInstancia();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            // Inyectamos dinámicamente los tipos permitidos en los parámetros del query
+            for (int i = 0; i < tiposPermitidos.size(); i++) {
+                ps.setString(i + 1, tiposPermitidos.get(i));
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    // Formateamos la información: [Tipo] Marca - Modelo (Descripción)
+                    String pieza = "[" + rs.getString("tipo_nombre") + "] "
+                            + rs.getString("marca") + " - "
+                            + rs.getString("modelo") + " ("
+                            + rs.getString("descripcion") + ")";
+                    listaPiezas.add(pieza);
+                }
+               
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al filtrar las piezas desde el DAO: " + e.getMessage());
+        }
+
+        return listaPiezas;
+    }
 
     
 } // Class
