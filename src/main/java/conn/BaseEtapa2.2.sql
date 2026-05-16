@@ -500,7 +500,7 @@ CREATE TABLE detalle_mant_celular (
 );
 
 -- ============================================================
--- INSERTS DE ETAPA 2 (Con Variables Dinámicas para no fallar)
+-- INSERTS DE ETAPA 2 
 -- ============================================================
 
 SET @tec_mant1 = (SELECT id_usuario FROM usuarios WHERE email = 'c.mendoza@hirata.cl');
@@ -534,6 +534,144 @@ INSERT INTO software (id_tipo_software, nombre, fabricante, descripcion) VALUES
 (2, 'Microsoft Office 365', 'Microsoft', 'Suite ofimática en la nube'),
 (3, 'Norton 360', 'NortonLifeLock','Antivirus + VPN + Firewall'),
 (4, 'Google Chrome', 'Google', 'Navegador web');
+
+-- ============================================================
+-- PIEZAS — 100 unidades en inventario
+-- ============================================================
+
+-- Memoria RAM — 14 piezas
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(1, 'Kingston', 'KVR32N22S8/8', 'DDR4 8GB 3200MHz SODIMM',12, 3),
+(1, 'Kingston', 'KVR32N22D8/16','DDR4 16GB 3200MHz DIMM', 8,  2),
+(1, 'Corsair', 'CMK8GX4M1A2666C16','DDR4 8GB 2666MHz DIMM',  6,  2),
+(1, 'Corsair', 'CMK32GX4M2E3200C16','DDR4 32GB 3600MHz DIMM', 3,  1),
+(1, 'Samsung', 'M471A1K43EB1-CWE', 'DDR4 8GB 3200MHz SODIMM OEM', 9,  3),
+(1, 'Samsung', 'M425R1GB4BB0-CQK', 'DDR5 8GB 4800MHz SODIMM', 4,  2),
+(1, 'G.Skill', 'F4-3200C16S-16GIS','DDR4 16GB 3200MHz DIMM', 5,  2),
+(1, 'G.Skill', 'F5-6000J3040G32GX2','DDR5 32GB 6000MHz DIMM Kit', 2,  1),
+(1, 'Crucial', 'CT8G4SFS832A','DDR4 8GB 3200MHz SODIMM', 10, 3),
+(1, 'Crucial','CT4G4SFS8266', 'DDR4 4GB 2666MHz SODIMM', 7,  2),
+(1, 'HyperX', 'HX432S20IB2/16','DDR4 16GB 3200MHz SODIMM', 5,  2),
+(1, 'Patriot', 'PSD48G320081S','DDR4 8GB 3200MHz SODIMM', 8,  2),
+(1, 'TeamGroup', 'TED416G3200C22-S01','DDR4 16GB 3200MHz SODIMM', 4,  1),
+(1, 'Adata', 'AD4S32008G22-SGN', 'DDR4 8GB 3200MHz SODIMM', 6,  2);
+
+-- Disco Duro HDD — 9 piezas
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(2, 'Seagate','ST1000DM010', 'Barracuda 1TB 7200rpm SATA', 7,  2),
+(2, 'Seagate', 'ST2000DM008', 'Barracuda 2TB 7200rpm SATA', 5,  2),
+(2, 'WD', 'WD10EZEX','Blue 1TB 7200rpm SATA', 6,  2),
+(2, 'WD', 'WD20EZAZ','Blue 2TB 5400rpm SATA', 4,  1),
+(2, 'WD', 'WD40EFRX','Red 4TB NAS 5400rpm', 2,  1),
+(2, 'Toshiba', 'HDWD110UZSVA','P300 1TB 7200rpm SATA', 5,  2),
+(2, 'Toshiba', 'HDWD120UZSVA','P300 2TB 7200rpm SATA', 3,  1),
+(2, 'HGST', 'HUS726020ALE614','Ultrastar 2TB 7200rpm', 2,  1),
+(2, 'Seagate', 'ST2000VX015','SkyHawk 2TB Vigilancia', 3,  1);
+
+-- SSD — 9 piezas
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(3, 'Samsung', 'MZ-77E500B/AM','870 EVO 500GB SATA 2.5"', 8,  2),
+(3, 'Samsung', 'MZ-77E1T0B/AM', '870 EVO 1TB SATA 2.5"', 5,  2),
+(3, 'WD','WDS500G2B0A', 'Blue 500GB SATA 2.5"',7,  2),
+(3, 'WD', 'WDS100T2B0A','Blue 1TB SATA 2.5"', 4,  2),
+(3, 'Kingston','SA400S37/480G', 'A400 480GB SATA 2.5"',6,  2),
+(3, 'Kingston','SNV2S/1000G','NV2 1TB M.2 NVMe', 5,  2),
+(3, 'Crucial','CT500MX500SSD1','MX500 500GB SATA 2.5"', 6,  2),
+(3, 'Crucial','CT1000MX500SSD1','MX500 1TB SATA 2.5"', 3,  1),
+(3, 'SanDisk','SDSSDA-500G-G26','Ultra 500GB SATA 2.5"', 4,  1);
+
+-- CPU — 9 piezas
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(4, 'Intel', 'BX8071512400','Core i5-12400 LGA1700 2.5GHz', 4,  1),
+(4, 'Intel', 'BX8071512700', 'Core i7-12700 LGA1700 2.1GHz', 3,  1),
+(4, 'Intel','BX8071512900', 'Core i9-12900 LGA1700 2.4GHz', 2,  1),
+(4, 'Intel', 'BX8071513600K', 'Core i5-13600K LGA1700 3.5GHz', 3,  1),
+(4, 'AMD', '100-100000927BOX','Ryzen 5 5600 AM4 3.5GHz', 4,  1),
+(4, 'AMD', '100-100000063WOF','Ryzen 7 5800X AM4 3.8GHz', 2,  1),
+(4, 'AMD', '100-100000061WOF','Ryzen 9 5900X AM4 3.7GHz',  2,  1),
+(4, 'Intel','BX8071512100', 'Core i3-12100 LGA1700 3.3GHz',  5,  2),
+(4, 'AMD','100-100001015BOX', 'Ryzen 5 7600 AM5 3.8GHz',  2,  1);
+
+-- GPU — 8 piezas
+
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(5, 'NVIDIA', 'RTX 3060 12GB', 'GeForce RTX 3060 12GB GDDR6', 3,  1),
+(5, 'NVIDIA', 'RTX 3070 8GB', 'GeForce RTX 3070 8GB GDDR6',  2,  1),
+(5, 'AMD', 'RX 6600 8GB', 'Radeon RX 6600 8GB GDDR6',  3,  1),
+(5, 'AMD', 'RX 6700 10GB', 'Radeon RX 6700 10GB GDDR6', 2,  1),
+(5, 'NVIDIA','GTX 1660 Super 6GB','GeForce GTX 1660 SUPER 6GB', 4,  1),
+(5, 'NVIDIA','RTX 4060 8GB', 'GeForce RTX 4060 8GB GDDR6',  2,  1),
+(5, 'AMD', 'RX 7600 8GB', 'Radeon RX 7600 8GB GDDR6',  2,  1),
+(5, 'NVIDIA', 'RTX 3050 8GB', 'GeForce RTX 3050 8GB GDDR6', 3,  1);
+
+-- Fuente de Poder — 8 piezas
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(6, 'Corsair', 'CP-9020197-NA', 'RM750x 750W 80+ Gold Modular', 3,  1),
+(6, 'EVGA', '220-G3-0650-Y1', 'SuperNOVA 650W G3 80+ Gold', 3,  1),
+(6, 'Seasonic', 'SSR-850FX', 'Focus GX-850 850W 80+ Gold', 2,  1),
+(6, 'Cooler Master','MPE-6001-ACAAB','MWE 600W 80+ Bronze', 4,  2),
+(6, 'be quiet!', 'BN282', 'Straight Power 11 750W', 2,  1),
+(6, 'Thermaltake','W0373RU', 'Smart 500W 80+ White', 5,  2),
+(6, 'Antec', 'NEO ECO 650W','NeoECO 650W 80+ Bronze', 3,  1),
+(6, 'FSP',  'FSP550-50AACBL', 'Hydro 550W 80+ Bronze', 3,  1);
+
+-- Tarjeta Madre — 8 piezas
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(7, 'ASUS', 'ROG STRIX B550-F', 'B550 ATX AM4 DDR4', 2,  1),
+(7, 'MSI', 'MAG B550 TOMAHAWK', 'B550 ATX AM4 DDR4', 2,  1),
+(7, 'Gigabyte', 'B660M DS3H', 'B660 mATX LGA1700 DDR4', 3,  1),
+(7, 'ASRock', 'B460M Pro4', 'B460 mATX LGA1200 DDR4', 2,  1),
+(7, 'ASUS', 'PRIME Z690-P', 'Z690 ATX LGA1700 DDR4/5', 2,  1),
+(7, 'MSI', 'PRO B660M-A DDR4', 'B660 mATX LGA1700 DDR4', 3,  1),
+(7, 'Gigabyte', 'Z690 UD DDR4', 'Z690 ATX LGA1700 DDR4', 2,  1),
+(7, 'ASRock', 'B550M Pro4', 'B550 mATX AM4 DDR4', 2,  1);
+
+-- Ventilador — 8 piezas
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(8, 'Noctua', 'NF-A12x25 PWM', 'Ventilador 120mm 2000rpm',5,  2),
+(8, 'be quiet!', 'BL067', 'Silent Wings 3 120mm PWM', 5,  2),
+(8, 'Corsair', 'CO-9050072-WW','LL120 RGB 120mm', 4,  2),
+(8, 'Arctic', 'ACFAN00119A','P12 PWM 120mm 200-1800rpm', 8,  3),
+(8, 'Cooler Master','MFX-B2DN-18NPK','SickleFlow 120 ARGB', 6,  2),
+(8, 'Noctua', 'NH-D15','Cooler CPU dual torre', 3,  1),
+(8, 'be quiet!', 'BK022', 'Dark Rock 4 Cooler CPU', 3,  1),
+(8, 'DeepCool',  'DP-MCH4-GMX400', 'GAMMAXX 400 Cooler CPU', 4,  2);
+
+-- Batería — 9 piezas
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(9, 'Dell', 'PGFX4', 'Batería 68Wh Latitude 5540', 4,  2),
+(9, 'HP',  'L78555-005', 'Batería 56Wh ProBook 450 G10', 4,  2),
+(9, 'Lenovo', '02DL014', 'Batería 57Wh ThinkPad T14 Gen3', 4,  2),
+(9, 'Asus', '0B200-03980100', 'Batería 50Wh ExpertBook B5', 3,  1),
+(9, 'Acer', 'AP18C7M','Batería 48Wh TravelMate P4', 3,  1),
+(9, 'Samsung', 'AA-PBUN4TB', 'Batería 60Wh Galaxy Book', 3,  1),
+(9, 'MSI', 'BTY-M6H', 'Batería 52.4Wh Modern 15', 3,  1),
+(9, 'Generic', 'BTY-S14', 'Batería universal 48Wh 11.1V', 2,  1),
+(9, 'Toshiba', 'PA5157U-1BRS', 'Batería 45Wh Tecra A50', 2,  1);
+
+-- Pantalla — 9 piezas
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(10, 'Samsung','S27F350FHL', 'Monitor 27" FHD IPS 60Hz', 3,  1),
+(10, 'LG', '24MK430H-B', 'Monitor 24" FHD IPS 75Hz', 4,  1),
+(10, 'Dell', 'P2722H','Monitor 27" FHD IPS 60Hz', 3,  1),
+(10, 'ASUS','VA24EHE', 'Monitor 24" FHD VA 75Hz', 4,  1),
+(10, 'Acer', 'R271', 'Monitor 27" FHD IPS 75Hz', 2,  1),
+(10, 'BenQ', 'GW2480', 'Monitor 24" FHD IPS 60Hz', 3,  1),
+(10, 'ViewSonic','VA2732-H', 'Monitor 27" FHD VA 75Hz', 2,  1),
+(10, 'HP', '24mh FHD', 'Monitor 24" FHD IPS 75Hz', 3,  1),
+(10, 'Philips','275E1S','Monitor 27" QHD IPS 75Hz', 2,  1);
+
+-- Tóner — 9 piezas
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(11, 'HP', 'CE285A', 'Tóner 85A Negro HP LaserJet', 6,  2),
+(11, 'HP','CF226A','Tóner 26A Negro HP LaserJet', 5,  2),
+(11, 'Canon','3514C002', 'Tóner 052 Negro i-SENSYS', 4,  2),
+(11, 'Canon','3009C002', 'Tóner 057 Negro i-SENSYS', 4,  2),
+(11, 'Epson','C13S110079','Tóner S110079 Negro WF-C5790', 3,  1),
+(11, 'Brother', 'TN-3480', 'Tóner TN-3480 Negro HL-L8360CDW', 4,  2),
+(11, 'Samsung', 'MLT-D111S', 'Tóner D111S Negro Xpress', 3,  1),
+(11, 'Lexmark', '50F4H00','Tóner 504H Negro MS310', 2,  1),
+(11, 'Xerox', '106R03623','Tóner Phaser 3330 Negro', 2,  1);
 
 -- Software Equipos (Capturando IDs dinámicamente)
 SET @sw_win11 = (SELECT id_software FROM software WHERE nombre = 'Windows 11 Pro');
