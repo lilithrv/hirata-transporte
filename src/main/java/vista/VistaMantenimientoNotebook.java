@@ -22,9 +22,15 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         
         this.idRecibido = idEquipo; // Ahora la ventana ya sabe qué equipo es
         
-        // Centrar y poner título
+        this.setSize(900, 800);
+
+        // Evita que el usuario cambie el tamaño de la ventana
+        this.setResizable(false);
+
+        // Centra la ventana en la pantalla
         this.setLocationRelativeTo(null);
-        this.setTitle("Mantenimiento Notebook - ID: " + idEquipo);
+
+        this.setTitle("Inventario Central");
     }
 
     /**
@@ -36,21 +42,212 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        pnlInfoGeneral = new javax.swing.JPanel();
+        lblCodigoSerie = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txtCodigoSerie = new javax.swing.JTextField();
+        txtTipoMantenimiento = new javax.swing.JTextField();
+        txtEstado = new javax.swing.JTextField();
+        jpnCheckList = new javax.swing.JPanel();
+        cbxDesarmeInicial = new javax.swing.JCheckBox();
+        cbxLimpiezaFisica = new javax.swing.JCheckBox();
+        cbxCheckRam = new javax.swing.JCheckBox();
+        cbxCambioPasta = new javax.swing.JCheckBox();
+        cbxArmadoCierre = new javax.swing.JCheckBox();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jPanel2 = new javax.swing.JPanel();
+        btnAgregar = new javax.swing.JButton();
+        pnlObservaciones = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtaObservaciones = new javax.swing.JTextArea();
+        btnGuardarMantnimiento = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setToolTipText("");
+        jPanel1.setPreferredSize(new java.awt.Dimension(900, 700));
+
+        pnlInfoGeneral.setBackground(new java.awt.Color(255, 255, 255));
+        pnlInfoGeneral.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Información General", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 13), new java.awt.Color(0, 0, 0))); // NOI18N
+
+        lblCodigoSerie.setForeground(new java.awt.Color(0, 0, 0));
+        lblCodigoSerie.setText("Código de Serie");
+
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Tipo de Mantenimiento");
+
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Estado");
+
+        javax.swing.GroupLayout pnlInfoGeneralLayout = new javax.swing.GroupLayout(pnlInfoGeneral);
+        pnlInfoGeneral.setLayout(pnlInfoGeneralLayout);
+        pnlInfoGeneralLayout.setHorizontalGroup(
+            pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInfoGeneralLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblCodigoSerie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(34, 34, 34)
+                .addGroup(pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtCodigoSerie, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                    .addComponent(txtTipoMantenimiento)
+                    .addComponent(txtEstado))
+                .addContainerGap(80, Short.MAX_VALUE))
+        );
+        pnlInfoGeneralLayout.setVerticalGroup(
+            pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInfoGeneralLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCodigoSerie)
+                    .addComponent(txtCodigoSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtTipoMantenimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        jpnCheckList.setBackground(new java.awt.Color(255, 255, 255));
+        jpnCheckList.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Check List y Sustitución de Piezas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 13), new java.awt.Color(0, 0, 0))); // NOI18N
+        jpnCheckList.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        cbxDesarmeInicial.setForeground(new java.awt.Color(0, 0, 0));
+        cbxDesarmeInicial.setText("Desarme Inicial");
+        jpnCheckList.add(cbxDesarmeInicial, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 34, -1, -1));
+
+        cbxLimpiezaFisica.setForeground(new java.awt.Color(0, 0, 0));
+        cbxLimpiezaFisica.setText("Limpieza Física");
+        jpnCheckList.add(cbxLimpiezaFisica, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 88, -1, -1));
+
+        cbxCheckRam.setForeground(new java.awt.Color(0, 0, 0));
+        cbxCheckRam.setText("Checkeo RAM");
+        cbxCheckRam.setActionCommand("Checkeo RAM");
+        jpnCheckList.add(cbxCheckRam, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 115, -1, -1));
+
+        cbxCambioPasta.setForeground(new java.awt.Color(0, 0, 0));
+        cbxCambioPasta.setText("Cambio de Pasta Térmica");
+        jpnCheckList.add(cbxCambioPasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 61, -1, -1));
+
+        cbxArmadoCierre.setForeground(new java.awt.Color(0, 0, 0));
+        cbxArmadoCierre.setText("Armado y Cierre");
+        jpnCheckList.add(cbxArmadoCierre, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 142, -1, -1));
+
+        jCheckBox1.setForeground(new java.awt.Color(0, 0, 0));
+        jCheckBox1.setText("Sustitución de Componentes");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+        jpnCheckList.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("                                                  "));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jScrollPane2.setViewportView(jPanel2);
+
+        jpnCheckList.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 700, 110));
+
+        btnAgregar.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
+        btnAgregar.setText("+");
+        jpnCheckList.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 200, 60, 50));
+
+        pnlObservaciones.setBackground(new java.awt.Color(255, 255, 255));
+        pnlObservaciones.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Observaciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 13), new java.awt.Color(0, 0, 0))); // NOI18N
+
+        txtaObservaciones.setBackground(new java.awt.Color(255, 255, 255));
+        txtaObservaciones.setColumns(20);
+        txtaObservaciones.setForeground(new java.awt.Color(0, 0, 0));
+        txtaObservaciones.setRows(5);
+        txtaObservaciones.setBorder(null);
+        jScrollPane1.setViewportView(txtaObservaciones);
+
+        javax.swing.GroupLayout pnlObservacionesLayout = new javax.swing.GroupLayout(pnlObservaciones);
+        pnlObservaciones.setLayout(pnlObservacionesLayout);
+        pnlObservacionesLayout.setHorizontalGroup(
+            pnlObservacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlObservacionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+        );
+        pnlObservacionesLayout.setVerticalGroup(
+            pnlObservacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+        );
+
+        btnGuardarMantnimiento.setBackground(new java.awt.Color(204, 204, 204));
+        btnGuardarMantnimiento.setForeground(new java.awt.Color(0, 0, 0));
+        btnGuardarMantnimiento.setText("Guardar Mantenimiento");
+
+        btnCancelar.setBackground(new java.awt.Color(204, 204, 204));
+        btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
+        btnCancelar.setText("Cancelar");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlInfoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlObservaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jpnCheckList, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnGuardarMantnimiento)
+                .addGap(18, 18, 18)
+                .addComponent(btnCancelar)
+                .addGap(67, 67, 67))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(pnlInfoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jpnCheckList, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pnlObservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCancelar)
+                    .addComponent(btnGuardarMantnimiento))
+                .addContainerGap(95, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -88,5 +285,28 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnGuardarMantnimiento;
+    private javax.swing.JCheckBox cbxArmadoCierre;
+    private javax.swing.JCheckBox cbxCambioPasta;
+    private javax.swing.JCheckBox cbxCheckRam;
+    private javax.swing.JCheckBox cbxDesarmeInicial;
+    private javax.swing.JCheckBox cbxLimpiezaFisica;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel jpnCheckList;
+    private javax.swing.JLabel lblCodigoSerie;
+    private javax.swing.JPanel pnlInfoGeneral;
+    private javax.swing.JPanel pnlObservaciones;
+    private javax.swing.JTextField txtCodigoSerie;
+    private javax.swing.JTextField txtEstado;
+    private javax.swing.JTextField txtTipoMantenimiento;
+    private javax.swing.JTextArea txtaObservaciones;
     // End of variables declaration//GEN-END:variables
 }
