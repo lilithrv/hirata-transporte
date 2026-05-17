@@ -29,7 +29,7 @@ public class SoftwareDAO {
                 + "FROM software_equipo se "
                 + "JOIN software s       ON se.id_software = s.id_software "
                 + "JOIN tipos_software t ON s.id_tipo_software = t.id_tipo_software "
-                + "WHERE se.id_equipo = ? "
+                + "WHERE se.id_equipo = ? AND se.estado != 'Desinstalado' "
                 + "ORDER BY se.fecha_accion DESC";
 
         Connection conn = Conexion.getInstancia();
