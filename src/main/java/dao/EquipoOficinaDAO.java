@@ -277,6 +277,7 @@ public class EquipoOficinaDAO {
                     equipo.setMarca(rs.getString("marca"));
                     equipo.setModelo(rs.getString("modelo"));
                     equipo.setNumeroSerie(rs.getString("numero_serie"));
+                    equipo.setEstado(rs.getString("estado"));
 
                     return equipo;
                 }

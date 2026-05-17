@@ -33,8 +33,34 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
         this.setTitle("Inventario Central");
+        
+        
+        cargarDatosEquipo();
+        
     }
 
+    private void cargarDatosEquipo() {
+        dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
+
+        modelo.EquipoOficina equipo = equipoDAO.buscarPorId(this.idRecibido);
+
+        if (equipo != null) {
+            // Pintamos los datos en los JTextFields exactos
+            txtCodigoSerie.setText(equipo.getNumeroSerie());
+            txtTipoMantenimiento.setText(equipo.getTipoEquipo().getNombre());
+            txtEstado.setText(equipo.getEstado());
+
+            // Los dejamos como "Solo Lectura" para que el técnico no los edite sin querer
+            txtCodigoSerie.setEditable(false);
+            txtTipoMantenimiento.setEditable(false);
+            txtEstado.setEditable(false);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: No se pudieron recuperar los datos del equipo.");
+        }
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
