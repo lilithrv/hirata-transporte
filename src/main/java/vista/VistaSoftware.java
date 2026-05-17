@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -317,6 +318,11 @@ public class VistaSoftware extends javax.swing.JFrame {
         });
 
         btnDesinstalar.setText("DESINSTALAR");
+        btnDesinstalar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDesinstalarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlContenidoLayout = new javax.swing.GroupLayout(pnlContenido);
         pnlContenido.setLayout(pnlContenidoLayout);
@@ -498,6 +504,54 @@ public class VistaSoftware extends javax.swing.JFrame {
             cargarTablaSoftware(equipoSeleccionado.getIdEquipo());
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnDesinstalarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesinstalarActionPerformed
+        // TODO add your handling code here:
+        int filaSeleccionada = tablaSoftwareEquipo.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Debe seleccionar un software para desinstalar.",
+                    "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int id = (int) tablaSoftwareEquipo.getValueAt(filaSeleccionada, 0);
+        String sw = (String) tablaSoftwareEquipo.getValueAt(filaSeleccionada, 2);
+
+        UIManager.put("OptionPane.yesButtonText", "Sí");
+        UIManager.put("OptionPane.noButtonText", "No");
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que deseas desinstalar " + sw + "\n"
+                + "del equipo " + equipoSeleccionado.getMarca() + " " + equipoSeleccionado.getModelo()
+                + " (" + equipoSeleccionado.getNumeroSerie() + ")?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            softwareDAO.desinstalar(id);
+
+            JOptionPane.showMessageDialog(this,
+                    "Software desinstalado correctamente",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            cargarTablaSoftware(equipoSeleccionado.getIdEquipo()); // ← recargar
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al desinstalar software: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnDesinstalarActionPerformed
 
     /**
      * @param args the command line arguments
