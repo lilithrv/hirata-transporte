@@ -209,7 +209,7 @@ public class VistaSoftware extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaSoftwareEquipo = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        btnAgregar = new javax.swing.JButton();
+        btnInstalar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
         btnDesinstalar = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
@@ -302,10 +302,10 @@ public class VistaSoftware extends javax.swing.JFrame {
 
         jLabel3.setText("SOFTWARE INSTALADO EN:");
 
-        btnAgregar.setText("AGREGAR");
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+        btnInstalar.setText("INSTALAR");
+        btnInstalar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
+                btnInstalarActionPerformed(evt);
             }
         });
 
@@ -337,7 +337,7 @@ public class VistaSoftware extends javax.swing.JFrame {
                             .addGap(18, 18, 18)
                             .addComponent(jTextField1))
                         .addGroup(pnlContenidoLayout.createSequentialGroup()
-                            .addComponent(btnAgregar)
+                            .addComponent(btnInstalar)
                             .addGap(43, 43, 43)
                             .addComponent(btnActualizar)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
@@ -366,7 +366,7 @@ public class VistaSoftware extends javax.swing.JFrame {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAgregar)
+                    .addComponent(btnInstalar)
                     .addComponent(btnActualizar)
                     .addComponent(btnDesinstalar))
                 .addGap(22, 22, 22)
@@ -429,7 +429,7 @@ public class VistaSoftware extends javax.swing.JFrame {
         cargarTablaSoftware(idEquipo);
     }//GEN-LAST:event_tablaEquiposMouseClicked
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+    private void btnInstalarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInstalarActionPerformed
         // TODO add your handling code here:
         if (equipoSeleccionado == null) {
             JOptionPane.showMessageDialog(this,
@@ -446,7 +446,7 @@ public class VistaSoftware extends javax.swing.JFrame {
         if (dialog.isConfirmado()) {
             cargarTablaSoftware(equipoSeleccionado.getIdEquipo());
         }
-    }//GEN-LAST:event_btnAgregarActionPerformed
+    }//GEN-LAST:event_btnInstalarActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
@@ -490,9 +490,9 @@ public class VistaSoftware extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
-    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscarTipo;
     private javax.swing.JButton btnDesinstalar;
+    private javax.swing.JButton btnInstalar;
     private javax.swing.JButton btnLogout;
     private javax.swing.JComboBox<String> cmbTipo;
     private javax.swing.JLabel jLabel1;
