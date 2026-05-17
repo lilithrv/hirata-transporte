@@ -91,8 +91,8 @@ public class EquipoOficinaDAO {
         }
         return lista;
     }
-    
-     public List<String> obtenerEstadosUnicos() {
+
+    public List<String> obtenerEstadosUnicos() {
         List<String> estados = new ArrayList<>();
         String sql = "SELECT DISTINCT estado FROM equipos_oficina ORDER BY estado ASC";
 
@@ -155,9 +155,7 @@ public class EquipoOficinaDAO {
         }
         return lista;
     } // Listar Todo
-    
-    
-    
+
     public List<EquipoOficina> listarFiltrado(String estado, String tipoNombre) {
         List<EquipoOficina> lista = new ArrayList<>();
 
@@ -209,5 +207,35 @@ public class EquipoOficinaDAO {
         return lista;
     }
 
-    
+    public EquipoOficina buscarPorId(int id) {
+        String sql = "SELECT e.*, t.nombre AS tipo_nombre "
+                + "FROM equipos_oficina e "
+                + "JOIN tipos_equipo t ON e.id_tipo_equipo = t.id_tipo_equipo "
+                + "WHERE e.id_equipo = ?";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);                          
+            try (ResultSet rs = ps.executeQuery()) {   
+                if (rs.next()) {
+                    TipoEquipo tipo = new TipoEquipo();
+                    tipo.setIdTipoEquipo(rs.getInt("id_tipo_equipo"));
+                    tipo.setNombre(rs.getString("tipo_nombre"));
+
+                    EquipoOficina equipo = new EquipoOficina();
+                    equipo.setIdEquipo(rs.getInt("id_equipo"));
+                    equipo.setTipoEquipo(tipo);
+                    equipo.setMarca(rs.getString("marca"));
+                    equipo.setModelo(rs.getString("modelo"));
+                    equipo.setNumeroSerie(rs.getString("numero_serie"));
+
+                    return equipo;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar equipo: " + e.getMessage());
+        }
+        return null;
+    }
+
 } // Class
