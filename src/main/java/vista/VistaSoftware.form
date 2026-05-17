@@ -273,6 +273,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="ACTUALIZAR VERSI&#xd3;N"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActualizarActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnDesinstalar">
           <Properties>

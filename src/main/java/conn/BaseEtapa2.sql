@@ -528,14 +528,12 @@ INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico
 (@nb01, @sw_norton, '22.24', 'Instalado',   @tec_it1, '2023-03-12'),
 (@nb02, @sw_win11,  '22H2',  'Actualizado', @tec_it1, '2023-03-12'),
 (@nb02, @sw_office, '16.0',  'Instalado',   @tec_it1, '2023-03-12'),
-(@nb02, @sw_norton, '22.24', 'Instalado',   @tec_it1, '2023-03-12'),
 (@nb03, @sw_win11,  '23H2',  'Actualizado', @tec_it2, '2023-05-17'),
 (@nb03, @sw_office, '16.0',  'Instalado',   @tec_it2, '2023-05-17'),
 (@nb03, @sw_norton, '22.24', 'Instalado',   @tec_it2, '2023-05-17'),
 (@nb04, @sw_win11,  '23H2',  'Actualizado', @tec_it2, '2023-05-17'),
 (@nb04, @sw_office, '16.0',  'Instalado',   @tec_it2, '2023-05-17'),
 (@nb04, @sw_norton, '22.24', 'Instalado',   @tec_it2, '2023-05-17'),
-(@nb05, @sw_win11,  '22H2',  'Instalado',   @tec_it2, '2022-11-22'),
 (@nb05, @sw_office, '16.0',  'Instalado',   @tec_it2, '2022-11-22'),
 (@nb05, @sw_norton, '22.20', 'Instalado',   @tec_it2, '2022-11-22'),
 (@nb06, @sw_win11,  '23H2',  'Actualizado', @tec_it1, '2023-07-03'),
@@ -545,13 +543,11 @@ INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico
 (@nb07, @sw_office, '16.0',  'Instalado',   @tec_it1, '2023-07-03'),
 (@nb07, @sw_norton, '22.24', 'Instalado',   @tec_it1, '2023-07-03'),
 (@nb08, @sw_win11,  '23H2',  'Actualizado', @tec_it2, '2023-09-14'),
-(@nb08, @sw_office, '16.0',  'Instalado',   @tec_it2, '2023-09-14'),
 (@nb08, @sw_norton, '22.24', 'Instalado',   @tec_it2, '2023-09-14'),
 (@nb09, @sw_win11,  '21H2',  'Instalado',   @tec_it1, '2021-07-02'),
 (@nb09, @sw_office, '15.0',  'Instalado',   @tec_it1, '2021-07-02'),
 (@nb09, @sw_norton, '22.10', 'Instalado',   @tec_it1, '2021-07-02'),
 (@nb10, @sw_win11,  '23H2',  'Actualizado', @tec_it2, '2024-01-10'),
-(@nb10, @sw_office, '16.0',  'Instalado',   @tec_it2, '2024-01-10'),
 (@nb10, @sw_norton, '22.24', 'Instalado',   @tec_it2, '2024-01-10');
 
 -- === Software en PC Escritorio: Windows 10 + LibreOffice + Chrome ===
@@ -560,7 +556,6 @@ INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico
 (@pc01, @sw_libreoff,'7.6.0', 'Instalado',   @tec_it1, '2022-08-16'),
 (@pc01, @sw_chrome,  '119.0', 'Actualizado', @tec_it1, '2022-08-16'),
 (@pc02, @sw_win10,   '22H2',  'Actualizado', @tec_it1, '2022-08-16'),
-(@pc02, @sw_libreoff,'7.6.0', 'Instalado',   @tec_it1, '2022-08-16'),
 (@pc02, @sw_chrome,  '119.0', 'Actualizado', @tec_it1, '2022-08-16'),
 (@pc03, @sw_win10,   '21H2',  'Instalado',   @tec_it1, '2022-08-16'),
 (@pc03, @sw_libreoff,'7.5.0', 'Instalado',   @tec_it1, '2022-08-16'),
@@ -570,7 +565,6 @@ INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico
 (@pc04, @sw_chrome,  '120.0', 'Actualizado', @tec_it2, '2023-01-22'),
 (@pc05, @sw_win10,   '22H2',  'Actualizado', @tec_it2, '2023-01-22'),
 (@pc05, @sw_libreoff,'7.6.0', 'Instalado',   @tec_it2, '2023-01-22'),
-(@pc05, @sw_chrome,  '120.0', 'Actualizado', @tec_it2, '2023-01-22'),
 (@pc06, @sw_win10,   '22H2',  'Actualizado', @tec_it1, '2023-04-07'),
 (@pc06, @sw_libreoff,'7.6.0', 'Instalado',   @tec_it1, '2023-04-07'),
 (@pc06, @sw_chrome,  '120.0', 'Actualizado', @tec_it1, '2023-04-07'),
@@ -589,7 +583,6 @@ INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico
 (@pc11, @sw_win10,   '22H2',  'Actualizado', @tec_it2, '2022-12-03'),
 (@pc11, @sw_libreoff,'7.6.0', 'Instalado',   @tec_it2, '2022-12-03'),
 (@pc11, @sw_chrome,  '108.0', 'Instalado',   @tec_it2, '2022-12-03'),
-(@pc12, @sw_win10,   '21H2',  'Instalado',   @tec_it2, '2022-12-03'),
 (@pc12, @sw_libreoff,'7.4.0', 'Instalado',   @tec_it2, '2022-12-03'),
 (@pc12, @sw_chrome,  '108.0', 'Instalado',   @tec_it2, '2022-12-03');
 
@@ -599,7 +592,6 @@ INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico
 (@imp01, @sw_adobe,     '23.0',  'Instalado',   @tec_mant2, '2022-05-12'),
 (@imp01, @sw_hp_print,  '40.0',  'Instalado',   @tec_mant2, '2022-05-12'),
 (@imp02, @sw_driver_hp, '61.0',  'Instalado',   @tec_mant2, '2022-05-12'),
-(@imp02, @sw_adobe,     '23.0',  'Instalado',   @tec_mant2, '2022-05-12'),
 (@imp02, @sw_hp_print,  '40.0',  'Instalado',   @tec_mant2, '2022-05-12'),
 (@imp03, @sw_fw_canon,  '3.09',  'Actualizado', @tec_it2,   '2023-03-01'),
 (@imp03, @sw_adobe,     '23.0',  'Instalado',   @tec_it2,   '2023-03-01'),
@@ -614,10 +606,9 @@ INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico
 -- === Software en Celulares: Android 14 + Teams + Zoom ===
 INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico, fecha_accion) VALUES
 (@cel01, @sw_android14, '14.0',  'Actualizado', @tec_mant1, '2023-04-22'),
-(@cel01, @sw_teams, '5.17', 'Instalado', @tec_mant1, '2023-04-22'),
+
 (@cel01, @sw_zoom, '5.16',  'Instalado',   @tec_mant1, '2023-04-22'),
 (@cel02, @sw_android14, '14.0',  'Actualizado', @tec_mant2, '2023-04-22'),
-(@cel02, @sw_teams, '5.17','Instalado', @tec_mant2, '2023-04-22'),
 (@cel02, @sw_zoom, '5.16', 'Instalado', @tec_mant2, '2023-04-22'),
 (@cel03, @sw_android14, '14.0', 'Actualizado', @tec_it1, '2023-07-16'),
 (@cel03, @sw_teams, '5.17', 'Instalado', @tec_it1, '2023-07-16'),
@@ -626,5 +617,4 @@ INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico
 (@cel04, @sw_teams, '5.15',  'Instalado',  @tec_it2,  '2023-07-16'),
 (@cel04, @sw_zoom, '5.14',  'Instalado', @tec_it2,  '2023-07-16'),
 (@cel05, @sw_android14, '14.0', 'Actualizado', @adm_inv, '2024-02-03'),
-(@cel05, @sw_teams, '5.17', 'Instalado', @adm_inv, '2024-02-03'),
-(@cel05, @sw_zoom,  '5.16', 'Instalado', @adm_inv, '2024-02-03');
+(@cel05, @sw_teams, '5.17', 'Instalado', @adm_inv, '2024-02-03');

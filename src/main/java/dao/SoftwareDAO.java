@@ -82,17 +82,18 @@ public class SoftwareDAO {
         }
     }
 
-    public boolean actualizarVersion(int idSwEquipo, String nuevaVersion, int idTecnico) {
+    public boolean actualizarVersion(int idSwEquipo, String nuevaVersion, int idTecnico,  String notas) {
         String sql = "UPDATE software_equipo "
                 + "SET version = ?, estado = 'Actualizado', "
-                + "id_tecnico = ?, fecha_accion = NOW() "
+                + "id_tecnico = ?, fecha_accion = NOW(), notas = ?  "
                 + "WHERE id_sw_equipo = ?";
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, nuevaVersion);
             ps.setInt(2, idTecnico);
-            ps.setInt(3, idSwEquipo);
+            ps.setString(3, notas.isEmpty() ? null : notas);
+            ps.setInt(4, idSwEquipo);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Error al actualizar versión: " + e.getMessage());

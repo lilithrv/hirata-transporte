@@ -310,6 +310,11 @@ public class VistaSoftware extends javax.swing.JFrame {
         });
 
         btnActualizar.setText("ACTUALIZAR VERSIÓN");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
 
         btnDesinstalar.setText("DESINSTALAR");
 
@@ -462,6 +467,37 @@ public class VistaSoftware extends javax.swing.JFrame {
             this.dispose(); // cerrar vista actual
         }
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        // TODO add your handling code here:
+        int filaEquipo = tablaEquipos.getSelectedRow();
+        if (filaEquipo == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un equipo primero.");
+            return;
+        }
+
+        int filaSoftware = tablaSoftwareEquipo.getSelectedRow();
+        if (filaSoftware == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un software para actualizar.");
+            return;
+        }
+
+        int idSwEquipo = (int) tablaSoftwareEquipo.getValueAt(filaSoftware, 0);
+        String nombreSoftware = (String) tablaSoftwareEquipo.getValueAt(filaSoftware, 2);
+        String versionActual = (String) tablaSoftwareEquipo.getValueAt(filaSoftware, 3);
+
+        DialogActualizarVersion dialog = new DialogActualizarVersion(
+                this, true,
+                idSwEquipo,
+                nombreSoftware,
+                versionActual
+        );
+        dialog.setVisible(true);
+
+        if (dialog.isConfirmado()) {
+            cargarTablaSoftware(equipoSeleccionado.getIdEquipo());
+        }
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
      * @param args the command line arguments
