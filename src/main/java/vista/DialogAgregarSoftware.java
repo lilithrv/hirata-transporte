@@ -4,20 +4,100 @@
  */
 package vista;
 
+import dao.SoftwareDAO;
+import dao.UsuarioDAO;
+import java.awt.Frame;
+import java.util.HashMap;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import modelo.EquipoOficina;
+import modelo.Software;
+import modelo.Usuario;
+import util.Sesion;
+
 /**
  *
  * @author leslie
  */
 public class DialogAgregarSoftware extends javax.swing.JDialog {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogAgregarSoftware.class.getName());
+    private int idEquipo;
+    private boolean confirmado = false;
+    private HashMap<String, Software> mapaSoftware;
+    private SoftwareDAO softwareDAO;
+    private UsuarioDAO usuarioDAO;
 
     /**
      * Creates new form DialogAgregarSoftware
      */
-    public DialogAgregarSoftware(java.awt.Frame parent, boolean modal) {
+    public DialogAgregarSoftware(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(parent);
+        softwareDAO = new SoftwareDAO();
+        usuarioDAO = new UsuarioDAO();
+        mapaSoftware = new HashMap<>();
+    }
+
+    public DialogAgregarSoftware(Frame parent, boolean modal, EquipoOficina equipo) {
+        super(parent, modal);
+        initComponents();
+
+        this.setLocationRelativeTo(parent);
+
+        // Inicializar DAO
+        softwareDAO = new SoftwareDAO();
+        mapaSoftware = new HashMap<>();
+        usuarioDAO = new UsuarioDAO();
+
+        this.idEquipo = equipo.getIdEquipo();
+
+        // 1. Autocargar nombre del equipo (txtEquipo no editable)
+        txtEquipo.setText(
+                equipo.getMarca() + " "
+                + equipo.getModelo() + " ("
+                + equipo.getNumeroSerie() + ")"
+        );
+        txtEquipo.setEditable(false);
+
+        cargarCombos(equipo.getTipoEquipo().getIdTipoEquipo());
+
+        Usuario user = Sesion.getUsuarioActivo();
+        Usuario tecnico = usuarioDAO.obtenerPorId(user.getIdUsuario());
+
+        if (tecnico != null) {
+            cmbTecnico.addItem(tecnico.getNombreUsuario());
+            cmbTecnico.setSelectedItem(tecnico.getNombreUsuario());
+            cmbTecnico.setEnabled(false);
+        }
+
+    }
+
+    private void cargarCombos(int idTipoEquipo) {
+        cmbSoftware.removeAllItems();
+        mapaSoftware.clear();
+        cmbSoftware.addItem("Seleccionar");
+
+        List<Software> lista = softwareDAO.listarCompatiblesPorTipoEquipo(idTipoEquipo);
+
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "No hay software registrado para este tipo de equipo.",
+                    "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        for (Software s : lista) {
+            String key = s.getNombre();
+            cmbSoftware.addItem(key);
+            mapaSoftware.put(key, s);
+        }
+    }
+
+    public boolean isConfirmado() {
+        return confirmado;
     }
 
     /**
@@ -59,6 +139,12 @@ public class DialogAgregarSoftware extends javax.swing.JDialog {
 
         lblNotas.setText("NOTAS");
 
+        txtEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEquipoActionPerformed(evt);
+            }
+        });
+
         cmbSoftware.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         cmbTecnico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -66,8 +152,18 @@ public class DialogAgregarSoftware extends javax.swing.JDialog {
         jScrollPane1.setViewportView(paneNotas);
 
         btnCancelar.setText("CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnGuardar.setText("GUARDAR");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,6 +230,59 @@ public class DialogAgregarSoftware extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        String swSeleccionado = (String) cmbSoftware.getSelectedItem();
+        String version = txtVersion.getText().trim();
+
+        if (swSeleccionado == null || swSeleccionado.equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(this, "Selecciona un software.");
+            return;
+        }
+        if (version.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingresa la versión.");
+            return;
+        }
+
+        Software sw = mapaSoftware.get(swSeleccionado);
+        Usuario tecnico = Sesion.getUsuarioActivo();
+
+        // Verificar si ya está instalado
+        if (softwareDAO.existeInstalacion(idEquipo, sw.getIdSoftware())) {
+            JOptionPane.showMessageDialog(this,
+                    "'" + sw.getNombre() + "' ya está instalado en este equipo.\n"
+                    + "Para actualizar la versión, use el botón 'Actualizar Versión'.",
+                    "Software ya instalado",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        boolean ok = softwareDAO.registrarInstalacion(
+                idEquipo,
+                sw.getIdSoftware(),
+                version,
+                tecnico.getIdUsuario()
+        );
+
+        if (ok) {
+            JOptionPane.showMessageDialog(this, "Software agregado correctamente.");
+            confirmado = true;
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al guardar. Intenta de nuevo.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void txtEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEquipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEquipoActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments

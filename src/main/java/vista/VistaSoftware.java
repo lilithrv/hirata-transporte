@@ -38,6 +38,7 @@ public class VistaSoftware extends javax.swing.JFrame {
     private SoftwareDAO softwareDAO;
     private EquipoOficinaDAO equipoDAO;
     private TipoEquipoDAO tipoEquipoDAO;
+    private EquipoOficina equipoSeleccionado;
 
     public VistaSoftware() {
         initComponents();
@@ -57,6 +58,16 @@ public class VistaSoftware extends javax.swing.JFrame {
         equipoDAO = new EquipoOficinaDAO();
         tipoEquipoDAO = new TipoEquipoDAO();
         mapaTipos = new HashMap<>();
+
+        tablaEquipos.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"ID", "Tipo", "Marca", "Modelo", "N° Serie"}
+        ));
+
+        tablaSoftwareEquipo.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"ID", "Tipo", "Software", "Versión"}
+        ));
 
         cargarTipos();
 
@@ -198,15 +209,21 @@ public class VistaSoftware extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaSoftwareEquipo = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        btnAgregar = new javax.swing.JButton();
+        btnInstalar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
         btnDesinstalar = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         pnlContenido.setBackground(new java.awt.Color(255, 255, 255));
 
         btnLogout.setText("CERRAR SESIÓN");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
 
         lblTitulo.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         lblTitulo.setText(" GESTIÓN DE SOFTWARE EN EQUIPOS ");
@@ -285,7 +302,12 @@ public class VistaSoftware extends javax.swing.JFrame {
 
         jLabel3.setText("SOFTWARE INSTALADO EN:");
 
-        btnAgregar.setText("AGREGAR");
+        btnInstalar.setText("INSTALAR");
+        btnInstalar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInstalarActionPerformed(evt);
+            }
+        });
 
         btnActualizar.setText("ACTUALIZAR VERSIÓN");
 
@@ -307,12 +329,15 @@ public class VistaSoftware extends javax.swing.JFrame {
             .addGroup(pnlContenidoLayout.createSequentialGroup()
                 .addGap(61, 61, 61)
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
                     .addComponent(jLabel2)
                     .addComponent(pnlFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(pnlContenidoLayout.createSequentialGroup()
-                            .addComponent(btnAgregar)
+                            .addComponent(jLabel3)
+                            .addGap(18, 18, 18)
+                            .addComponent(jTextField1))
+                        .addGroup(pnlContenidoLayout.createSequentialGroup()
+                            .addComponent(btnInstalar)
                             .addGap(43, 43, 43)
                             .addComponent(btnActualizar)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
@@ -333,12 +358,15 @@ public class VistaSoftware extends javax.swing.JFrame {
                 .addGap(44, 44, 44)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addComponent(jLabel3)
+                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlContenidoLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addComponent(jLabel3))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAgregar)
+                    .addComponent(btnInstalar)
                     .addComponent(btnActualizar)
                     .addComponent(btnDesinstalar))
                 .addGap(22, 22, 22)
@@ -385,8 +413,55 @@ public class VistaSoftware extends javax.swing.JFrame {
         }
 
         int idEquipo = (int) tablaEquipos.getValueAt(filaSeleccionada, 0);
+
+        // Guardar el equipo seleccionado para usarlo en el dialog
+        equipoSeleccionado = equipoDAO.buscarPorId(idEquipo);
+
+        // Mostrar en el label "SOFTWARE INSTALADO EN:"
+        if (equipoSeleccionado != null) {
+            jTextField1.setText(
+                    equipoSeleccionado.getMarca() + " "
+                    + equipoSeleccionado.getModelo() + " — "
+                    + equipoSeleccionado.getNumeroSerie()
+            );
+        }
+
         cargarTablaSoftware(idEquipo);
     }//GEN-LAST:event_tablaEquiposMouseClicked
+
+    private void btnInstalarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInstalarActionPerformed
+        // TODO add your handling code here:
+        if (equipoSeleccionado == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Selecciona un equipo primero.",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DialogAgregarSoftware dialog = new DialogAgregarSoftware(
+                this, true, equipoSeleccionado);
+        dialog.setVisible(true);
+
+        // Refrescar tabla después de cerrar el dialog
+        if (dialog.isConfirmado()) {
+            cargarTablaSoftware(equipoSeleccionado.getIdEquipo());
+        }
+    }//GEN-LAST:event_btnInstalarActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que desea cerrar sesión?",
+                "Cerrar sesión",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            util.Sesion.cerrarSesion(); // limpiar sesión
+            new VistaLogin().setVisible(true); // abrir login
+            this.dispose(); // cerrar vista actual
+        }
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -415,9 +490,9 @@ public class VistaSoftware extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
-    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscarTipo;
     private javax.swing.JButton btnDesinstalar;
+    private javax.swing.JButton btnInstalar;
     private javax.swing.JButton btnLogout;
     private javax.swing.JComboBox<String> cmbTipo;
     private javax.swing.JLabel jLabel1;
@@ -425,6 +500,7 @@ public class VistaSoftware extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JPanel pnlContenido;
     private javax.swing.JPanel pnlFiltro;
