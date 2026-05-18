@@ -8,23 +8,25 @@ package vista;
  *
  * @author gustavo
  */
+
 public class VistaMantenimientoNotebook extends javax.swing.JFrame {
     
     
     
     private int idRecibido;
     private int contadorPiezas = 1;
+    private javax.swing.JFrame ventanaPrincipal;
     
     /**
      * Creates new form VistaMantenimientoNotebook
      */
-    public VistaMantenimientoNotebook(int idEquipo) {
+    public VistaMantenimientoNotebook(int idEquipo, javax.swing.JFrame principal) {
         initComponents();
         
         this.idRecibido = idEquipo; // Ahora la ventana ya sabe qué equipo es
+        this.ventanaPrincipal = principal;
         
-        
-        this.setSize(900, 800);
+        this.setSize(1000, 800);
 
         // Evita que el usuario cambie el tamaño de la ventana
         this.setResizable(false);
@@ -36,6 +38,13 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         
         
         cargarDatosEquipo();
+        btnAgregar.setEnabled(false);
+        
+        cbxLimpiezaFisica.setEnabled(false);
+        cbxCambioPasta.setEnabled(false);
+        cbxCheckRam.setEnabled(false);
+        cbxArmadoCierre.setEnabled(false);
+        
         
     }
 
@@ -59,6 +68,23 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         }
     }
     
+    
+    private void limpiarYBloquearDesde(int nivel) {
+        if (nivel <= 1) {
+            cbxLimpiezaFisica.setSelected(false);
+            cbxLimpiezaFisica.setEnabled(false);
+        }
+        if (nivel <= 2) {
+            cbxCambioPasta.setSelected(false);
+            cbxCambioPasta.setEnabled(false);
+        }
+        if (nivel <= 3) {
+            cbxCheckRam.setSelected(false);
+            cbxCheckRam.setEnabled(false);
+        }
+        cbxArmadoCierre.setSelected(false);
+        cbxArmadoCierre.setEnabled(false);
+    }
     
     
     /**
@@ -84,13 +110,13 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         cbxCheckRam = new javax.swing.JCheckBox();
         cbxCambioPasta = new javax.swing.JCheckBox();
         cbxArmadoCierre = new javax.swing.JCheckBox();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        cbxSustitucion = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
         pnlPanelPiezas = new javax.swing.JPanel();
         btnAgregar = new javax.swing.JButton();
         pnlObservaciones = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txtaObservaciones = new javax.swing.JTextArea();
+        txtObservaciones = new javax.swing.JTextArea();
         btnGuardarMantnimiento = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
@@ -149,44 +175,60 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
 
         jpnCheckList.setBackground(new java.awt.Color(255, 255, 255));
         jpnCheckList.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Check List y Sustitución de Piezas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 13), new java.awt.Color(0, 0, 0))); // NOI18N
-        jpnCheckList.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         cbxDesarmeInicial.setForeground(new java.awt.Color(0, 0, 0));
         cbxDesarmeInicial.setText("Desarme Inicial");
-        jpnCheckList.add(cbxDesarmeInicial, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 34, -1, -1));
+        cbxDesarmeInicial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxDesarmeInicialActionPerformed(evt);
+            }
+        });
 
         cbxLimpiezaFisica.setForeground(new java.awt.Color(0, 0, 0));
         cbxLimpiezaFisica.setText("Limpieza Física");
-        jpnCheckList.add(cbxLimpiezaFisica, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 88, -1, -1));
+        cbxLimpiezaFisica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxLimpiezaFisicaActionPerformed(evt);
+            }
+        });
 
         cbxCheckRam.setForeground(new java.awt.Color(0, 0, 0));
         cbxCheckRam.setText("Checkeo RAM");
-        jpnCheckList.add(cbxCheckRam, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 115, -1, -1));
+        cbxCheckRam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxCheckRamActionPerformed(evt);
+            }
+        });
 
         cbxCambioPasta.setForeground(new java.awt.Color(0, 0, 0));
         cbxCambioPasta.setText("Cambio de Pasta Térmica");
-        jpnCheckList.add(cbxCambioPasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 61, -1, -1));
+        cbxCambioPasta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxCambioPastaActionPerformed(evt);
+            }
+        });
 
         cbxArmadoCierre.setForeground(new java.awt.Color(0, 0, 0));
         cbxArmadoCierre.setText("Armado y Cierre");
-        jpnCheckList.add(cbxArmadoCierre, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 142, -1, -1));
-
-        jCheckBox1.setForeground(new java.awt.Color(0, 0, 0));
-        jCheckBox1.setText("Sustitución de Componentes");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        cbxArmadoCierre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                cbxArmadoCierreActionPerformed(evt);
             }
         });
-        jpnCheckList.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
+
+        cbxSustitucion.setForeground(new java.awt.Color(0, 0, 0));
+        cbxSustitucion.setText("Sustitución de Componentes");
+        cbxSustitucion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxSustitucionActionPerformed(evt);
+            }
+        });
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("                                                  "));
 
         pnlPanelPiezas.setBackground(new java.awt.Color(255, 255, 255));
         pnlPanelPiezas.setLayout(new javax.swing.BoxLayout(pnlPanelPiezas, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane2.setViewportView(pnlPanelPiezas);
-
-        jpnCheckList.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 700, 150));
 
         btnAgregar.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         btnAgregar.setText("+");
@@ -195,17 +237,71 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                 btnAgregarActionPerformed(evt);
             }
         });
-        jpnCheckList.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 200, 60, 50));
+
+        javax.swing.GroupLayout jpnCheckListLayout = new javax.swing.GroupLayout(jpnCheckList);
+        jpnCheckList.setLayout(jpnCheckListLayout);
+        jpnCheckListLayout.setHorizontalGroup(
+            jpnCheckListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpnCheckListLayout.createSequentialGroup()
+                .addGroup(jpnCheckListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpnCheckListLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(cbxDesarmeInicial))
+                    .addGroup(jpnCheckListLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(cbxCheckRam))
+                    .addGroup(jpnCheckListLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(cbxArmadoCierre))
+                    .addGroup(jpnCheckListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jpnCheckListLayout.createSequentialGroup()
+                            .addGap(25, 25, 25)
+                            .addComponent(cbxSustitucion))
+                        .addGroup(jpnCheckListLayout.createSequentialGroup()
+                            .addComponent(jScrollPane2)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jpnCheckListLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(cbxLimpiezaFisica))
+                    .addGroup(jpnCheckListLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(cbxCambioPasta)))
+                .addGap(25, 25, 25))
+        );
+        jpnCheckListLayout.setVerticalGroup(
+            jpnCheckListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpnCheckListLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(cbxDesarmeInicial)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxLimpiezaFisica)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxCambioPasta)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxCheckRam)
+                .addGap(6, 6, 6)
+                .addComponent(cbxArmadoCierre)
+                .addGap(7, 7, 7)
+                .addGroup(jpnCheckListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpnCheckListLayout.createSequentialGroup()
+                        .addComponent(cbxSustitucion)
+                        .addGap(39, 39, 39)
+                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnCheckListLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
 
         pnlObservaciones.setBackground(new java.awt.Color(255, 255, 255));
         pnlObservaciones.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Observaciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 13), new java.awt.Color(0, 0, 0))); // NOI18N
 
-        txtaObservaciones.setBackground(new java.awt.Color(255, 255, 255));
-        txtaObservaciones.setColumns(20);
-        txtaObservaciones.setForeground(new java.awt.Color(0, 0, 0));
-        txtaObservaciones.setRows(5);
-        txtaObservaciones.setBorder(null);
-        jScrollPane1.setViewportView(txtaObservaciones);
+        txtObservaciones.setBackground(new java.awt.Color(255, 255, 255));
+        txtObservaciones.setColumns(20);
+        txtObservaciones.setForeground(new java.awt.Color(0, 0, 0));
+        txtObservaciones.setRows(5);
+        txtObservaciones.setBorder(null);
+        jScrollPane1.setViewportView(txtObservaciones);
 
         javax.swing.GroupLayout pnlObservacionesLayout = new javax.swing.GroupLayout(pnlObservaciones);
         pnlObservaciones.setLayout(pnlObservacionesLayout);
@@ -224,10 +320,20 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         btnGuardarMantnimiento.setBackground(new java.awt.Color(204, 204, 204));
         btnGuardarMantnimiento.setForeground(new java.awt.Color(0, 0, 0));
         btnGuardarMantnimiento.setText("Guardar Mantenimiento");
+        btnGuardarMantnimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarMantnimientoActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setBackground(new java.awt.Color(204, 204, 204));
         btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -235,17 +341,19 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlInfoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlObservaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpnCheckList, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE))
-                .addContainerGap(47, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGuardarMantnimiento)
-                .addGap(18, 18, 18)
-                .addComponent(btnCancelar)
-                .addGap(67, 67, 67))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(pnlInfoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(386, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(pnlObservaciones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jpnCheckList, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnGuardarMantnimiento)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCancelar)))
+                        .addGap(67, 67, 67))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,21 +361,21 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(pnlInfoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jpnCheckList, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jpnCheckList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlObservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCancelar)
                     .addComponent(btnGuardarMantnimiento))
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap(103, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,23 +385,25 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    private void cbxSustitucionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxSustitucionActionPerformed
+
+        btnAgregar.setEnabled(cbxSustitucion.isSelected());
+
+    }//GEN-LAST:event_cbxSustitucionActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
 
-        //Panel contenedor de la fila
+        // Panel contenedor de la fila
         javax.swing.JPanel panelFila = new javax.swing.JPanel();
         panelFila.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
         panelFila.setMaximumSize(new java.awt.Dimension(Short.MAX_VALUE, 35));
         panelFila.setOpaque(false);
 
-        //Label identificador
+        // Label identificador
         javax.swing.JLabel lblComponente = new javax.swing.JLabel("Componente " + contadorPiezas + ":");
         lblComponente.setPreferredSize(new java.awt.Dimension(90, 25));
 
-        //ComboBox con los repuestos (Recupera su ancho completo original)
+        // ComboBox con los repuestos
         javax.swing.JComboBox<String> cmbRepuestos = new javax.swing.JComboBox<>();
         cmbRepuestos.setPreferredSize(new java.awt.Dimension(550, 25));
         cmbRepuestos.addItem("-- Seleccione Repuesto --");
@@ -311,22 +421,333 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
             cmbRepuestos.addItem(repuesto);
         }
 
-        // Armar la fila (Solo el Label y el ComboBox, sin textos extra)
+        // ?Botón de eliminación individual para la fila
+        javax.swing.JButton btnEliminarFila = new javax.swing.JButton("X");
+        btnEliminarFila.setPreferredSize(new java.awt.Dimension(45, 25));
+        btnEliminarFila.setForeground(java.awt.Color.RED); // Letra roja para que resalte
+        btnEliminarFila.setFocusable(false);
+        btnEliminarFila.setToolTipText("Quitar este componente");
+
+        // EVENTO DE BORRADO DINÁMICO
+        btnEliminarFila.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                // Removemos este panel de fila completo del contenedor principal
+                pnlPanelPiezas.remove(panelFila);
+
+                // Restamos 1 al contador global para que la validación de guardado no se descuadre
+                contadorPiezas--;
+
+                // Re-indexamos los labels restantes para que no queden saltos (ej: Componente 1, Componente 3)
+                java.awt.Component[] filasRestantes = pnlPanelPiezas.getComponents();
+                int indiceLector = 1;
+                for (java.awt.Component compFila : filasRestantes) {
+                    if (compFila instanceof javax.swing.JPanel) {
+                        javax.swing.JPanel filaActual = (javax.swing.JPanel) compFila;
+                        // El primer elemento del FlowLayout de la fila siempre es nuestro JLabel
+                        if (filaActual.getComponent(0) instanceof javax.swing.JLabel) {
+                            javax.swing.JLabel labelActual = (javax.swing.JLabel) filaActual.getComponent(0);
+                            labelActual.setText("Componente " + indiceLector + ":");
+                            indiceLector++;
+                        }
+                    }
+                }
+
+                // Si el técnico borró la última pieza que quedaba y la sustitución estaba activa, 
+                // volvemos a bloquear "Armado y Cierre" por seguridad
+                if (cbxSustitucion.isSelected() && contadorPiezas <= 1) {
+                    cbxArmadoCierre.setSelected(false);
+                    cbxArmadoCierre.setEnabled(false);
+                }
+
+                // Redibujamos para reflejar la eliminación inmediatamente
+                pnlPanelPiezas.revalidate();
+                pnlPanelPiezas.repaint();
+            }
+        });
+
+        // Armar la estructura de la fila agregando el nuevo botón
         panelFila.add(lblComponente);
         panelFila.add(cmbRepuestos);
+        panelFila.add(btnEliminarFila); // <-- Inyectamos la X al final
 
-        //Inyectar la fila al scrollbar
+        // Inyectar la fila al scrollbar
         pnlPanelPiezas.add(panelFila);
 
-        // Redibujar la interfaz
+        // Redibujar la interfaz contenedor
         pnlPanelPiezas.revalidate();
         pnlPanelPiezas.repaint();
 
         // Incrementar el contador global
         contadorPiezas++;
 
-
+        // Regla reactiva de guardado automático si ya cumple condiciones
+        if (cbxCheckRam.isSelected() && cbxSustitucion.isSelected() && this.contadorPiezas > 1) {
+            cbxArmadoCierre.setEnabled(true);
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+
+        int respuesta = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de salir? Perderá todos los cambios no guardados en este checklist.",
+                "Confirmar Cancelación",
+                javax.swing.JOptionPane.YES_NO_OPTION,
+                javax.swing.JOptionPane.WARNING_MESSAGE
+        );
+
+        if (respuesta == javax.swing.JOptionPane.YES_OPTION) {
+            // RETORNO CON REFRESCADO: Actualizamos la tabla principal por si acaso antes de volver
+            if (this.ventanaPrincipal != null) {
+                if (this.ventanaPrincipal instanceof vista.VistaListaEquipos) {
+                    vista.VistaListaEquipos lista = (vista.VistaListaEquipos) this.ventanaPrincipal;
+                    lista.refrescarTabla();
+                }
+                this.ventanaPrincipal.setVisible(true);
+            }
+            // Cerramos y destruimos la ventana actual del mantenimiento
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnGuardarMantnimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarMantnimientoActionPerformed
+
+        // ==========================================
+        // VALIDACIÓN DE PIEZAS Y OBSERVACIONES
+        // ==========================================
+        if (cbxSustitucion.isSelected()) {
+
+            // Validar si el técnico presionó el botón "+" al menos una vez
+            if (this.contadorPiezas <= 1) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Indicó que hay sustitución, pero no ha agregado ninguna pieza. Presione el botón '+' para añadir.",
+                        "Faltan Componentes",
+                        javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            boolean tieneOtroSeleccionado = false;
+
+            // Recorrer los paneles hijos para inspeccionar los ComboBoxes
+            java.awt.Component[] filas = pnlPanelPiezas.getComponents();
+            for (java.awt.Component componenteFila : filas) {
+                if (componenteFila instanceof javax.swing.JPanel) {
+                    javax.swing.JPanel fila = (javax.swing.JPanel) componenteFila;
+
+                    for (java.awt.Component subComp : fila.getComponents()) {
+                        if (subComp instanceof javax.swing.JComboBox) {
+                            javax.swing.JComboBox<?> combo = (javax.swing.JComboBox<?>) subComp;
+                            String seleccion = combo.getSelectedItem().toString();
+
+                            if (seleccion.equals("-- Seleccione Repuesto --")) {
+                                javax.swing.JOptionPane.showMessageDialog(this,
+                                        "Por favor, seleccione un repuesto válido en todas las filas agregadas.",
+                                        "Selección Incompleta",
+                                        javax.swing.JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+
+                            if (seleccion.equalsIgnoreCase("Otro") || seleccion.contains("Otro")) {
+                                tieneOtroSeleccionado = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (tieneOtroSeleccionado && txtObservaciones.getText().trim().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Ha seleccionado la opción 'Otro' en los repuestos.\nPor favor, detalle en las Observaciones qué componente corresponde.",
+                        "Observaciones Obligatorias",
+                        javax.swing.JOptionPane.WARNING_MESSAGE);
+                txtObservaciones.requestFocus();
+                return;
+            }
+        }
+
+        // ==========================================
+        // 2. EVALUAR CHECKLIST OBLIGATORIO (CON NUEVO ORDEN Y COMPONENTE)
+        // ==========================================
+        boolean checklistCompleto = cbxDesarmeInicial.isSelected()
+                && cbxLimpiezaFisica.isSelected()
+                && cbxCambioPasta.isSelected()
+                && cbxCheckRam.isSelected()
+                && cbxArmadoCierre.isSelected();
+
+        String estadoMantenimiento = "";
+        String estadoEquipo = "";
+        String tipoMantenimiento = "Preventivo"; // Valor por defecto
+
+        // ==========================================
+        // LÓGICA DE DECISIÓN (SITUACIÓN DE LA VIDA REAL REFINADA)
+        // ==========================================
+        if (checklistCompleto) {
+            // El checklist está al 100%, preguntamos normalmente
+            int confirmar = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Está seguro de que desea guardar el mantenimiento como completado?",
+                    "Confirmar Guardado",
+                    javax.swing.JOptionPane.YES_NO_OPTION,
+                    javax.swing.JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (confirmar != javax.swing.JOptionPane.YES_OPTION) {
+                return; // Cancelamos si dice que no
+            }
+
+            estadoMantenimiento = "Completado";
+            estadoEquipo = "Activo";
+
+        } else {
+            // El checklist NO está completo, lanzamos opciones personalizadas
+            Object[] opciones = {"Guardar Avance", "Cierre Rápido (Correctivo)", "Cancelar"};
+
+            int eleccion = javax.swing.JOptionPane.showOptionDialog(this,
+                    "El checklist preventivo no está completo.\n¿Qué acción desea realizar?",
+                    "Opciones de Guardado",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION,
+                    javax.swing.JOptionPane.QUESTION_MESSAGE,
+                    null, opciones, opciones[0]);
+
+            if (eleccion == 0) {
+                // Opción: Guardar Avance (Siempre permitido para que el técnico pueda irse a almorzar o continuar después)
+                estadoMantenimiento = "En Proceso";
+                estadoEquipo = "En Mantenimiento";
+
+            } else if (eleccion == 1) {
+                // Opción: Cierre Rápido (Correctivo)
+
+                // Si hay piezas agregadas, NO permitimos Cierre Rápido sin Armado y Cierre
+                if (cbxSustitucion.isSelected() && this.contadorPiezas > 1) {
+                    javax.swing.JOptionPane.showMessageDialog(this,
+                            "No puede realizar un Cierre Rápido si sustituyó componentes.\n"
+                            + "Para dar el mantenimiento por COMPLETADO con piezas nuevas, debe terminar de ensamblar el equipo y marcar la casilla 'Armado y Cierre'.\n\n"
+                            + "Si aún no termina el trabajo físico, elija la opción 'Guardar Avance'.",
+                            "Cierre Bloqueado",
+                            javax.swing.JOptionPane.ERROR_MESSAGE);
+                    return; // Congela el proceso inmediatamente
+                }
+
+                // Validación clásica de observaciones para arreglos puntuales (sin piezas)
+                if (txtObservaciones.getText().trim().isEmpty()) {
+                    javax.swing.JOptionPane.showMessageDialog(this,
+                            "Para realizar un Cierre Rápido DEBE detallar en el campo de Observaciones qué reparación realizó.",
+                            "Observaciones Obligatorias",
+                            javax.swing.JOptionPane.WARNING_MESSAGE);
+                    txtObservaciones.requestFocus();
+                    return;
+                }
+
+                estadoMantenimiento = "Completado";
+                estadoEquipo = "Activo";
+                tipoMantenimiento = "Correctivo";
+
+            } else {
+                return; // Opción: Cancelar o cerrar la ventana
+            }
+        }
+
+        // ==========================================
+        // LLAMADA AL DAO Y CIERRE DE VENTANA
+        // ==========================================
+        dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
+
+        boolean exito = equipoDAO.guardarMantenimientoNotebook(
+                this.idRecibido,
+                estadoEquipo,
+                estadoMantenimiento,
+                cbxDesarmeInicial.isSelected(),
+                cbxLimpiezaFisica.isSelected(),
+                cbxCheckRam.isSelected(), 
+                cbxCambioPasta.isSelected(), 
+                cbxArmadoCierre.isSelected(),
+                cbxSustitucion.isSelected(),
+                tipoMantenimiento,
+                txtObservaciones.getText().trim()
+        );
+
+        if (exito) {
+            String serie = txtCodigoSerie.getText();
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "¡Mantenimiento de Notebook [" + serie + "] guardado con éxito!",
+                    "Guardado Exitoso",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+            // RETORNO Y RECARGA INTELIGENTE
+            if (this.ventanaPrincipal != null) {
+                if (this.ventanaPrincipal instanceof vista.VistaListaEquipos) {
+                    vista.VistaListaEquipos lista = (vista.VistaListaEquipos) this.ventanaPrincipal;
+                    lista.refrescarTabla();
+                }
+                this.ventanaPrincipal.setVisible(true);
+            }
+            this.dispose(); // Destruimos la ventana de mantenimiento
+
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error crítico: No se pudo registrar el mantenimiento en la base de datos.",
+                    "Error de Guardado",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnGuardarMantnimientoActionPerformed
+
+    private void cbxArmadoCierreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxArmadoCierreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxArmadoCierreActionPerformed
+
+    private void cbxDesarmeInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxDesarmeInicialActionPerformed
+
+        cbxLimpiezaFisica.setEnabled(cbxDesarmeInicial.isSelected());
+
+        if (!cbxDesarmeInicial.isSelected()) {
+            limpiarYBloquearDesde(1);
+        }
+
+    }//GEN-LAST:event_cbxDesarmeInicialActionPerformed
+
+    private void cbxLimpiezaFisicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxLimpiezaFisicaActionPerformed
+
+        cbxCambioPasta.setEnabled(cbxLimpiezaFisica.isSelected());
+
+        if (!cbxLimpiezaFisica.isSelected()) {
+            limpiarYBloquearDesde(2);
+        }
+   
+    }//GEN-LAST:event_cbxLimpiezaFisicaActionPerformed
+
+    private void cbxCambioPastaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCambioPastaActionPerformed
+
+        cbxCheckRam.setEnabled(cbxCambioPasta.isSelected());
+
+        if (!cbxCambioPasta.isSelected()) {
+            limpiarYBloquearDesde(3);
+        }
+
+    }//GEN-LAST:event_cbxCambioPastaActionPerformed
+
+    private void cbxCheckRamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCheckRamActionPerformed
+
+        if (cbxCheckRam.isSelected()) {
+            // Si requiere repuestos pero la lista está vacía...
+            if (cbxSustitucion.isSelected() && this.contadorPiezas <= 1) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Indicó que habrá sustitución de componentes.\nDebe presionar el botón '+' e incorporar las piezas antes de poder habilitar 'Armado y Cierre'.",
+                        "Acción Requerida",
+                        javax.swing.JOptionPane.WARNING_MESSAGE);
+
+                cbxCheckRam.setSelected(false); // Desmarcamos por apurar el flujo
+                return;
+            }
+            // Si pasa la regla, habilitamos el paso final
+            cbxArmadoCierre.setEnabled(true);
+        } else {
+            cbxArmadoCierre.setSelected(false);
+            cbxArmadoCierre.setEnabled(false);
+        }
+
+    }//GEN-LAST:event_cbxCheckRamActionPerformed
 
     /**
      * @param args the command line arguments
@@ -358,7 +779,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VistaMantenimientoNotebook(1).setVisible(true);
+                new VistaMantenimientoNotebook(1, null).setVisible(true);
             }
         });
     }
@@ -372,7 +793,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
     private javax.swing.JCheckBox cbxCheckRam;
     private javax.swing.JCheckBox cbxDesarmeInicial;
     private javax.swing.JCheckBox cbxLimpiezaFisica;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox cbxSustitucion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -385,7 +806,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
     private javax.swing.JPanel pnlPanelPiezas;
     private javax.swing.JTextField txtCodigoSerie;
     private javax.swing.JTextField txtEstado;
+    private javax.swing.JTextArea txtObservaciones;
     private javax.swing.JTextField txtTipoMantenimiento;
-    private javax.swing.JTextArea txtaObservaciones;
     // End of variables declaration//GEN-END:variables
 }
