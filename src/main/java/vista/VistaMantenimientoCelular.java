@@ -8,25 +8,80 @@ package vista;
  *
  * @author gustavo
  */
-public class VistaMantenimientoCelular extends javax.swing.JFrame {
 
+public class VistaMantenimientoCelular extends javax.swing.JFrame {
+    
+    
+    
     private int idRecibido;
-    
-    
+    private int contadorPiezas = 1;
+    private javax.swing.JFrame ventanaPrincipal;
     
     /**
-     * Creates new form VistaMantenimientoCelular
+     * Creates new form VistaMantenimientoNotebook
      */
-    public VistaMantenimientoCelular(int idEquipo) {
+    public VistaMantenimientoCelular(int idEquipo, javax.swing.JFrame principal) {
         initComponents();
         
-        this.idRecibido = idEquipo;
+        this.idRecibido = idEquipo; // Ahora la ventana ya sabe qué equipo es
+        this.ventanaPrincipal = principal;
         
-        // Centrar y poner un título descriptivo
+        this.setSize(1000, 800);
+
+        // Evita que el usuario cambie el tamaño de la ventana
+        this.setResizable(false);
+
+        // Centra la ventana en la pantalla
         this.setLocationRelativeTo(null);
-        this.setTitle("Checklist Dispositivo Móvil - ID: " + idEquipo);
+
+        this.setTitle("Inventario Central");
+        
+        
+        cargarDatosEquipo();
+
+        
+        btnAgregar.setEnabled(false);
+        
+        cbxLimpieza.setEnabled(false);
+        cbxBateria.setEnabled(false);
+        cbxArmadoCierre.setEnabled(false);
+
     }
 
+    private void cargarDatosEquipo() {
+        dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
+
+        modelo.EquipoOficina equipo = equipoDAO.buscarPorId(this.idRecibido);
+
+        if (equipo != null) {
+            // Pintamos los datos en los JTextFields exactos
+            txtCodigoSerie.setText(equipo.getNumeroSerie());
+            txtTipoMantenimiento.setText(equipo.getTipoEquipo().getNombre());
+            txtEstado.setText(equipo.getEstado());
+
+            // Los dejamos como "Solo Lectura" para que el técnico no los edite sin querer
+            txtCodigoSerie.setEditable(false);
+            txtTipoMantenimiento.setEditable(false);
+            txtEstado.setEditable(false);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: No se pudieron recuperar los datos del equipo.");
+        }
+    }
+    
+    private void limpiarYBloquearDesde(int nivel) {
+        if (nivel <= 1) {
+            cbxLimpieza.setSelected(false);
+            cbxLimpieza.setEnabled(false);
+        }
+        if (nivel <= 2) {
+            cbxBateria.setSelected(false);
+            cbxBateria.setEnabled(false);
+        }
+        cbxArmadoCierre.setSelected(false);
+        cbxArmadoCierre.setEnabled(false);
+    }
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,21 +91,316 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        pnlInfoGeneral = new javax.swing.JPanel();
+        lblCodigoSerie = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txtCodigoSerie = new javax.swing.JTextField();
+        txtTipoMantenimiento = new javax.swing.JTextField();
+        txtEstado = new javax.swing.JTextField();
+        jpnCheckList = new javax.swing.JPanel();
+        cbxPantalla = new javax.swing.JCheckBox();
+        cbxLimpieza = new javax.swing.JCheckBox();
+        cbxBateria = new javax.swing.JCheckBox();
+        cbxArmadoCierre = new javax.swing.JCheckBox();
+        cbxSustitucion = new javax.swing.JCheckBox();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        pnlPanelPiezas = new javax.swing.JPanel();
+        btnAgregar = new javax.swing.JButton();
+        pnlObservaciones = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtObservaciones = new javax.swing.JTextArea();
+        btnGuardarMantnimiento = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setToolTipText("");
+        jPanel1.setPreferredSize(new java.awt.Dimension(900, 700));
+
+        pnlInfoGeneral.setBackground(new java.awt.Color(255, 255, 255));
+        pnlInfoGeneral.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Información General", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 13), new java.awt.Color(0, 0, 0))); // NOI18N
+
+        lblCodigoSerie.setForeground(new java.awt.Color(0, 0, 0));
+        lblCodigoSerie.setText("Código de Serie");
+
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Tipo de Mantenimiento");
+
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Estado");
+
+        javax.swing.GroupLayout pnlInfoGeneralLayout = new javax.swing.GroupLayout(pnlInfoGeneral);
+        pnlInfoGeneral.setLayout(pnlInfoGeneralLayout);
+        pnlInfoGeneralLayout.setHorizontalGroup(
+            pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInfoGeneralLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblCodigoSerie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(34, 34, 34)
+                .addGroup(pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtCodigoSerie, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                    .addComponent(txtTipoMantenimiento)
+                    .addComponent(txtEstado))
+                .addContainerGap(80, Short.MAX_VALUE))
+        );
+        pnlInfoGeneralLayout.setVerticalGroup(
+            pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInfoGeneralLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCodigoSerie)
+                    .addComponent(txtCodigoSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtTipoMantenimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlInfoGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        jpnCheckList.setBackground(new java.awt.Color(255, 255, 255));
+        jpnCheckList.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Check List y Sustitución de Piezas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 13), new java.awt.Color(0, 0, 0))); // NOI18N
+        jpnCheckList.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        cbxPantalla.setForeground(new java.awt.Color(0, 0, 0));
+        cbxPantalla.setText("Revisión Pantalla Táctil");
+        cbxPantalla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxPantallaActionPerformed(evt);
+            }
+        });
+        jpnCheckList.add(cbxPantalla, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 19, -1, -1));
+
+        cbxLimpieza.setForeground(new java.awt.Color(0, 0, 0));
+        cbxLimpieza.setText("Limpieza Física");
+        cbxLimpieza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxLimpiezaActionPerformed(evt);
+            }
+        });
+        jpnCheckList.add(cbxLimpieza, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 46, -1, -1));
+
+        cbxBateria.setForeground(new java.awt.Color(0, 0, 0));
+        cbxBateria.setText("Revisión Rendimiento Batería");
+        cbxBateria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxBateriaActionPerformed(evt);
+            }
+        });
+        jpnCheckList.add(cbxBateria, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 73, -1, -1));
+
+        cbxArmadoCierre.setForeground(new java.awt.Color(0, 0, 0));
+        cbxArmadoCierre.setText("Armado y Cierre");
+        cbxArmadoCierre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxArmadoCierreActionPerformed(evt);
+            }
+        });
+        jpnCheckList.add(cbxArmadoCierre, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 100, -1, -1));
+
+        cbxSustitucion.setForeground(new java.awt.Color(0, 0, 0));
+        cbxSustitucion.setText("Sustitución de Componentes");
+        cbxSustitucion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxSustitucionActionPerformed(evt);
+            }
+        });
+        jpnCheckList.add(cbxSustitucion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("                                                  "));
+
+        pnlPanelPiezas.setBackground(new java.awt.Color(255, 255, 255));
+        pnlPanelPiezas.setLayout(new javax.swing.BoxLayout(pnlPanelPiezas, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane2.setViewportView(pnlPanelPiezas);
+
+        jpnCheckList.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 137, 793, 150));
+
+        btnAgregar.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
+        btnAgregar.setText("+");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        jpnCheckList.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(816, 172, 60, 50));
+
+        pnlObservaciones.setBackground(new java.awt.Color(255, 255, 255));
+        pnlObservaciones.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Observaciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 13), new java.awt.Color(0, 0, 0))); // NOI18N
+
+        txtObservaciones.setBackground(new java.awt.Color(255, 255, 255));
+        txtObservaciones.setColumns(20);
+        txtObservaciones.setForeground(new java.awt.Color(0, 0, 0));
+        txtObservaciones.setRows(5);
+        txtObservaciones.setBorder(null);
+        jScrollPane1.setViewportView(txtObservaciones);
+
+        javax.swing.GroupLayout pnlObservacionesLayout = new javax.swing.GroupLayout(pnlObservaciones);
+        pnlObservaciones.setLayout(pnlObservacionesLayout);
+        pnlObservacionesLayout.setHorizontalGroup(
+            pnlObservacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlObservacionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+        );
+        pnlObservacionesLayout.setVerticalGroup(
+            pnlObservacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlObservacionesLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        btnGuardarMantnimiento.setBackground(new java.awt.Color(204, 204, 204));
+        btnGuardarMantnimiento.setForeground(new java.awt.Color(0, 0, 0));
+        btnGuardarMantnimiento.setText("Guardar Mantenimiento");
+        btnGuardarMantnimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarMantnimientoActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setBackground(new java.awt.Color(204, 204, 204));
+        btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(pnlInfoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(386, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(pnlObservaciones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jpnCheckList, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnGuardarMantnimiento)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCancelar)))
+                        .addGap(67, 67, 67))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(pnlInfoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jpnCheckList, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pnlObservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCancelar)
+                    .addComponent(btnGuardarMantnimiento))
+                .addContainerGap(94, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbxSustitucionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxSustitucionActionPerformed
+
+        btnAgregar.setEnabled(cbxSustitucion.isSelected());
+
+    }//GEN-LAST:event_cbxSustitucionActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+
+        int respuesta = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de salir? Perderá todos los cambios no guardados en este checklist.",
+                "Confirmar Cancelación",
+                javax.swing.JOptionPane.YES_NO_OPTION,
+                javax.swing.JOptionPane.WARNING_MESSAGE
+        );
+
+        if (respuesta == javax.swing.JOptionPane.YES_OPTION) {
+            // RETORNO CON REFRESCADO: Actualizamos la tabla principal por si acaso antes de volver
+            if (this.ventanaPrincipal != null) {
+                if (this.ventanaPrincipal instanceof vista.VistaListaEquipos) {
+                    vista.VistaListaEquipos lista = (vista.VistaListaEquipos) this.ventanaPrincipal;
+                    lista.refrescarTabla();
+                }
+                this.ventanaPrincipal.setVisible(true);
+            }
+            // Cerramos y destruimos la ventana actual del mantenimiento
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnGuardarMantnimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarMantnimientoActionPerformed
+
+
+    }//GEN-LAST:event_btnGuardarMantnimientoActionPerformed
+
+    private void cbxArmadoCierreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxArmadoCierreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxArmadoCierreActionPerformed
+
+    private void cbxPantallaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxPantallaActionPerformed
+        cbxLimpieza.setEnabled(cbxPantalla.isSelected());
+        if (!cbxPantalla.isSelected()) {
+            limpiarYBloquearDesde(1);
+        }
+    }//GEN-LAST:event_cbxPantallaActionPerformed
+
+    private void cbxLimpiezaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxLimpiezaActionPerformed
+        cbxBateria.setEnabled(cbxLimpieza.isSelected());
+        if (!cbxLimpieza.isSelected()) {
+            limpiarYBloquearDesde(2);
+        }
+    }//GEN-LAST:event_cbxLimpiezaActionPerformed
+
+    private void cbxBateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxBateriaActionPerformed
+        if (cbxBateria.isSelected()) {
+            if (cbxSustitucion.isSelected() && this.contadorPiezas <= 1) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Indicó que habrá sustitución de componentes (batería, pantalla, etc.).\nDebe presionar el botón '+' e incorporar las piezas antes de poder habilitar el Cierre Final.",
+                        "Acción Requerida",
+                        javax.swing.JOptionPane.WARNING_MESSAGE);
+
+                cbxBateria.setSelected(false);
+                return;
+            }
+            cbxArmadoCierre.setEnabled(true);
+        } else {
+            cbxArmadoCierre.setSelected(false);
+            cbxArmadoCierre.setEnabled(false);
+        }
+    }//GEN-LAST:event_cbxBateriaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,28 +428,38 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(VistaMantenimientoCelular.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(VistaMantenimientoCelular.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                // Le pasamos el 1 para que el botón de "Play" de este archivo funcione
-                new VistaMantenimientoCelular(1).setVisible(true);
+                new VistaMantenimientoCelular(1, null).setVisible(true);
             }
         });
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnGuardarMantnimiento;
+    private javax.swing.JCheckBox cbxArmadoCierre;
+    private javax.swing.JCheckBox cbxBateria;
+    private javax.swing.JCheckBox cbxLimpieza;
+    private javax.swing.JCheckBox cbxPantalla;
+    private javax.swing.JCheckBox cbxSustitucion;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel jpnCheckList;
+    private javax.swing.JLabel lblCodigoSerie;
+    private javax.swing.JPanel pnlInfoGeneral;
+    private javax.swing.JPanel pnlObservaciones;
+    private javax.swing.JPanel pnlPanelPiezas;
+    private javax.swing.JTextField txtCodigoSerie;
+    private javax.swing.JTextField txtEstado;
+    private javax.swing.JTextArea txtObservaciones;
+    private javax.swing.JTextField txtTipoMantenimiento;
     // End of variables declaration//GEN-END:variables
 }

@@ -16,6 +16,7 @@ public class VistaMantenimientoPC extends javax.swing.JFrame {
     private int idRecibido;
     private int contadorPiezas = 1;
     private javax.swing.JFrame ventanaPrincipal;
+    private java.util.List<String> listaRepuestosCacheados;
     
     /**
      * Creates new form VistaMantenimientoNotebook
@@ -38,6 +39,8 @@ public class VistaMantenimientoPC extends javax.swing.JFrame {
         
         
         cargarDatosEquipo();
+        cargarRepuestosEnCache();
+        
         btnAgregar.setEnabled(false);
         
         cbxLimpiezaFisica.setEnabled(false);
@@ -49,6 +52,43 @@ public class VistaMantenimientoPC extends javax.swing.JFrame {
         
     }
 
+    private void cargarRepuestosEnCache() {
+        dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
+        // Filtros originales para PC y Notebook
+        java.util.List<String> filtros = java.util.Arrays.asList(
+                "Memoria RAM", "Disco Duro HDD", "Disco Duro SSD", "CPU",
+                "GPU", "Tarjeta Madre", "Ventilador", "Batería", "Pantalla", "Otro"
+        );
+        this.listaRepuestosCacheados = equipoDAO.obtenerPiezasPorTipos(filtros);
+    }
+    
+    private void removerFilaComponente(javax.swing.JPanel panelFila) {
+        pnlPanelPiezas.remove(panelFila);
+        contadorPiezas--;
+
+        java.awt.Component[] filasRestantes = pnlPanelPiezas.getComponents();
+        int indiceLector = 1;
+        for (java.awt.Component compFila : filasRestantes) {
+            if (compFila instanceof javax.swing.JPanel) {
+                javax.swing.JPanel filaActual = (javax.swing.JPanel) compFila;
+                if (filaActual.getComponent(0) instanceof javax.swing.JLabel) {
+                    javax.swing.JLabel labelActual = (javax.swing.JLabel) filaActual.getComponent(0);
+                    labelActual.setText("Componente " + indiceLector + ":");
+                    indiceLector++;
+                }
+            }
+        }
+
+        if (cbxSustitucion.isSelected() && contadorPiezas <= 1) {
+            cbxArmadoCierre.setSelected(false);
+            cbxArmadoCierre.setEnabled(false);
+        }
+
+        pnlPanelPiezas.revalidate();
+        pnlPanelPiezas.repaint();
+    }
+    
+    
     private void cargarDatosEquipo() {
         dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
 
@@ -411,96 +451,43 @@ public class VistaMantenimientoPC extends javax.swing.JFrame {
     }//GEN-LAST:event_cbxSustitucionActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-
-        // Panel contenedor de la fila
         javax.swing.JPanel panelFila = new javax.swing.JPanel();
         panelFila.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
         panelFila.setMaximumSize(new java.awt.Dimension(Short.MAX_VALUE, 35));
         panelFila.setOpaque(false);
 
-        // Label identificador
         javax.swing.JLabel lblComponente = new javax.swing.JLabel("Componente " + contadorPiezas + ":");
         lblComponente.setPreferredSize(new java.awt.Dimension(90, 25));
 
-        // ComboBox con los repuestos
         javax.swing.JComboBox<String> cmbRepuestos = new javax.swing.JComboBox<>();
         cmbRepuestos.setPreferredSize(new java.awt.Dimension(550, 25));
         cmbRepuestos.addItem("-- Seleccione Repuesto --");
 
-        // Cargar los filtros de Notebook desde la base de datos
-        java.util.List<String> filtrosNotebook = java.util.Arrays.asList(
-                "Memoria RAM", "Disco Duro HDD", "Disco Duro SSD", "CPU",
-                "GPU", "Tarjeta Madre", "Ventilador", "Batería", "Pantalla", "Otro"
-        );
-
-        dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
-        java.util.List<String> piezasDisponibles = equipoDAO.obtenerPiezasPorTipos(filtrosNotebook);
-
-        for (String repuesto : piezasDisponibles) {
-            cmbRepuestos.addItem(repuesto);
+        // LEEMOS DE LA CACHÉ
+        if (this.listaRepuestosCacheados != null) {
+            for (String repuesto : this.listaRepuestosCacheados) {
+                cmbRepuestos.addItem(repuesto);
+            }
         }
 
-        // ?Botón de eliminación individual para la fila
         javax.swing.JButton btnEliminarFila = new javax.swing.JButton("X");
         btnEliminarFila.setPreferredSize(new java.awt.Dimension(45, 25));
-        btnEliminarFila.setForeground(java.awt.Color.RED); // Letra roja para que resalte
+        btnEliminarFila.setForeground(java.awt.Color.RED);
         btnEliminarFila.setFocusable(false);
-        btnEliminarFila.setToolTipText("Quitar este componente");
 
-        // EVENTO DE BORRADO DINÁMICO
-        btnEliminarFila.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                // Removemos este panel de fila completo del contenedor principal
-                pnlPanelPiezas.remove(panelFila);
+        // LLAMADA AL MÉTODO EXTERNO
+        btnEliminarFila.addActionListener(e -> removerFilaComponente(panelFila));
 
-                // Restamos 1 al contador global para que la validación de guardado no se descuadre
-                contadorPiezas--;
-
-                // Re-indexamos los labels restantes para que no queden saltos (ej: Componente 1, Componente 3)
-                java.awt.Component[] filasRestantes = pnlPanelPiezas.getComponents();
-                int indiceLector = 1;
-                for (java.awt.Component compFila : filasRestantes) {
-                    if (compFila instanceof javax.swing.JPanel) {
-                        javax.swing.JPanel filaActual = (javax.swing.JPanel) compFila;
-                        // El primer elemento del FlowLayout de la fila siempre es nuestro JLabel
-                        if (filaActual.getComponent(0) instanceof javax.swing.JLabel) {
-                            javax.swing.JLabel labelActual = (javax.swing.JLabel) filaActual.getComponent(0);
-                            labelActual.setText("Componente " + indiceLector + ":");
-                            indiceLector++;
-                        }
-                    }
-                }
-
-                // Si el técnico borró la última pieza que quedaba y la sustitución estaba activa, 
-                // volvemos a bloquear "Armado y Cierre" por seguridad
-                if (cbxSustitucion.isSelected() && contadorPiezas <= 1) {
-                    cbxArmadoCierre.setSelected(false);
-                    cbxArmadoCierre.setEnabled(false);
-                }
-
-                // Redibujamos para reflejar la eliminación inmediatamente
-                pnlPanelPiezas.revalidate();
-                pnlPanelPiezas.repaint();
-            }
-        });
-
-        // Armar la estructura de la fila agregando el nuevo botón
         panelFila.add(lblComponente);
         panelFila.add(cmbRepuestos);
-        panelFila.add(btnEliminarFila); // <-- Inyectamos la X al final
+        panelFila.add(btnEliminarFila);
 
-        // Inyectar la fila al scrollbar
         pnlPanelPiezas.add(panelFila);
-
-        // Redibujar la interfaz contenedor
         pnlPanelPiezas.revalidate();
         pnlPanelPiezas.repaint();
 
-        // Incrementar el contador global
         contadorPiezas++;
 
-        // Regla reactiva de guardado automático si ya cumple condiciones
         if (cbxCheckAlmacenamiento.isSelected() && cbxSustitucion.isSelected() && this.contadorPiezas > 1) {
             cbxArmadoCierre.setEnabled(true);
         }

@@ -388,7 +388,10 @@ public class VistaListaEquipos extends javax.swing.JFrame {
                 break;
 
             case "Celular":
-                new VistaMantenimientoCelular(idEquipo).setVisible(true);
+                VistaMantenimientoCelular ventanaCelular = new VistaMantenimientoCelular(idEquipo, this); 
+                ventanaCelular.setVisible(true);
+
+                this.setVisible(false); 
                 break;
 
             case "Impresora":
