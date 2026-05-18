@@ -467,6 +467,21 @@ CREATE TABLE software_equipo (
     FOREIGN KEY (id_tecnico) REFERENCES usuarios(id_usuario)
 );
 
+
+-- Check List Equipos
+
+CREATE TABLE detalle_mant_notebook (
+    id_detalle_nb INT AUTO_INCREMENT PRIMARY KEY,
+    id_mantenimiento INT NOT NULL UNIQUE,
+    desarme_inicial BOOLEAN DEFAULT FALSE,
+    limpieza_fisica BOOLEAN DEFAULT FALSE,
+    check_ram BOOLEAN DEFAULT FALSE,
+    cambio_pasta BOOLEAN DEFAULT FALSE,
+    armado_cierre BOOLEAN DEFAULT FALSE,
+    sustitucion_piezas BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_mantenimiento) REFERENCES mantenimiento_equipos(id_mantenimiento) ON DELETE CASCADE
+);
+
 CREATE TABLE detalle_mant_computador (
     id_detalle_pc INT AUTO_INCREMENT PRIMARY KEY,
     id_mantenimiento INT NOT NULL UNIQUE,

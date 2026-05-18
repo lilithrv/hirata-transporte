@@ -287,5 +287,107 @@ public class EquipoOficinaDAO {
         }
         return null;
     }
+    
+    
+    public boolean guardarMantenimientoNotebook(int idEquipo, String estadoEqui, String estadoMant,
+            boolean desarme, boolean limpieza, boolean ram, boolean pasta, boolean cierre, boolean sustitucion,
+            String tipoMant, String observaciones) { // <-- 🚀 Nuevos parámetros
+
+        Connection conn = Conexion.getInstancia();
+
+        try {
+            conn.setAutoCommit(false);
+
+            // Buscamos primero el id_mantenimiento activo para este equipo
+            int idMantenimiento = -1;
+            String sqlBuscarMant = "SELECT id_mantenimiento FROM mantenimiento_equipos WHERE id_equipo = ? AND estado != 'Completado' LIMIT 1";
+
+            try (PreparedStatement psBusca = conn.prepareStatement(sqlBuscarMant)) {
+                psBusca.setInt(1, idEquipo);
+                try (ResultSet rs = psBusca.executeQuery()) {
+                    if (rs.next()) {
+                        idMantenimiento = rs.getInt("id_mantenimiento");
+                    }
+                }
+            }
+
+            //  Si no existe, lo creamos al vuelo
+            if (idMantenimiento == -1) {
+                // Nota: Se pone id_tecnico = 1 por defecto para pruebas. Luego lo vinculas a tu inicio de sesión.
+                String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio) VALUES (?, ?, ?, ?, 1, NOW())";
+                try (PreparedStatement psCrear = conn.prepareStatement(sqlCrearMant, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+                    psCrear.setInt(1, idEquipo);
+                    psCrear.setString(2, tipoMant);
+                    psCrear.setString(3, estadoMant);
+                    psCrear.setString(4, observaciones);
+                    psCrear.executeUpdate();
+
+                    try (ResultSet rsKeys = psCrear.getGeneratedKeys()) {
+                        if (rsKeys.next()) {
+                            idMantenimiento = rsKeys.getInt(1);
+                        }
+                    }
+                }
+            } else {
+                // Si ya existía, simplemente lo actualizamos
+                String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ? WHERE id_mantenimiento = ?";
+                try (PreparedStatement psMant = conn.prepareStatement(sqlUpdateMant)) {
+                    psMant.setString(1, estadoMant);
+                    psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
+                    psMant.setString(3, tipoMant);
+                    psMant.setString(4, observaciones);
+                    psMant.setInt(5, idMantenimiento);
+                    psMant.executeUpdate();
+                }
+            }
+
+            // Actualizar la tabla del Equipo (Activo / En Mantenimiento)
+            String sqlUpdateEquipo = "UPDATE equipos_oficina SET estado = ? WHERE id_equipo = ?";
+            try (PreparedStatement psEqui = conn.prepareStatement(sqlUpdateEquipo)) {
+                psEqui.setString(1, estadoEqui);
+                psEqui.setInt(2, idEquipo);
+                psEqui.executeUpdate();
+            }
+
+            // Insertar o actualizar el Checklist detallado
+            String sqlChecklist = "INSERT INTO detalle_mant_notebook (id_mantenimiento, desarme_inicial, limpieza_fisica, check_ram, cambio_pasta, armado_cierre, sustitucion_piezas) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?) "
+                    + "ON DUPLICATE KEY UPDATE desarme_inicial = ?, limpieza_fisica = ?, check_ram = ?, cambio_pasta = ?, armado_cierre = ?, sustitucion_piezas = ?";
+            try (PreparedStatement psCheck = conn.prepareStatement(sqlChecklist)) {
+                psCheck.setInt(1, idMantenimiento);
+                psCheck.setBoolean(2, desarme);
+                psCheck.setBoolean(3, limpieza);
+                psCheck.setBoolean(4, ram);
+                psCheck.setBoolean(5, pasta);
+                psCheck.setBoolean(6, cierre);
+                psCheck.setBoolean(7, sustitucion);
+
+                psCheck.setBoolean(8, desarme);
+                psCheck.setBoolean(9, limpieza);
+                psCheck.setBoolean(10, ram);
+                psCheck.setBoolean(11, pasta);
+                psCheck.setBoolean(12, cierre);
+                psCheck.setBoolean(13, sustitucion);
+                psCheck.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("Error en transacción: " + e.getMessage());
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+            }
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+            }
+        }
+        return false;
+    }
+    
 
 } // Class

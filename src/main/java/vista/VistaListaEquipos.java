@@ -374,7 +374,10 @@ public class VistaListaEquipos extends javax.swing.JFrame {
         // Redirección inteligente
         switch (tipo) {
             case "Notebook":
-                new VistaMantenimientoNotebook(idEquipo).setVisible(true);
+                VistaMantenimientoNotebook ventanaNB = new VistaMantenimientoNotebook(idEquipo, this);
+                ventanaNB.setVisible(true);
+                
+                this.setVisible(false);
                 break;
 
             case "PC Escritorio":
