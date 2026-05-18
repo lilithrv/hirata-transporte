@@ -43,8 +43,9 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         cbxLimpiezaFisica.setEnabled(false);
         cbxCambioPasta.setEnabled(false);
         cbxCheckRam.setEnabled(false);
+        cbxCheckAlmacenamiento.setEnabled(false);
         cbxArmadoCierre.setEnabled(false);
-        
+
         
     }
 
@@ -82,10 +83,14 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
             cbxCheckRam.setSelected(false);
             cbxCheckRam.setEnabled(false);
         }
+        if (nivel <= 4) {
+            cbxCheckAlmacenamiento.setSelected(false);
+            cbxCheckAlmacenamiento.setEnabled(false);
+        }
         cbxArmadoCierre.setSelected(false);
         cbxArmadoCierre.setEnabled(false);
     }
-    
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -108,6 +113,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         cbxDesarmeInicial = new javax.swing.JCheckBox();
         cbxLimpiezaFisica = new javax.swing.JCheckBox();
         cbxCheckRam = new javax.swing.JCheckBox();
+        cbxCheckAlmacenamiento = new javax.swing.JCheckBox();
         cbxCambioPasta = new javax.swing.JCheckBox();
         cbxArmadoCierre = new javax.swing.JCheckBox();
         cbxSustitucion = new javax.swing.JCheckBox();
@@ -200,6 +206,14 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
             }
         });
 
+        cbxCheckAlmacenamiento.setForeground(new java.awt.Color(0, 0, 0));
+        cbxCheckAlmacenamiento.setText("Checkeo Almacenamiento");
+        cbxCheckAlmacenamiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxCheckAlmacenamientoActionPerformed(evt);
+            }
+        });
+
         cbxCambioPasta.setForeground(new java.awt.Color(0, 0, 0));
         cbxCambioPasta.setText("Cambio de Pasta Térmica");
         cbxCambioPasta.addActionListener(new java.awt.event.ActionListener() {
@@ -249,7 +263,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                         .addComponent(cbxDesarmeInicial))
                     .addGroup(jpnCheckListLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(cbxCheckRam))
+                        .addComponent(cbxCheckAlmacenamiento))
                     .addGroup(jpnCheckListLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(cbxArmadoCierre))
@@ -258,7 +272,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                             .addGap(25, 25, 25)
                             .addComponent(cbxSustitucion))
                         .addGroup(jpnCheckListLayout.createSequentialGroup()
-                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 793, Short.MAX_VALUE)
                             .addGap(18, 18, 18)
                             .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jpnCheckListLayout.createSequentialGroup()
@@ -268,21 +282,26 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(cbxCambioPasta)))
                 .addGap(25, 25, 25))
+            .addGroup(jpnCheckListLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cbxCheckRam)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpnCheckListLayout.setVerticalGroup(
             jpnCheckListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnCheckListLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
                 .addComponent(cbxDesarmeInicial)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxLimpiezaFisica)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxCambioPasta)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(9, 9, 9)
                 .addComponent(cbxCheckRam)
-                .addGap(6, 6, 6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxCheckAlmacenamiento)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxArmadoCierre)
-                .addGap(7, 7, 7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpnCheckListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpnCheckListLayout.createSequentialGroup()
                         .addComponent(cbxSustitucion)
@@ -368,7 +387,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCancelar)
                     .addComponent(btnGuardarMantnimiento))
-                .addContainerGap(103, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -482,7 +501,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         contadorPiezas++;
 
         // Regla reactiva de guardado automático si ya cumple condiciones
-        if (cbxCheckRam.isSelected() && cbxSustitucion.isSelected() && this.contadorPiezas > 1) {
+        if (cbxCheckAlmacenamiento.isSelected() && cbxSustitucion.isSelected() && this.contadorPiezas > 1) {
             cbxArmadoCierre.setEnabled(true);
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
@@ -572,7 +591,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         boolean checklistCompleto = cbxDesarmeInicial.isSelected()
                 && cbxLimpiezaFisica.isSelected()
                 && cbxCambioPasta.isSelected()
-                && cbxCheckRam.isSelected()
+                && cbxCheckAlmacenamiento.isSelected()
                 && cbxArmadoCierre.isSelected();
 
         String estadoMantenimiento = "";
@@ -659,7 +678,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                 estadoMantenimiento,
                 cbxDesarmeInicial.isSelected(),
                 cbxLimpiezaFisica.isSelected(),
-                cbxCheckRam.isSelected(), 
+                cbxCheckAlmacenamiento.isSelected(), 
                 cbxCambioPasta.isSelected(), 
                 cbxArmadoCierre.isSelected(),
                 cbxSustitucion.isSelected(),
@@ -698,55 +717,49 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
     }//GEN-LAST:event_cbxArmadoCierreActionPerformed
 
     private void cbxDesarmeInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxDesarmeInicialActionPerformed
-
         cbxLimpiezaFisica.setEnabled(cbxDesarmeInicial.isSelected());
-
         if (!cbxDesarmeInicial.isSelected()) {
             limpiarYBloquearDesde(1);
         }
-
     }//GEN-LAST:event_cbxDesarmeInicialActionPerformed
 
     private void cbxLimpiezaFisicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxLimpiezaFisicaActionPerformed
-
         cbxCambioPasta.setEnabled(cbxLimpiezaFisica.isSelected());
-
         if (!cbxLimpiezaFisica.isSelected()) {
             limpiarYBloquearDesde(2);
         }
-   
     }//GEN-LAST:event_cbxLimpiezaFisicaActionPerformed
 
     private void cbxCambioPastaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCambioPastaActionPerformed
-
         cbxCheckRam.setEnabled(cbxCambioPasta.isSelected());
-
         if (!cbxCambioPasta.isSelected()) {
             limpiarYBloquearDesde(3);
         }
-
     }//GEN-LAST:event_cbxCambioPastaActionPerformed
 
-    private void cbxCheckRamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCheckRamActionPerformed
-
-        if (cbxCheckRam.isSelected()) {
-            // Si requiere repuestos pero la lista está vacía...
+    private void cbxCheckAlmacenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCheckAlmacenamientoActionPerformed
+        if (cbxCheckAlmacenamiento.isSelected()) {
             if (cbxSustitucion.isSelected() && this.contadorPiezas <= 1) {
                 javax.swing.JOptionPane.showMessageDialog(this,
                         "Indicó que habrá sustitución de componentes.\nDebe presionar el botón '+' e incorporar las piezas antes de poder habilitar 'Armado y Cierre'.",
                         "Acción Requerida",
                         javax.swing.JOptionPane.WARNING_MESSAGE);
 
-                cbxCheckRam.setSelected(false); // Desmarcamos por apurar el flujo
+                cbxCheckAlmacenamiento.setSelected(false);
                 return;
             }
-            // Si pasa la regla, habilitamos el paso final
             cbxArmadoCierre.setEnabled(true);
         } else {
             cbxArmadoCierre.setSelected(false);
             cbxArmadoCierre.setEnabled(false);
         }
+    }//GEN-LAST:event_cbxCheckAlmacenamientoActionPerformed
 
+    private void cbxCheckRamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCheckRamActionPerformed
+        cbxCheckAlmacenamiento.setEnabled(cbxCheckRam.isSelected());
+        if (!cbxCheckRam.isSelected()) {
+            limpiarYBloquearDesde(4);
+        }
     }//GEN-LAST:event_cbxCheckRamActionPerformed
 
     /**
@@ -790,6 +803,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardarMantnimiento;
     private javax.swing.JCheckBox cbxArmadoCierre;
     private javax.swing.JCheckBox cbxCambioPasta;
+    private javax.swing.JCheckBox cbxCheckAlmacenamiento;
     private javax.swing.JCheckBox cbxCheckRam;
     private javax.swing.JCheckBox cbxDesarmeInicial;
     private javax.swing.JCheckBox cbxLimpiezaFisica;
