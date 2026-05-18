@@ -472,12 +472,27 @@ public class VistaSoftware extends javax.swing.JFrame {
 
         btnAgregar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         btnAgregar.setText("AGREGAR");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         btnEditar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         btnEditar.setText("EDITAR");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         btnEliminar.setText("ELIMINAR");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnExit.setText("CERRAR SESIÓN");
         btnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -711,6 +726,88 @@ public class VistaSoftware extends javax.swing.JFrame {
             this.dispose(); // cerrar vista actual
         }
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // TODO add your handling code here:
+        DialogNuevoSoftware dialog = new DialogNuevoSoftware(this, true);
+        dialog.setVisible(true);
+        if (dialog.isConfirmado()) {
+            cargarTablaCatalogo();
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        int filaSw = tablaCatalogo.getSelectedRow();
+        if (filaSw == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un software primero.");
+            return;
+        }
+
+        int idSw = (int) tablaCatalogo.getValueAt(filaSw, 0);
+
+        Software software = softwareDAO.buscarPorId(idSw);
+
+        if (software == null) {
+            JOptionPane.showMessageDialog(this, "No se pudo obtener el software.");
+            return;
+        }
+
+        DialogEditarSoftware dialog = new DialogEditarSoftware(this, true, software);
+        dialog.setVisible(true);
+
+        if (dialog.isConfirmado()) {
+            cargarTablaCatalogo();
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        int filaSeleccionada = tablaCatalogo.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Debe seleccionar un software para eliminar.",
+                    "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int id = (int) tablaCatalogo.getValueAt(filaSeleccionada, 0);
+        String sw = (String) tablaCatalogo.getValueAt(filaSeleccionada, 2);
+
+        // Verificar si está instalado en algún equipo
+        if (softwareDAO.tieneInstalaciones(id)) {
+            JOptionPane.showMessageDialog(this,
+                    "<html>No se puede eliminar <b>" + sw + "</b>.<br>"
+                    + "Está instalado en uno o más equipos.</html>",
+                    "No se puede eliminar",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        UIManager.put("OptionPane.yesButtonText", "Sí");
+        UIManager.put("OptionPane.noButtonText", "No");
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que deseas eliminar " + sw + "?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        boolean ok = softwareDAO.eliminar(id);
+        if (ok) {
+            JOptionPane.showMessageDialog(this, "Software eliminado correctamente.");
+            cargarTablaCatalogo();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al eliminar.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments

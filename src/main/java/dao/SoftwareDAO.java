@@ -82,7 +82,7 @@ public class SoftwareDAO {
         }
     }
 
-    public boolean actualizarVersion(int idSwEquipo, String nuevaVersion, int idTecnico,  String notas) {
+    public boolean actualizarVersion(int idSwEquipo, String nuevaVersion, int idTecnico, String notas) {
         String sql = "UPDATE software_equipo "
                 + "SET version = ?, estado = 'Actualizado', "
                 + "id_tecnico = ?, fecha_accion = NOW(), notas = ?  "
@@ -150,13 +150,12 @@ public class SoftwareDAO {
         List<Software> lista = new ArrayList<>();
         String sql = "SELECT s.id_software, s.id_tipo_software, s.nombre, t.nombre AS tipo_nombre "
                 + "FROM software s "
-                + // <-- espacio antes de WHERE
-                "JOIN tipos_software t ON s.id_tipo_software = t.id_tipo_software "
+                + "JOIN tipos_software t ON s.id_tipo_software = t.id_tipo_software "
                 + "WHERE s.id_tipo_software = ?";
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idTipoSoftware);                          
+            ps.setInt(1, idTipoSoftware);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     TipoSoftware tipo = new TipoSoftware();
@@ -230,5 +229,143 @@ public class SoftwareDAO {
             System.err.println("Error al verificar instalación: " + e.getMessage());
         }
         return false;
+    }
+
+    public boolean agregar(Software s) {
+        String sql = "INSERT INTO software (id_tipo_software, nombre, fabricante, descripcion) "
+                + "VALUES (?, ?, ?, ?)";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, s.getTipoSoftware().getIdTipoSoftware());
+            ps.setString(2, s.getNombre());
+            ps.setString(3, s.getFabricante());
+            ps.setString(4, s.getDescripcion());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al agregar software: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean editar(Software s) {
+        String sql = "UPDATE software "
+                + "SET id_tipo_software = ?, nombre = ?, fabricante = ?, descripcion = ? "
+                + "WHERE id_software = ?";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, s.getTipoSoftware().getIdTipoSoftware());
+            ps.setString(2, s.getNombre());
+            ps.setString(3, s.getFabricante());
+            ps.setString(4, s.getDescripcion());
+            ps.setInt(5, s.getIdSoftware());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al editar software: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public List<TipoSoftware> listarTipos() {
+        List<TipoSoftware> listado = new ArrayList<>();
+
+        String sql = "SELECT * FROM tipos_software";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    TipoSoftware tipo = new TipoSoftware();
+                    tipo.setIdTipoSoftware(rs.getInt("id_tipo_software"));
+                    tipo.setNombre(rs.getString("nombre"));
+
+                    listado.add(tipo);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al listar tipos de software: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return listado;
+    }
+
+    public boolean existeNombre(String nombre) {
+        String sql = "SELECT COUNT(*) FROM software WHERE LOWER(nombre) = LOWER(?)";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nombre);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al verificar nombre: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public Software buscarPorId(int idSoftware) {
+        String sql = "SELECT s.*, t.nombre AS tipo_nombre "
+                + "FROM software s "
+                + "JOIN tipos_software t ON s.id_tipo_software = t.id_tipo_software "
+                + "WHERE s.id_software = ?";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idSoftware);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    TipoSoftware tipo = new TipoSoftware();
+                    tipo.setIdTipoSoftware(rs.getInt("id_tipo_software"));
+                    tipo.setNombre(rs.getString("tipo_nombre"));
+
+                    Software s = new Software();
+                    s.setIdSoftware(rs.getInt("id_software"));
+                    s.setTipoSoftware(tipo);
+                    s.setNombre(rs.getString("nombre"));
+                    s.setFabricante(rs.getString("fabricante"));
+                    s.setDescripcion(rs.getString("descripcion"));
+
+                    return s;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar software: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean tieneInstalaciones(int idSoftware) {
+        String sql = "SELECT COUNT(*) FROM software_equipo WHERE id_software = ?";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idSoftware);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al verificar instalaciones: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean eliminar(int idSoftware) {
+        String sql = "DELETE FROM software WHERE id_software = ?";
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idSoftware);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar software: " + e.getMessage());
+            return false;
+        }
     }
 }
