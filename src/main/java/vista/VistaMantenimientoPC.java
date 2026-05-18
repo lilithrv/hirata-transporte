@@ -659,12 +659,13 @@ public class VistaMantenimientoPC extends javax.swing.JFrame {
         // ==========================================
         dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
 
-        boolean exito = equipoDAO.guardarMantenimientoNotebook(
+        boolean exito = equipoDAO.guardarMantenimientoPC(
                 this.idRecibido,
                 estadoEquipo,
                 estadoMantenimiento,
                 cbxDesarmeInicial.isSelected(),
                 cbxLimpiezaFisica.isSelected(),
+                cbxCheckRam.isSelected(),
                 cbxCheckAlmacenamiento.isSelected(), 
                 cbxCambioPasta.isSelected(), 
                 cbxArmadoCierre.isSelected(),

@@ -665,6 +665,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                 estadoMantenimiento,
                 cbxDesarmeInicial.isSelected(),
                 cbxLimpiezaFisica.isSelected(),
+                cbxCheckRam.isSelected(),
                 cbxCheckAlmacenamiento.isSelected(), 
                 cbxCambioPasta.isSelected(), 
                 cbxArmadoCierre.isSelected(),

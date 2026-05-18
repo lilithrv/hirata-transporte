@@ -16,6 +16,7 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
     private int idRecibido;
     private int contadorPiezas = 1;
     private javax.swing.JFrame ventanaPrincipal;
+    private java.util.List<String> listaRepuestosCacheados;
     
     /**
      * Creates new form VistaMantenimientoNotebook
@@ -38,6 +39,7 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
         
         
         cargarDatosEquipo();
+        cargarRepuestosEnCache();
 
         
         btnAgregar.setEnabled(false);
@@ -47,6 +49,19 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
         cbxArmadoCierre.setEnabled(false);
 
     }
+    
+    
+    private void cargarRepuestosEnCache() {
+        dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
+
+        // Filtros estrictos: Solo lo que le sirve a un teléfono
+        java.util.List<String> filtros = java.util.Arrays.asList(
+                "Batería Celular", "Pantalla Celular", "Otro"
+        );
+
+        this.listaRepuestosCacheados = equipoDAO.obtenerPiezasPorTipos(filtros);
+    }
+    
 
     private void cargarDatosEquipo() {
         dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
@@ -79,6 +94,33 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
         }
         cbxArmadoCierre.setSelected(false);
         cbxArmadoCierre.setEnabled(false);
+    }
+
+    
+    private void removerFilaComponente(javax.swing.JPanel panelFila) {
+        pnlPanelPiezas.remove(panelFila);
+        contadorPiezas--;
+
+        java.awt.Component[] filasRestantes = pnlPanelPiezas.getComponents();
+        int indiceLector = 1;
+        for (java.awt.Component compFila : filasRestantes) {
+            if (compFila instanceof javax.swing.JPanel) {
+                javax.swing.JPanel filaActual = (javax.swing.JPanel) compFila;
+                if (filaActual.getComponent(0) instanceof javax.swing.JLabel) {
+                    javax.swing.JLabel labelActual = (javax.swing.JLabel) filaActual.getComponent(0);
+                    labelActual.setText("Componente " + indiceLector + ":");
+                    indiceLector++;
+                }
+            }
+        }
+
+        if (cbxSustitucion.isSelected() && contadorPiezas <= 1) {
+            cbxArmadoCierre.setSelected(false);
+            cbxArmadoCierre.setEnabled(false);
+        }
+
+        pnlPanelPiezas.revalidate();
+        pnlPanelPiezas.repaint();
     }
 
     
@@ -329,12 +371,63 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
 
     private void cbxSustitucionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxSustitucionActionPerformed
 
+        // Apagamos o encendemos el botón "+" automáticamente
         btnAgregar.setEnabled(cbxSustitucion.isSelected());
 
+        // Lógica del Armado y Cierre Fantasma
+        if (!cbxSustitucion.isSelected()) {
+            cbxArmadoCierre.setSelected(false);
+            cbxArmadoCierre.setEnabled(false);
+        } else {
+            // Si lo marca, verificamos si ya pasó el test de batería y si ya tiene piezas
+            if (cbxBateria.isSelected() && this.contadorPiezas > 1) {
+                cbxArmadoCierre.setEnabled(true);
+            }
+        }
     }//GEN-LAST:event_cbxSustitucionActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        javax.swing.JPanel panelFila = new javax.swing.JPanel();
+        panelFila.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
+        panelFila.setMaximumSize(new java.awt.Dimension(Short.MAX_VALUE, 35));
+        panelFila.setOpaque(false);
 
+        javax.swing.JLabel lblComponente = new javax.swing.JLabel("Componente " + contadorPiezas + ":");
+        lblComponente.setPreferredSize(new java.awt.Dimension(90, 25));
+
+        javax.swing.JComboBox<String> cmbRepuestos = new javax.swing.JComboBox<>();
+        cmbRepuestos.setPreferredSize(new java.awt.Dimension(550, 25));
+        cmbRepuestos.addItem("-- Seleccione Repuesto --");
+
+        // Leemos la caché exclusiva de celulares
+        if (this.listaRepuestosCacheados != null) {
+            for (String repuesto : this.listaRepuestosCacheados) {
+                cmbRepuestos.addItem(repuesto);
+            }
+        }
+
+        javax.swing.JButton btnEliminarFila = new javax.swing.JButton("X");
+        btnEliminarFila.setPreferredSize(new java.awt.Dimension(45, 25));
+        btnEliminarFila.setForeground(java.awt.Color.RED);
+        btnEliminarFila.setFocusable(false);
+
+        // Enlazamos al método de borrado
+        btnEliminarFila.addActionListener(e -> removerFilaComponente(panelFila));
+
+        panelFila.add(lblComponente);
+        panelFila.add(cmbRepuestos);
+        panelFila.add(btnEliminarFila);
+
+        pnlPanelPiezas.add(panelFila);
+        pnlPanelPiezas.revalidate();
+        pnlPanelPiezas.repaint();
+
+        contadorPiezas++;
+
+        // Habilitar armado si el test de batería ya está marcado
+        if (cbxBateria.isSelected() && cbxSustitucion.isSelected() && this.contadorPiezas > 1) {
+            cbxArmadoCierre.setEnabled(true);
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -362,8 +455,183 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarMantnimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarMantnimientoActionPerformed
+        // ==========================================
+        // VALIDACIÓN DE PIEZAS Y OBSERVACIONES
+        // ==========================================
+        if (cbxSustitucion.isSelected()) {
 
+            // Validar si presionó el botón "+" al menos una vez
+            if (this.contadorPiezas <= 1) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Indicó que hay sustitución, pero no ha agregado ninguna pieza. Presione el botón '+' para añadir.",
+                        "Faltan Componentes",
+                        javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
+            boolean tieneOtroSeleccionado = false;
+
+            // Recorrer los paneles hijos para inspeccionar los ComboBoxes
+            java.awt.Component[] filas = pnlPanelPiezas.getComponents();
+            for (java.awt.Component componenteFila : filas) {
+                if (componenteFila instanceof javax.swing.JPanel) {
+                    javax.swing.JPanel fila = (javax.swing.JPanel) componenteFila;
+
+                    for (java.awt.Component subComp : fila.getComponents()) {
+                        if (subComp instanceof javax.swing.JComboBox) {
+                            javax.swing.JComboBox<?> combo = (javax.swing.JComboBox<?>) subComp;
+                            String seleccion = combo.getSelectedItem().toString();
+
+                            if (seleccion.equals("-- Seleccione Repuesto --")) {
+                                javax.swing.JOptionPane.showMessageDialog(this,
+                                        "Por favor, seleccione un repuesto válido en todas las filas agregadas.",
+                                        "Selección Incompleta",
+                                        javax.swing.JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+
+                            if (seleccion.equalsIgnoreCase("Otro") || seleccion.contains("Otro")) {
+                                tieneOtroSeleccionado = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Si seleccionó "Otro", obligamos a detallar en observaciones
+            if (tieneOtroSeleccionado && txtObservaciones.getText().trim().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Ha seleccionado la opción 'Otro' en los repuestos.\nPor favor, detalle en las Observaciones qué componente corresponde.",
+                        "Observaciones Obligatorias",
+                        javax.swing.JOptionPane.WARNING_MESSAGE);
+                txtObservaciones.requestFocus();
+                return;
+            }
+        }
+
+        // ==========================================
+        // EVALUAR CHECKLIST DINÁMICO DE CELULAR
+        // ==========================================
+        // Base: Los 3 pasos obligatorios que se hacen sin abrir el equipo
+        boolean checklistCompleto = cbxPantalla.isSelected()
+                && cbxLimpieza.isSelected()
+                && cbxBateria.isSelected();
+
+        // Si el técnico indicó sustitución, el "Armado y Cierre" se vuelve obligatorio
+        if (cbxSustitucion.isSelected()) {
+            checklistCompleto = checklistCompleto && cbxArmadoCierre.isSelected();
+        }
+
+        String estadoMantenimiento = "";
+        String estadoEquipo = "";
+        String tipoMantenimiento = "Preventivo"; // Valor por defecto
+
+        // ==========================================
+        // LÓGICA DE DECISIÓN (Preventivo, Correctivo o Avance)
+        // ==========================================
+        if (checklistCompleto) {
+            int confirmar = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Está seguro de que desea guardar el mantenimiento del celular como completado?",
+                    "Confirmar Guardado",
+                    javax.swing.JOptionPane.YES_NO_OPTION,
+                    javax.swing.JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (confirmar != javax.swing.JOptionPane.YES_OPTION) {
+                return; // Cancelamos si dice que no
+            }
+
+            estadoMantenimiento = "Completado";
+            estadoEquipo = "Activo";
+
+        } else {
+            // El checklist NO está completo, lanzamos opciones personalizadas
+            Object[] opciones = {"Guardar Avance", "Cierre Rápido (Correctivo)", "Cancelar"};
+
+            int eleccion = javax.swing.JOptionPane.showOptionDialog(this,
+                    "El checklist preventivo no está completo.\n¿Qué acción desea realizar?",
+                    "Opciones de Guardado",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION,
+                    javax.swing.JOptionPane.QUESTION_MESSAGE,
+                    null, opciones, opciones[0]);
+
+            if (eleccion == 0) {
+                // Opción: Guardar Avance
+                estadoMantenimiento = "En Proceso";
+                estadoEquipo = "En Mantenimiento";
+
+            } else if (eleccion == 1) {
+                // Opción: Cierre Rápido (Correctivo)
+                if (cbxSustitucion.isSelected() && this.contadorPiezas > 1) {
+                    javax.swing.JOptionPane.showMessageDialog(this,
+                            "No puede realizar un Cierre Rápido si sustituyó componentes.\n"
+                            + "Para dar el mantenimiento por COMPLETADO con piezas nuevas, debe terminar el chequeo y marcar la casilla 'Verificación y Cierre Final'.",
+                            "Cierre Bloqueado",
+                            javax.swing.JOptionPane.ERROR_MESSAGE);
+                    return; // Congela el proceso
+                }
+
+                if (txtObservaciones.getText().trim().isEmpty()) {
+                    javax.swing.JOptionPane.showMessageDialog(this,
+                            "Para realizar un Cierre Rápido DEBE detallar en el campo de Observaciones qué reparación realizó.",
+                            "Observaciones Obligatorias",
+                            javax.swing.JOptionPane.WARNING_MESSAGE);
+                    txtObservaciones.requestFocus();
+                    return;
+                }
+
+                estadoMantenimiento = "Completado";
+                estadoEquipo = "Activo";
+                tipoMantenimiento = "Correctivo";
+
+            } else {
+                return; // Opción: Cancelar
+            }
+        }
+
+        // ==========================================
+        // LLAMADA AL DAO Y CIERRE DE VENTANA
+        // ==========================================
+        dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();
+
+        // Llamamos al método específico de Celular en el DAO
+        boolean exito = equipoDAO.guardarMantenimientoCelular(
+                this.idRecibido,
+                estadoEquipo,
+                estadoMantenimiento,
+                cbxPantalla.isSelected(),
+                cbxLimpieza.isSelected(),
+                cbxBateria.isSelected(),
+                cbxArmadoCierre.isSelected(),
+                cbxSustitucion.isSelected(),
+                tipoMantenimiento,
+                txtObservaciones.getText().trim()
+        );
+
+        if (exito) {
+            String serie = txtCodigoSerie.getText();
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "¡Mantenimiento de Celular [" + serie + "] guardado con éxito!",
+                    "Guardado Exitoso",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+            // RETORNO Y RECARGA INTELIGENTE A LA LISTA
+            if (this.ventanaPrincipal != null) {
+                if (this.ventanaPrincipal instanceof vista.VistaListaEquipos) {
+                    vista.VistaListaEquipos lista = (vista.VistaListaEquipos) this.ventanaPrincipal;
+                    lista.refrescarTabla();
+                }
+                this.ventanaPrincipal.setVisible(true);
+            }
+            this.dispose(); // Destruimos la ventana de mantenimiento
+
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error crítico: No se pudo registrar el mantenimiento del celular en la base de datos.",
+                    "Error de Guardado",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnGuardarMantnimientoActionPerformed
 
     private void cbxArmadoCierreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxArmadoCierreActionPerformed
@@ -386,19 +654,27 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
 
     private void cbxBateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxBateriaActionPerformed
         if (cbxBateria.isSelected()) {
-            if (cbxSustitucion.isSelected() && this.contadorPiezas <= 1) {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                        "Indicó que habrá sustitución de componentes (batería, pantalla, etc.).\nDebe presionar el botón '+' e incorporar las piezas antes de poder habilitar el Cierre Final.",
-                        "Acción Requerida",
-                        javax.swing.JOptionPane.WARNING_MESSAGE);
 
-                cbxBateria.setSelected(false);
-                return;
+            // Si hay sustitución, evaluamos las piezas y habilitamos el cierre
+            if (cbxSustitucion.isSelected()) {
+                if (this.contadorPiezas <= 1) {
+                    javax.swing.JOptionPane.showMessageDialog(this,
+                            "Indicó que habrá sustitución de componentes.\nDebe presionar el botón '+' e incorporar las piezas antes de proceder al Armado.",
+                            "Acción Requerida",
+                            javax.swing.JOptionPane.WARNING_MESSAGE);
+                    cbxBateria.setSelected(false);
+                    return;
+                }
+                cbxArmadoCierre.setEnabled(true);
+            } else {
+                // Si NO hay sustitución, el equipo nunca se abrió. El Armado queda bloqueado.
+                cbxArmadoCierre.setEnabled(false);
             }
-            cbxArmadoCierre.setEnabled(true);
+
         } else {
             cbxArmadoCierre.setSelected(false);
             cbxArmadoCierre.setEnabled(false);
+            limpiarYBloquearDesde(3);
         }
     }//GEN-LAST:event_cbxBateriaActionPerformed
 
