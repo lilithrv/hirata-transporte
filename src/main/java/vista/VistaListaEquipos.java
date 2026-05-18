@@ -381,7 +381,10 @@ public class VistaListaEquipos extends javax.swing.JFrame {
                 break;
 
             case "PC Escritorio":
-                new VistaMantenimientoPC(idEquipo).setVisible(true);
+                VistaMantenimientoPC ventanaPC = new VistaMantenimientoPC(idEquipo, this); 
+                ventanaPC.setVisible(true);
+
+                this.setVisible(false); 
                 break;
 
             case "Celular":
