@@ -214,6 +214,18 @@ CREATE TABLE detalle_mant_celular (
     FOREIGN KEY (id_mantenimiento) REFERENCES mantenimiento_equipos(id_mantenimiento) ON DELETE CASCADE
 );
 
+CREATE TABLE detalle_mant_notebook (
+    id_detalle_nb INT AUTO_INCREMENT PRIMARY KEY,
+    id_mantenimiento INT NOT NULL UNIQUE,
+    desarme_inicial BOOLEAN DEFAULT FALSE,
+    limpieza_fisica BOOLEAN DEFAULT FALSE,
+    check_ram BOOLEAN DEFAULT FALSE,
+    check_almacenamiento BOOLEAN DEFAULT FALSE,
+    cambio_pasta BOOLEAN DEFAULT FALSE,
+    armado_cierre BOOLEAN DEFAULT FALSE,
+    sustitucion_piezas BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_mantenimiento) REFERENCES mantenimiento_equipos(id_mantenimiento) ON DELETE CASCADE
+);
 -- ============================================================
 -- NUEVOS ROLES
 -- ============================================================
@@ -229,13 +241,20 @@ INSERT INTO usuarios (nombre, email, password, id_rol) VALUES
     ('Ana Rodríguez', 'a.rodriguez@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 4),
     ('Diego Soto', 'd.soto@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 5),
     ('Valentina Torres', 'v.torres@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 5),
-    ('Roberto Fuentes', 'r.fuentes@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 6);
+    ('Roberto Fuentes', 'r.fuentes@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 6),
+    ('Javiera Campos',   'j.campos@hirata.cl',     '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 6),
+    ('Matías Herrera',   'm.herrera@hirata.cl',    '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 7),
+    ('Daniela Núñez',    'd.nunez@hirata.cl',      '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 7);
+
 
 SET @tec_mant1 = (SELECT id_usuario FROM usuarios WHERE email = 'c.mendoza@hirata.cl');
 SET @tec_mant2 = (SELECT id_usuario FROM usuarios WHERE email = 'a.rodriguez@hirata.cl');
 SET @tec_it1   = (SELECT id_usuario FROM usuarios WHERE email = 'd.soto@hirata.cl');
 SET @tec_it2   = (SELECT id_usuario FROM usuarios WHERE email = 'v.torres@hirata.cl');
-SET @adm_inv   = (SELECT id_usuario FROM usuarios WHERE email = 'r.fuentes@hirata.cl');
+SET @adm_mant1 = (SELECT id_usuario FROM usuarios WHERE email = 'r.fuentes@hirata.cl');
+SET @adm_mant2 = (SELECT id_usuario FROM usuarios WHERE email = 'j.campos@hirata.cl');
+SET @adm_inv1  = (SELECT id_usuario FROM usuarios WHERE email = 'm.herrera@hirata.cl');
+SET @adm_inv2  = (SELECT id_usuario FROM usuarios WHERE email = 'd.nunez@hirata.cl');
 
 
 -- Notebooks (10)
