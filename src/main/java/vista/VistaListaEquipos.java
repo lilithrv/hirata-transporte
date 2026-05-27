@@ -396,7 +396,10 @@ public class VistaListaEquipos extends javax.swing.JFrame {
                 break;
 
             case "Impresora":
-                new VistaMantenimientoImpresora(idEquipo).setVisible(true);
+                VistaMantenimientoImpresora ventanaImp = new VistaMantenimientoImpresora(idEquipo, this);
+                ventanaImp.setVisible(true);
+                
+                this.setVisible(false); 
                 break;
 
             default:
