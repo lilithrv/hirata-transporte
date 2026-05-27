@@ -29,6 +29,7 @@ public class DialogEditarSoftware extends javax.swing.JDialog {
     public DialogEditarSoftware(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        EstiloHirata.aplicar(getContentPane());
         this.setLocationRelativeTo(parent);
 
         softwareDAO = new SoftwareDAO();

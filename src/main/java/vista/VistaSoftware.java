@@ -41,6 +41,7 @@ public class VistaSoftware extends javax.swing.JFrame {
      */
     public VistaSoftware() {
         initComponents();
+        EstiloHirata.aplicarVentana(this, getTitle(), getWidth() > 0 ? getWidth() : 1000, getHeight() > 0 ? getHeight() : 650);
         this.setSize(915, 750);
 
         // Evita que el usuario cambie el tamaño de la ventana

@@ -4,6 +4,9 @@
  */
 package vista;
 
+import vista.etapa1.VistaAdminMantenimiento;
+import vista.etapa1.VistaConductor;
+import vista.etapa1.VistaAdminFlota;
 import java.awt.Color;
 
 /**
@@ -16,6 +19,7 @@ public class VistaLogin extends javax.swing.JFrame {
 
     public VistaLogin() {
         initComponents();
+        EstiloHirata.aplicarVentana(this, getTitle(), getWidth() > 0 ? getWidth() : 1000, getHeight() > 0 ? getHeight() : 650);
 
         this.setSize(1000, 650);
 

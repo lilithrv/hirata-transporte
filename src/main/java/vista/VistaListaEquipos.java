@@ -26,6 +26,7 @@ public class VistaListaEquipos extends javax.swing.JFrame {
     public VistaListaEquipos() {
         
         initComponents();
+        EstiloHirata.aplicarVentana(this, getTitle(), getWidth() > 0 ? getWidth() : 1000, getHeight() > 0 ? getHeight() : 650);
 
         this.setSize(900, 700);
 

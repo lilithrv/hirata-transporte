@@ -23,6 +23,7 @@ public class VistaMantenimientoPC extends javax.swing.JFrame {
      */
     public VistaMantenimientoPC(int idEquipo, javax.swing.JFrame principal) {
         initComponents();
+        EstiloHirata.aplicarVentana(this, getTitle(), getWidth() > 0 ? getWidth() : 1000, getHeight() > 0 ? getHeight() : 650);
         
         this.idRecibido = idEquipo; // Ahora la ventana ya sabe qué equipo es
         this.ventanaPrincipal = principal;

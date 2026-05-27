@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package vista;
+package vista.etapa1;
 
 import dao.KilometrajeDAO;
 import dao.MantenimientoDAO;
@@ -20,6 +20,7 @@ import modelo.Mantenimiento;
 import modelo.Usuario;
 import modelo.Vehiculo;
 import util.Sesion;
+import vista.VistaLogin;
 
 /**
  *
@@ -210,7 +211,6 @@ public class VistaConductor extends javax.swing.JFrame {
         lblMensaje = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1000, 650));
 
         lblEstado.setBackground(new java.awt.Color(255, 255, 255));
         lblEstado.setForeground(new java.awt.Color(255, 255, 255));

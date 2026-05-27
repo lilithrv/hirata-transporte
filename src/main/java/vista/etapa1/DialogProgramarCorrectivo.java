@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista;
+package vista.etapa1;
 
 import dao.KilometrajeDAO;
 import dao.MantenimientoDAO;
@@ -91,7 +91,6 @@ public class DialogProgramarCorrectivo extends javax.swing.JDialog {
         btnProgramar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(460, 450));
 
         lblCorrectivo.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         lblCorrectivo.setText("PROGRAMAR MANTENIMIENTO");
