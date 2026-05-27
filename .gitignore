@@ -2,15 +2,20 @@
 target/
 *.log
 
-
-#NetBeans
+# NetBeans
 nbproject/private/
+nbproject/project.properties
 build/
 dist/
+nb-configuration.xml
 
-#OS files
+# OS files
 .DS_Store
 Thumbs.db
+._*
 
 # Java
-*.Class
+*.class
+*.jar
+*.war
+*.ear
