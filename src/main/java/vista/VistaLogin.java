@@ -4,6 +4,8 @@
  */
 package vista;
 
+import vista.historialequipos.VistaHistorialMantenimientoEquipo;
+import vista.software.VistaSoftware;
 import vista.etapa1.VistaAdminMantenimiento;
 import vista.etapa1.VistaConductor;
 import vista.etapa1.VistaAdminFlota;

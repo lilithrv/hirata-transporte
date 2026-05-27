@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista;
+package vista.software;
 
 import dao.SoftwareDAO;
 import java.util.HashMap;
@@ -10,51 +10,33 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Software;
 import modelo.TipoSoftware;
+import vista.EstiloHirata;
 
 /**
  *
  * @author leslie
  */
-public class DialogEditarSoftware extends javax.swing.JDialog {
+public class DialogNuevoSoftware extends javax.swing.JDialog {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogEditarSoftware.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogNuevoSoftware.class.getName());
     private boolean confirmado = false;
     private SoftwareDAO softwareDAO;
     private HashMap<String, TipoSoftware> mapaTipos;
-    private Software software;
 
     /**
-     * Creates new form DialogActualizarSoftware
+     * Creates new form DialogoNuevoSoftware
      */
-    public DialogEditarSoftware(java.awt.Frame parent, boolean modal) {
+    public DialogNuevoSoftware(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         EstiloHirata.aplicar(getContentPane());
+
         this.setLocationRelativeTo(parent);
 
         softwareDAO = new SoftwareDAO();
         mapaTipos = new HashMap<>();
 
         cargarCombos();
-    }
-
-    public DialogEditarSoftware(java.awt.Frame parent, boolean modal, Software software) {
-        super(parent, modal);
-        initComponents();
-        this.setLocationRelativeTo(parent);
-
-        this.software = software;
-
-        softwareDAO = new SoftwareDAO();
-        mapaTipos = new HashMap<>();
-
-        cargarCombos();
-
-        // Precargar datos
-        cmbTipo.setSelectedItem(software.getTipoSoftware().getNombre());
-        txtNombre.setText(software.getNombre());
-        txtFabricante.setText(software.getFabricante());
-        txtDescripcion.setText(software.getDescripcion());
     }
 
     public boolean isConfirmado() {
@@ -93,31 +75,31 @@ public class DialogEditarSoftware extends javax.swing.JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         lblTipo = new javax.swing.JLabel();
+        cmbTipo = new javax.swing.JComboBox<>();
         lblNombre = new javax.swing.JLabel();
         lblFabricante = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        cmbTipo = new javax.swing.JComboBox<>();
         txtNombre = new javax.swing.JTextField();
         txtFabricante = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescripcion = new javax.swing.JTextArea();
         btnCancelar = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        jLabel1.setText("EDITAR SOFTWARE");
+        jLabel1.setText("AGREGAR SOFTWARE AL CATÁLOGO");
 
         lblTipo.setText("TIPO SOFTWARE");
+
+        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         lblNombre.setText("NOMBRE");
 
         lblFabricante.setText("FABRICANTE");
 
         jLabel2.setText("DESCRIPCIÓN");
-
-        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         txtDescripcion.setColumns(20);
         txtDescripcion.setRows(5);
@@ -131,11 +113,11 @@ public class DialogEditarSoftware extends javax.swing.JDialog {
             }
         });
 
-        btnEditar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        btnEditar.setText("EDITAR");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        btnAgregar.setText("AGREGAR");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
+                btnAgregarActionPerformed(evt);
             }
         });
 
@@ -143,58 +125,60 @@ public class DialogEditarSoftware extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(143, 143, 143))
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTipo)
-                    .addComponent(lblNombre)
-                    .addComponent(lblFabricante)
-                    .addComponent(jLabel2))
-                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnCancelar)
+                        .addGap(92, 92, 92)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTipo)
+                            .addComponent(lblNombre)
+                            .addComponent(lblFabricante)
+                            .addComponent(jLabel2))
                         .addGap(66, 66, 66)
-                        .addComponent(btnEditar))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(cmbTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtNombre)
-                        .addComponent(txtFabricante)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)))
-                .addContainerGap(34, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cmbTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtNombre)
+                            .addComponent(txtFabricante)
+                            .addComponent(jScrollPane1))))
+                .addContainerGap(25, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnCancelar)
+                .addGap(35, 35, 35)
+                .addComponent(btnAgregar)
+                .addGap(46, 46, 46))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(42, 42, 42)
-                                .addComponent(lblTipo))
-                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1)
                         .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblTipo)
+                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(32, 32, 32)
                         .addComponent(lblNombre))
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblFabricante)
                     .addComponent(txtFabricante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelar)
-                    .addComponent(btnEditar))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAgregar)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnCancelar)))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
@@ -205,54 +189,53 @@ public class DialogEditarSoftware extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
-        String nuevoNombre = txtNombre.getText().trim();
-        String nuevoFabricante = txtFabricante.getText().trim();
-        String nuevaDescripcion = txtDescripcion.getText().trim();
+        String nombre = txtNombre.getText().trim();
+        String fabricante = txtFabricante.getText().trim();
+        String descripcion = txtDescripcion.getText().trim();
         TipoSoftware tipo = mapaTipos.get((String) cmbTipo.getSelectedItem());
 
-        if (nuevoNombre.isEmpty()) {
+        if (nombre.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El nombre es obligatorio.");
             return;
         }
-
         if (tipo == null || ((String) cmbTipo.getSelectedItem()).equals("Seleccionar")) {
             JOptionPane.showMessageDialog(this, "Selecciona un tipo de software.");
             return;
         }
 
-        // Validar nombre duplicado, ignorando el nombre actual del software
-        if (!nuevoNombre.equalsIgnoreCase(software.getNombre())
-                && softwareDAO.existeNombre(nuevoNombre)) {
+        Software s = new Software();
+        s.setTipoSoftware(tipo);
+        s.setNombre(nombre);
+        s.setFabricante(fabricante.isEmpty() ? null : fabricante);
+        s.setDescripcion(descripcion.isEmpty() ? null : descripcion);
+
+        if (softwareDAO.existeNombre(nombre)) {
             JOptionPane.showMessageDialog(this,
-                    "Ya existe un software con el nombre '" + nuevoNombre + "'.",
+                    "Ya existe un software con el nombre '" + nombre + "'.",
                     "Nombre duplicado",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        software.setTipoSoftware(tipo);
-        software.setNombre(nuevoNombre);
-        software.setFabricante(nuevoFabricante.isEmpty() ? null : nuevoFabricante);
-        software.setDescripcion(nuevaDescripcion.isEmpty() ? null : nuevaDescripcion);
-
-        boolean ok = softwareDAO.editar(software);
+        boolean ok = softwareDAO.agregar(s);
 
         if (ok) {
             JOptionPane.showMessageDialog(this,
-                    "Software actualizado correctamente.",
+                    "Software agregado correctamente.",
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
             confirmado = true;
             dispose();
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Error al actualizar el software.",
+                    "Error al agregar el software.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnEditarActionPerformed
+
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -279,7 +262,7 @@ public class DialogEditarSoftware extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                DialogEditarSoftware dialog = new DialogEditarSoftware(new javax.swing.JFrame(), true);
+                DialogNuevoSoftware dialog = new DialogNuevoSoftware(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -292,8 +275,8 @@ public class DialogEditarSoftware extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnEditar;
     private javax.swing.JComboBox<String> cmbTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
