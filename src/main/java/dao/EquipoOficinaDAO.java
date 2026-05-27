@@ -562,8 +562,8 @@ public class EquipoOficinaDAO {
     }
 
     public boolean guardarMantenimientoImpresora(int idEquipo, String estadoEqui, String estadoMant,
-        boolean limpiezaRodillos, boolean revisionToner, boolean calibracionCabezales, boolean actualizacionFirmware, 
-        boolean armado, boolean sustitucion, String tipoMant, String observaciones) {
+            boolean limpiezaRodillos, boolean revisionToner, boolean calibracionCabezales, boolean actualizacionFirmware,
+            boolean armado, boolean sustitucion, String tipoMant, String observaciones) {
 
         Connection conn = Conexion.getInstancia();
 
@@ -618,17 +618,17 @@ public class EquipoOficinaDAO {
             String sqlChecklist = "INSERT INTO detalle_mant_impresora (id_mantenimiento, limpieza_rodillos, revision_toner, calibracion_cabezales, actualizacion_firmware) "
                     + "VALUES (?, ?, ?, ?, ?) "
                     + "ON DUPLICATE KEY UPDATE limpieza_rodillos=?, revision_toner=?, calibracion_cabezales=?, actualizacion_firmware=?";
-            
+
             try (java.sql.PreparedStatement psCheck = conn.prepareStatement(sqlChecklist)) {
                 psCheck.setInt(1, idMantenimiento);
-                psCheck.setBoolean(2, limpiezaRodillos); 
-                psCheck.setBoolean(3, revisionToner); 
-                psCheck.setBoolean(4, calibracionCabezales); 
+                psCheck.setBoolean(2, limpiezaRodillos);
+                psCheck.setBoolean(3, revisionToner);
+                psCheck.setBoolean(4, calibracionCabezales);
                 psCheck.setBoolean(5, actualizacionFirmware);
-                
-                psCheck.setBoolean(6, limpiezaRodillos); 
-                psCheck.setBoolean(7, revisionToner); 
-                psCheck.setBoolean(8, calibracionCabezales); 
+
+                psCheck.setBoolean(6, limpiezaRodillos);
+                psCheck.setBoolean(7, revisionToner);
+                psCheck.setBoolean(8, calibracionCabezales);
                 psCheck.setBoolean(9, actualizacionFirmware);
                 psCheck.executeUpdate();
             }
@@ -651,4 +651,133 @@ public class EquipoOficinaDAO {
         return false;
     }
 
-} // Class
+    public boolean insertar(EquipoOficina equipo) {
+        String sql = "INSERT INTO equipos_oficina "
+                + "(id_tipo_equipo, marca, modelo, numero_serie, estado, id_responsable, fecha_adquisicion) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        Connection cn = Conexion.getInstancia();
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, equipo.getTipoEquipo().getIdTipoEquipo());
+            ps.setString(2, equipo.getMarca());
+            ps.setString(3, equipo.getModelo());
+            ps.setString(4, equipo.getNumeroSerie());
+            ps.setString(5, equipo.getEstado());
+
+            // id_responsable puede ser 0 si no se asigna
+            if (equipo.getIdResponsable() > 0) {
+                ps.setInt(6, equipo.getIdResponsable());
+            } else {
+                ps.setNull(6, java.sql.Types.INTEGER);
+            }
+
+            // fecha_adquisicion puede ser null
+            if (equipo.getFechaAdquisicion() != null && !equipo.getFechaAdquisicion().isEmpty()) {
+                ps.setDate(7, java.sql.Date.valueOf(equipo.getFechaAdquisicion()));
+            } else {
+                ps.setNull(7, java.sql.Types.DATE);
+            }
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al insertar equipo: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean actualizar(EquipoOficina equipo) {
+        String sql = "UPDATE equipos_oficina SET "
+                + "id_tipo_equipo = ?, marca = ?, modelo = ?, numero_serie = ?, "
+                + "estado = ?, id_responsable = ?, fecha_adquisicion = ? "
+                + "WHERE id_equipo = ?";
+
+        Connection cn = Conexion.getInstancia();
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, equipo.getTipoEquipo().getIdTipoEquipo());
+            ps.setString(2, equipo.getMarca());
+            ps.setString(3, equipo.getModelo());
+            ps.setString(4, equipo.getNumeroSerie());
+            ps.setString(5, equipo.getEstado());
+
+            if (equipo.getIdResponsable() > 0) {
+                ps.setInt(6, equipo.getIdResponsable());
+            } else {
+                ps.setNull(6, java.sql.Types.INTEGER);
+            }
+
+            if (equipo.getFechaAdquisicion() != null && !equipo.getFechaAdquisicion().isEmpty()) {
+                ps.setDate(7, java.sql.Date.valueOf(equipo.getFechaAdquisicion()));
+            } else {
+                ps.setNull(7, java.sql.Types.DATE);
+            }
+
+            ps.setInt(8, equipo.getIdEquipo());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar equipo: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean eliminar(int idEquipo) {
+        String sql = "DELETE FROM equipos_oficina WHERE id_equipo = ?";
+
+        Connection cn = Conexion.getInstancia();
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, idEquipo);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar equipo: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public EquipoOficina buscarEquipo(int id) {
+        String sql = "SELECT e.*, t.nombre AS tipo_nombre, u.nombre AS responsable_nombre "
+                + "FROM equipos_oficina e "
+                + "JOIN tipos_equipo t ON e.id_tipo_equipo = t.id_tipo_equipo "
+                + "LEFT JOIN usuarios u ON e.id_responsable = u.id_usuario "
+                + "WHERE e.id_equipo = ?";
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    TipoEquipo tipo = new TipoEquipo();
+                    tipo.setIdTipoEquipo(rs.getInt("id_tipo_equipo"));
+                    tipo.setNombre(rs.getString("tipo_nombre"));
+
+                    EquipoOficina equipo = new EquipoOficina();
+                    equipo.setIdEquipo(rs.getInt("id_equipo"));
+                    equipo.setTipoEquipo(tipo);
+                    equipo.setMarca(rs.getString("marca"));
+                    equipo.setModelo(rs.getString("modelo"));
+                    equipo.setNumeroSerie(rs.getString("numero_serie"));
+                    equipo.setEstado(rs.getString("estado"));
+                    equipo.setIdResponsable(rs.getInt("id_responsable"));
+                    equipo.setNombreResponsable(rs.getString("responsable_nombre"));
+                    equipo.setFechaRegistro(rs.getTimestamp("fecha_registro"));
+
+                    // fecha_adquisicion
+                    java.sql.Date fechaSQL = rs.getDate("fecha_adquisicion");
+                    if (fechaSQL != null) {
+                        equipo.setFechaAdquisicion(fechaSQL.toString());
+                    }
+
+                    return equipo;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar equipo: " + e.getMessage());
+        }
+        return null;
+
+    } // Class
+}
