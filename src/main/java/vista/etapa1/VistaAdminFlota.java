@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package vista;
+package vista.etapa1;
 
+import vista.etapa1.DialogAgregarConductor;
+import vista.etapa1.DialogActualizarVehiculo;
 import dao.KilometrajeDAO;
 import dao.UsuarioDAO;
 import dao.VehiculoDAO;
@@ -21,6 +23,7 @@ import javax.swing.table.TableCellRenderer;
 import modelo.Kilometraje;
 import modelo.Usuario;
 import modelo.Vehiculo;
+import vista.VistaLogin;
 
 /**
  *
@@ -207,7 +210,6 @@ public class VistaAdminFlota extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(1260, 760));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblConductorFlota.setBackground(new java.awt.Color(255, 255, 255));

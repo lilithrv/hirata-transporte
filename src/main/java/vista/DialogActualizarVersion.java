@@ -31,6 +31,7 @@ public class DialogActualizarVersion extends javax.swing.JDialog {
     public DialogActualizarVersion(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        EstiloHirata.aplicar(getContentPane());
         this.setLocationRelativeTo(parent);
         softwareDAO = new SoftwareDAO();
         usuarioDAO = new UsuarioDAO();

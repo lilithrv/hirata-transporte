@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package vista;
+package vista.etapa1;
 
 import dao.MantenimientoDAO;
 import dao.VehiculoDAO;
@@ -29,6 +29,7 @@ import modelo.enums.TipoMantenimiento;
 import modelo.enums.EstadoMantenimiento;
 import modelo.enums.OrigenMantenimiento;
 import util.Sesion;
+import vista.VistaLogin;
 
 /**
  *
@@ -271,7 +272,6 @@ public class VistaAdminMantenimiento extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1360, 780));
-        setPreferredSize(new java.awt.Dimension(664, 70));
 
         pnlContenido.setBackground(new java.awt.Color(255, 255, 255));
         pnlContenido.setPreferredSize(new java.awt.Dimension(1360, 780));

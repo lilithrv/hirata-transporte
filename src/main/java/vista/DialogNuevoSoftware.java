@@ -28,6 +28,7 @@ public class DialogNuevoSoftware extends javax.swing.JDialog {
     public DialogNuevoSoftware(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        EstiloHirata.aplicar(getContentPane());
 
         this.setLocationRelativeTo(parent);
 
