@@ -219,7 +219,7 @@ public class EquipoOficinaDAO {
         }
 
         // Traemos el nombre del tipo, marca, modelo y descripción
-        String sql = "SELECT tp.nombre AS tipo_nombre, p.marca, p.modelo, p.descripcion "
+        String sql = "SELECT p.id_pieza, tp.nombre AS tipo_nombre, p.marca, p.modelo, p.descripcion "
                 + "FROM piezas p "
                 + "JOIN tipos_pieza tp ON p.id_tipo_pieza = tp.id_tipo_pieza "
                 + "WHERE p.stock_actual > 0 AND tp.nombre IN (" + sb.toString() + ") "
@@ -239,7 +239,7 @@ public class EquipoOficinaDAO {
 
                 while (rs.next()) {
                     // Formateamos la información: [Tipo] Marca - Modelo (Descripción)
-                    String pieza = "[" + rs.getString("tipo_nombre") + "] "
+                    String pieza = rs.getInt("id_pieza") + " | [" + rs.getString("tipo_nombre") + "] "
                             + rs.getString("marca") + " - "
                             + rs.getString("modelo") + " ("
                             + rs.getString("descripcion") + ")";
@@ -253,6 +253,34 @@ public class EquipoOficinaDAO {
         }
 
         return listaPiezas;
+    }
+
+    // Método auxiliar privado para no repetir código en cada tipo de equipo
+    private void registrarPiezasUsadas(Connection conn, int idMantenimiento, int idEquipo, List<Integer> piezasUsadas) throws SQLException {
+        if (piezasUsadas != null && !piezasUsadas.isEmpty()) {
+            String sqlDesc = "UPDATE piezas SET stock_actual = stock_actual - 1 WHERE id_pieza = ?";
+            String sqlMantP = "INSERT INTO mantenimiento_piezas (id_mantenimiento, id_pieza, cantidad, tipo_uso) VALUES (?, ?, 1, 'Reemplazo')";
+            String sqlEqComp = "INSERT INTO equipo_componentes (id_equipo, id_pieza, fecha_instalacion) VALUES (?, ?, NOW())";
+
+            try (PreparedStatement psDesc = conn.prepareStatement(sqlDesc); PreparedStatement psMantP = conn.prepareStatement(sqlMantP); PreparedStatement psEqC = conn.prepareStatement(sqlEqComp)) {
+
+                for (int idPieza : piezasUsadas) {
+                    // Restar stock
+                    psDesc.setInt(1, idPieza);
+                    psDesc.executeUpdate();
+
+                    // Historial de mantenimiento
+                    psMantP.setInt(1, idMantenimiento);
+                    psMantP.setInt(2, idPieza);
+                    psMantP.executeUpdate();
+
+                    // Vincular al equipo
+                    psEqC.setInt(1, idEquipo);
+                    psEqC.setInt(2, idPieza);
+                    psEqC.executeUpdate();
+                }
+            }
+        }
     }
 
     public EquipoOficina buscarPorId(int id) {
@@ -289,109 +317,77 @@ public class EquipoOficinaDAO {
 
     public boolean guardarMantenimientoNotebook(int idEquipo, String estadoEqui, String estadoMant,
             boolean desarme, boolean limpieza, boolean ram, boolean almacenamiento, boolean pasta, boolean cierre, boolean sustitucion,
-            String tipoMant, String observaciones) {
+            String tipoMant, String observaciones, List<Integer> piezasUsadas) {
 
         Connection conn = Conexion.getInstancia();
 
         try {
             conn.setAutoCommit(false);
             int idMantenimiento = -1;
+            // código de INSERT/UPDATE de mantenimiento_equipos 
             String sqlBuscarMant = "SELECT id_mantenimiento FROM mantenimiento_equipos WHERE id_equipo = ? AND estado != 'Completado' LIMIT 1";
-
             try (java.sql.PreparedStatement psBusca = conn.prepareStatement(sqlBuscarMant)) {
                 psBusca.setInt(1, idEquipo);
                 try (java.sql.ResultSet rs = psBusca.executeQuery()) {
-                    if (rs.next()) {
-                        idMantenimiento = rs.getInt("id_mantenimiento");
-                    }
+                    if (rs.next()) idMantenimiento = rs.getInt("id_mantenimiento");
                 }
             }
 
             if (idMantenimiento == -1) {
                 String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio) VALUES (?, ?, ?, ?, 1, NOW())";
                 try (java.sql.PreparedStatement psCrear = conn.prepareStatement(sqlCrearMant, java.sql.Statement.RETURN_GENERATED_KEYS)) {
-                    psCrear.setInt(1, idEquipo);
-                    psCrear.setString(2, tipoMant);
-                    psCrear.setString(3, estadoMant);
-                    psCrear.setString(4, observaciones);
+                    psCrear.setInt(1, idEquipo); psCrear.setString(2, tipoMant); psCrear.setString(3, estadoMant); psCrear.setString(4, observaciones);
                     psCrear.executeUpdate();
                     try (java.sql.ResultSet rsKeys = psCrear.getGeneratedKeys()) {
-                        if (rsKeys.next()) {
-                            idMantenimiento = rsKeys.getInt(1);
-                        }
+                        if (rsKeys.next()) idMantenimiento = rsKeys.getInt(1);
                     }
                 }
             } else {
                 String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ? WHERE id_mantenimiento = ?";
                 try (java.sql.PreparedStatement psMant = conn.prepareStatement(sqlUpdateMant)) {
-                    psMant.setString(1, estadoMant);
-                    psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
-                    psMant.setString(3, tipoMant);
-                    psMant.setString(4, observaciones);
-                    psMant.setInt(5, idMantenimiento);
+                    psMant.setString(1, estadoMant); psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
+                    psMant.setString(3, tipoMant); psMant.setString(4, observaciones); psMant.setInt(5, idMantenimiento);
                     psMant.executeUpdate();
                 }
             }
 
             String sqlUpdateEquipo = "UPDATE equipos_oficina SET estado = ? WHERE id_equipo = ?";
             try (java.sql.PreparedStatement psEqui = conn.prepareStatement(sqlUpdateEquipo)) {
-                psEqui.setString(1, estadoEqui);
-                psEqui.setInt(2, idEquipo);
+                psEqui.setString(1, estadoEqui); psEqui.setInt(2, idEquipo);
                 psEqui.executeUpdate();
             }
 
-            String sqlChecklist = "INSERT INTO detalle_mant_notebook (id_mantenimiento, desarme_inicial, limpieza_fisica, check_ram, check_almacenamiento, cambio_pasta, armado_cierre, sustitucion_piezas) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) "
-                    + "ON DUPLICATE KEY UPDATE desarme_inicial=?, limpieza_fisica=?, check_ram=?, check_almacenamiento=?, cambio_pasta=?, armado_cierre=?, sustitucion_piezas=?";
+            // Tu código de detalle_mant_notebook queda IGUAL
+            String sqlChecklist = "INSERT INTO detalle_mant_notebook (id_mantenimiento, desarme_inicial, limpieza_fisica, check_ram, check_almacenamiento, cambio_pasta, armado_cierre, sustitucion_piezas) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE desarme_inicial=?, limpieza_fisica=?, check_ram=?, check_almacenamiento=?, cambio_pasta=?, armado_cierre=?, sustitucion_piezas=?";
             try (java.sql.PreparedStatement psCheck = conn.prepareStatement(sqlChecklist)) {
-                psCheck.setInt(1, idMantenimiento);
-                psCheck.setBoolean(2, desarme);
-                psCheck.setBoolean(3, limpieza);
-                psCheck.setBoolean(4, ram);
-                psCheck.setBoolean(5, almacenamiento);
-                psCheck.setBoolean(6, pasta);
-                psCheck.setBoolean(7, cierre);
-                psCheck.setBoolean(8, sustitucion);
-
-                psCheck.setBoolean(9, desarme);
-                psCheck.setBoolean(10, limpieza);
-                psCheck.setBoolean(11, ram);
-                psCheck.setBoolean(12, almacenamiento);
-                psCheck.setBoolean(13, pasta);
-                psCheck.setBoolean(14, cierre);
-                psCheck.setBoolean(15, sustitucion);
+                psCheck.setInt(1, idMantenimiento); psCheck.setBoolean(2, desarme); psCheck.setBoolean(3, limpieza); psCheck.setBoolean(4, ram); psCheck.setBoolean(5, almacenamiento); psCheck.setBoolean(6, pasta); psCheck.setBoolean(7, cierre); psCheck.setBoolean(8, sustitucion);
+                psCheck.setBoolean(9, desarme); psCheck.setBoolean(10, limpieza); psCheck.setBoolean(11, ram); psCheck.setBoolean(12, almacenamiento); psCheck.setBoolean(13, pasta); psCheck.setBoolean(14, cierre); psCheck.setBoolean(15, sustitucion);
                 psCheck.executeUpdate();
             }
 
+            // LÓGICA DE INVENTARIO
+            registrarPiezasUsadas(conn, idMantenimiento, idEquipo, piezasUsadas);
+
             conn.commit();
             return true;
-
         } catch (java.sql.SQLException e) {
             System.err.println("Error en transacción Notebook: " + e.getMessage());
-            try {
-                conn.rollback();
-            } catch (java.sql.SQLException ex) {
-            }
+            try { conn.rollback(); } catch (java.sql.SQLException ex) {}
         } finally {
-            try {
-                conn.setAutoCommit(true);
-            } catch (java.sql.SQLException e) {
-            }
+            try { conn.setAutoCommit(true); } catch (java.sql.SQLException e) {}
         }
         return false;
     }
 
     public boolean guardarMantenimientoPC(int idEquipo, String estadoEqui, String estadoMant,
             boolean desarme, boolean limpieza, boolean ram, boolean almacenamiento, boolean pasta, boolean cierre, boolean sustitucion,
-            String tipoMant, String observaciones) {
+            String tipoMant, String observaciones, List<Integer> piezasUsadas) {
 
         Connection conn = Conexion.getInstancia();
-
         try {
             conn.setAutoCommit(false);
             int idMantenimiento = -1;
             String sqlBuscarMant = "SELECT id_mantenimiento FROM mantenimiento_equipos WHERE id_equipo = ? AND estado != 'Completado' LIMIT 1";
-
             try (java.sql.PreparedStatement psBusca = conn.prepareStatement(sqlBuscarMant)) {
                 psBusca.setInt(1, idEquipo);
                 try (java.sql.ResultSet rs = psBusca.executeQuery()) {
@@ -401,6 +397,7 @@ public class EquipoOficinaDAO {
                 }
             }
 
+            // Insert o update en mantenimiento_equipos
             if (idMantenimiento == -1) {
                 String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio) VALUES (?, ?, ?, ?, 1, NOW())";
                 try (java.sql.PreparedStatement psCrear = conn.prepareStatement(sqlCrearMant, java.sql.Statement.RETURN_GENERATED_KEYS)) {
@@ -427,6 +424,7 @@ public class EquipoOficinaDAO {
                 }
             }
 
+            // Update de equipo
             String sqlUpdateEquipo = "UPDATE equipos_oficina SET estado = ? WHERE id_equipo = ?";
             try (java.sql.PreparedStatement psEqui = conn.prepareStatement(sqlUpdateEquipo)) {
                 psEqui.setString(1, estadoEqui);
@@ -434,9 +432,8 @@ public class EquipoOficinaDAO {
                 psEqui.executeUpdate();
             }
 
-            String sqlChecklist = "INSERT INTO detalle_mant_computador (id_mantenimiento, desarmado_inicial, limpieza_fisica, cambio_pasta, check_ram, check_almacenamiento, armado_cierre) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?) "
-                    + "ON DUPLICATE KEY UPDATE desarmado_inicial=?, limpieza_fisica=?, cambio_pasta=?, check_ram=?, check_almacenamiento=?, armado_cierre=?";
+            // Detalle PC
+            String sqlChecklist = "INSERT INTO detalle_mant_computador (id_mantenimiento, desarmado_inicial, limpieza_fisica, cambio_pasta, check_ram, check_almacenamiento, armado_cierre) VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE desarmado_inicial=?, limpieza_fisica=?, cambio_pasta=?, check_ram=?, check_almacenamiento=?, armado_cierre=?";
             try (java.sql.PreparedStatement psCheck = conn.prepareStatement(sqlChecklist)) {
                 psCheck.setInt(1, idMantenimiento);
                 psCheck.setBoolean(2, desarme);
@@ -445,7 +442,6 @@ public class EquipoOficinaDAO {
                 psCheck.setBoolean(5, ram);
                 psCheck.setBoolean(6, almacenamiento);
                 psCheck.setBoolean(7, cierre);
-
                 psCheck.setBoolean(8, desarme);
                 psCheck.setBoolean(9, limpieza);
                 psCheck.setBoolean(10, pasta);
@@ -455,9 +451,11 @@ public class EquipoOficinaDAO {
                 psCheck.executeUpdate();
             }
 
+            // LÓGICA DE INVENTARIO
+            registrarPiezasUsadas(conn, idMantenimiento, idEquipo, piezasUsadas);
+
             conn.commit();
             return true;
-
         } catch (java.sql.SQLException e) {
             System.err.println("Error en transacción PC: " + e.getMessage());
             try {
@@ -475,15 +473,13 @@ public class EquipoOficinaDAO {
 
     public boolean guardarMantenimientoCelular(int idEquipo, String estadoEqui, String estadoMant,
             boolean revPantalla, boolean limpiezaPuertos, boolean testBateria, boolean cierre, boolean sustitucion,
-            String tipoMant, String observaciones) {
+            String tipoMant, String observaciones, List<Integer> piezasUsadas) {
 
         Connection conn = Conexion.getInstancia();
-
         try {
             conn.setAutoCommit(false);
             int idMantenimiento = -1;
             String sqlBuscarMant = "SELECT id_mantenimiento FROM mantenimiento_equipos WHERE id_equipo = ? AND estado != 'Completado' LIMIT 1";
-
             try (java.sql.PreparedStatement psBusca = conn.prepareStatement(sqlBuscarMant)) {
                 psBusca.setInt(1, idEquipo);
                 try (java.sql.ResultSet rs = psBusca.executeQuery()) {
@@ -526,16 +522,13 @@ public class EquipoOficinaDAO {
                 psEqui.executeUpdate();
             }
 
-            String sqlChecklist = "INSERT INTO detalle_mant_celular (id_mantenimiento, revision_pantalla_tactil, limpieza_puertos_carga, test_rendimiento_bateria, armado_cierre) "
-                    + "VALUES (?, ?, ?, ?, ?) "
-                    + "ON DUPLICATE KEY UPDATE revision_pantalla_tactil=?, limpieza_puertos_carga=?, test_rendimiento_bateria=?, armado_cierre=?";
+            String sqlChecklist = "INSERT INTO detalle_mant_celular (id_mantenimiento, revision_pantalla_tactil, limpieza_puertos_carga, test_rendimiento_bateria, armado_cierre) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE revision_pantalla_tactil=?, limpieza_puertos_carga=?, test_rendimiento_bateria=?, armado_cierre=?";
             try (java.sql.PreparedStatement psCheck = conn.prepareStatement(sqlChecklist)) {
                 psCheck.setInt(1, idMantenimiento);
                 psCheck.setBoolean(2, revPantalla);
                 psCheck.setBoolean(3, limpiezaPuertos);
                 psCheck.setBoolean(4, testBateria);
                 psCheck.setBoolean(5, cierre);
-
                 psCheck.setBoolean(6, revPantalla);
                 psCheck.setBoolean(7, limpiezaPuertos);
                 psCheck.setBoolean(8, testBateria);
@@ -543,9 +536,11 @@ public class EquipoOficinaDAO {
                 psCheck.executeUpdate();
             }
 
+            // LÓGICA DE INVENTARIO
+            registrarPiezasUsadas(conn, idMantenimiento, idEquipo, piezasUsadas);
+
             conn.commit();
             return true;
-
         } catch (java.sql.SQLException e) {
             System.err.println("Error en transacción Celular: " + e.getMessage());
             try {
@@ -563,90 +558,62 @@ public class EquipoOficinaDAO {
 
     public boolean guardarMantenimientoImpresora(int idEquipo, String estadoEqui, String estadoMant,
             boolean limpiezaRodillos, boolean revisionToner, boolean calibracionCabezales, boolean actualizacionFirmware,
-            boolean armado, boolean sustitucion, String tipoMant, String observaciones) {
+            boolean armado, boolean sustitucion, String tipoMant, String observaciones, List<Integer> piezasUsadas) {
 
         Connection conn = Conexion.getInstancia();
-
-        try {
+         try {
             conn.setAutoCommit(false);
             int idMantenimiento = -1;
             String sqlBuscarMant = "SELECT id_mantenimiento FROM mantenimiento_equipos WHERE id_equipo = ? AND estado != 'Completado' LIMIT 1";
-
             try (java.sql.PreparedStatement psBusca = conn.prepareStatement(sqlBuscarMant)) {
                 psBusca.setInt(1, idEquipo);
                 try (java.sql.ResultSet rs = psBusca.executeQuery()) {
-                    if (rs.next()) {
-                        idMantenimiento = rs.getInt("id_mantenimiento");
-                    }
+                    if (rs.next()) idMantenimiento = rs.getInt("id_mantenimiento");
                 }
             }
 
-            if (idMantenimiento == -1) {
+             if (idMantenimiento == -1) {
                 String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio) VALUES (?, ?, ?, ?, 1, NOW())";
                 try (java.sql.PreparedStatement psCrear = conn.prepareStatement(sqlCrearMant, java.sql.Statement.RETURN_GENERATED_KEYS)) {
-                    psCrear.setInt(1, idEquipo);
-                    psCrear.setString(2, tipoMant);
-                    psCrear.setString(3, estadoMant);
-                    psCrear.setString(4, observaciones);
+                    psCrear.setInt(1, idEquipo); psCrear.setString(2, tipoMant); psCrear.setString(3, estadoMant); psCrear.setString(4, observaciones);
                     psCrear.executeUpdate();
                     try (java.sql.ResultSet rsKeys = psCrear.getGeneratedKeys()) {
-                        if (rsKeys.next()) {
-                            idMantenimiento = rsKeys.getInt(1);
-                        }
+                        if (rsKeys.next()) idMantenimiento = rsKeys.getInt(1);
                     }
                 }
             } else {
                 String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ? WHERE id_mantenimiento = ?";
                 try (java.sql.PreparedStatement psMant = conn.prepareStatement(sqlUpdateMant)) {
-                    psMant.setString(1, estadoMant);
-                    psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
-                    psMant.setString(3, tipoMant);
-                    psMant.setString(4, observaciones);
-                    psMant.setInt(5, idMantenimiento);
+                    psMant.setString(1, estadoMant); psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
+                    psMant.setString(3, tipoMant); psMant.setString(4, observaciones); psMant.setInt(5, idMantenimiento);
                     psMant.executeUpdate();
                 }
             }
 
             String sqlUpdateEquipo = "UPDATE equipos_oficina SET estado = ? WHERE id_equipo = ?";
             try (java.sql.PreparedStatement psEqui = conn.prepareStatement(sqlUpdateEquipo)) {
-                psEqui.setString(1, estadoEqui);
-                psEqui.setInt(2, idEquipo);
+                psEqui.setString(1, estadoEqui); psEqui.setInt(2, idEquipo);
                 psEqui.executeUpdate();
             }
 
-            // Checklist específico para Impresora alineado con la BD
-            String sqlChecklist = "INSERT INTO detalle_mant_impresora (id_mantenimiento, limpieza_rodillos, revision_toner, calibracion_cabezales, actualizacion_firmware) "
-                    + "VALUES (?, ?, ?, ?, ?) "
-                    + "ON DUPLICATE KEY UPDATE limpieza_rodillos=?, revision_toner=?, calibracion_cabezales=?, actualizacion_firmware=?";
-
+            String sqlChecklist = "INSERT INTO detalle_mant_impresora (id_mantenimiento, limpieza_rodillos, revision_toner, calibracion_cabezales, actualizacion_firmware) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE limpieza_rodillos=?, revision_toner=?, calibracion_cabezales=?, actualizacion_firmware=?";
             try (java.sql.PreparedStatement psCheck = conn.prepareStatement(sqlChecklist)) {
-                psCheck.setInt(1, idMantenimiento);
-                psCheck.setBoolean(2, limpiezaRodillos);
-                psCheck.setBoolean(3, revisionToner);
-                psCheck.setBoolean(4, calibracionCabezales);
-                psCheck.setBoolean(5, actualizacionFirmware);
-
-                psCheck.setBoolean(6, limpiezaRodillos);
-                psCheck.setBoolean(7, revisionToner);
-                psCheck.setBoolean(8, calibracionCabezales);
-                psCheck.setBoolean(9, actualizacionFirmware);
+                psCheck.setInt(1, idMantenimiento); psCheck.setBoolean(2, limpiezaRodillos); psCheck.setBoolean(3, revisionToner); psCheck.setBoolean(4, calibracionCabezales); psCheck.setBoolean(5, actualizacionFirmware);
+                psCheck.setBoolean(6, limpiezaRodillos); psCheck.setBoolean(7, revisionToner); psCheck.setBoolean(8, calibracionCabezales); psCheck.setBoolean(9, actualizacionFirmware);
                 psCheck.executeUpdate();
             }
+
+            // LÓGICA DE INVENTARIO
+            registrarPiezasUsadas(conn, idMantenimiento, idEquipo, piezasUsadas);
 
             conn.commit();
             return true;
 
         } catch (java.sql.SQLException e) {
             System.err.println("Error en transacción Impresora: " + e.getMessage());
-            try {
-                conn.rollback();
-            } catch (java.sql.SQLException ex) {
-            }
+            try { conn.rollback(); } catch (java.sql.SQLException ex) {}
         } finally {
-            try {
-                conn.setAutoCommit(true);
-            } catch (java.sql.SQLException e) {
-            }
+            try { conn.setAutoCommit(true); } catch (java.sql.SQLException e) {}
         }
         return false;
     }
