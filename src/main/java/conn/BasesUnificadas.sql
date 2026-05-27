@@ -72,7 +72,7 @@ INSERT INTO roles (nombre) VALUES
     ('Técnico de Mantenimiento'),
     ('Técnico de IT'),
     ('Administrador de Mantenimiento Equipos'),
-    ('Administrador de Inventario');;
+    ('Administrador de Inventario');
     
 -- ────────────────────────────────────────────────────────────
 -- USUARIOS (5 admin flota, 5 admin mant, 90 conductores)
@@ -456,7 +456,9 @@ INSERT INTO tipos_pieza (nombre) VALUES
     ('Tarjeta Madre'),
     ('Ventilador'),
     ('Batería'),
+    ('Batería Celular'),
     ('Pantalla'),
+    ('Pantalla Celular'),
     ('Tóner'),
     ('Otro');
 
@@ -841,6 +843,22 @@ INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, sto
 (11, 'Samsung', 'MLT-D111S', 'Tóner D111S Negro Xpress', 3,  1),
 (11, 'Lexmark', '50F4H00','Tóner 504H Negro MS310', 2,  1),
 (11, 'Xerox', '106R03623','Tóner Phaser 3330 Negro', 2,  1);
+
+-- Baterías de Celular
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(13, 'Apple', 'A2653', 'Batería Original 3227mAh iPhone 13', 5, 2),
+(13, 'Apple', 'A2819', 'Batería Original 2018mAh iPhone SE 3ra Gen', 4, 1),
+(13, 'Samsung', 'EB-BA546ABY', 'Batería Original 5000mAh Galaxy A54', 6, 2),
+(13, 'Samsung', 'EB-BS901ABY', 'Batería Original 3700mAh Galaxy S22', 3, 1),
+(13, 'Motorola', 'KG40', 'Batería Original 5000mAh Moto G', 4, 1);
+
+-- Insertamos Pantallas de Celular 
+INSERT INTO piezas (id_tipo_pieza, marca, modelo, descripcion, stock_actual, stock_minimo) VALUES
+(14, 'Apple', 'OLED-IP13', 'Módulo Pantalla OLED 6.1" iPhone 13', 3, 1),
+(14, 'Apple', 'LCD-IPSE3', 'Módulo Pantalla Retina IPS 4.7" iPhone SE', 2, 1),
+(14, 'Samsung', 'AMOLED-A54', 'Módulo Pantalla Super AMOLED 6.4" Galaxy A54', 4, 1),
+(14, 'Samsung', 'AMOLED-S22', 'Módulo Pantalla Dynamic AMOLED 6.1" Galaxy S22', 2, 1),
+(14, 'Motorola', 'IPS-MOTOG', 'Módulo Pantalla IPS 6.5" Moto G', 3, 1);
 
 -- ============================================================
 -- CATÁLOGO DE SOFTWARE
