@@ -194,7 +194,7 @@ public class DialogAgregarSoftware extends javax.swing.JDialog {
                             .addComponent(txtVersion)
                             .addComponent(cmbTecnico, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1))))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
