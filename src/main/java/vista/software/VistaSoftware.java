@@ -2,8 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package vista;
+package vista.software;
 
+import vista.software.DialogEditarSoftware;
+import vista.software.DialogNuevoSoftware;
+import vista.software.DialogAgregarSoftware;
 import dao.EquipoOficinaDAO;
 import dao.SoftwareDAO;
 import dao.TipoEquipoDAO;
@@ -21,6 +24,8 @@ import modelo.Software;
 import modelo.SoftwareEquipo;
 import modelo.TipoEquipo;
 import modelo.TipoSoftware;
+import vista.EstiloHirata;
+import vista.VistaLogin;
 
 /**
  *

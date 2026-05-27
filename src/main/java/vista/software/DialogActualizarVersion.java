@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista;
+package vista.software;
 
 import dao.SoftwareDAO;
 import dao.UsuarioDAO;
@@ -11,6 +11,7 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 import modelo.Usuario;
 import util.Sesion;
+import vista.EstiloHirata;
 
 /**
  *
