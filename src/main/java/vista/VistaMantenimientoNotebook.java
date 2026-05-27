@@ -22,36 +22,27 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
      * Creates new form VistaMantenimientoNotebook
      */
     public VistaMantenimientoNotebook(int idEquipo, javax.swing.JFrame principal) {
-        initComponents();
-        EstiloHirata.aplicarVentana(this, getTitle(), getWidth() > 0 ? getWidth() : 1000, getHeight() > 0 ? getHeight() : 650);
-        
-        this.idRecibido = idEquipo; // Ahora la ventana ya sabe qué equipo es
-        this.ventanaPrincipal = principal;
-        
-        this.setSize(1000, 800);
+    initComponents();
 
-        // Evita que el usuario cambie el tamaño de la ventana
-        this.setResizable(false);
+    this.idRecibido = idEquipo;
+    this.ventanaPrincipal = principal;
 
-        // Centra la ventana en la pantalla
-        this.setLocationRelativeTo(null);
+    cargarDatosEquipo();
+    cargarRepuestosEnCache();
 
-        this.setTitle("Inventario Central");
-        
-        
-        cargarDatosEquipo();
-        cargarRepuestosEnCache();
-        
-        btnAgregar.setEnabled(false);
-        
-        cbxLimpiezaFisica.setEnabled(false);
-        cbxCambioPasta.setEnabled(false);
-        cbxCheckRam.setEnabled(false);
-        cbxCheckAlmacenamiento.setEnabled(false);
-        cbxArmadoCierre.setEnabled(false);
+    btnAgregar.setEnabled(false);
 
-        
-    }
+    cbxLimpiezaFisica.setEnabled(false);
+    cbxCambioPasta.setEnabled(false);
+    cbxCheckRam.setEnabled(false);
+    cbxCheckAlmacenamiento.setEnabled(false);
+    cbxArmadoCierre.setEnabled(false);
+
+    EstiloHirata.aplicarVentana(this, "Inventario Central", 1100, 900);
+    this.setMinimumSize(new java.awt.Dimension(1100, 900));
+    this.setResizable(true);
+    this.setLocationRelativeTo(null);
+}
     
     private void cargarRepuestosEnCache() {
         dao.EquipoOficinaDAO equipoDAO = new dao.EquipoOficinaDAO();

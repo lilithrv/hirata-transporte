@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -33,14 +34,20 @@ public final class EstiloHirata {
 
     private EstiloHirata() {}
 
-    public static void aplicarVentana(javax.swing.JFrame frame, String titulo, int ancho, int alto) {
-        frame.setTitle(titulo);
-        frame.setSize(ancho, alto);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.getContentPane().setBackground(FONDO);
-        aplicar(frame.getContentPane());
-    }
+ public static void aplicarVentana(javax.swing.JFrame frame, String titulo, int ancho, int alto) {
+    frame.setTitle(titulo);
+    frame.getContentPane().setBackground(FONDO);
+
+    aplicar(frame.getContentPane());
+
+    frame.pack();
+
+    frame.setMinimumSize(new java.awt.Dimension(ancho, alto));
+    frame.setSize(Math.max(frame.getWidth(), ancho), Math.max(frame.getHeight(), alto));
+
+    frame.setLocationRelativeTo(null);
+    frame.setResizable(true);
+}
 
     public static void aplicar(Container contenedor) {
         for (Component c : contenedor.getComponents()) {
