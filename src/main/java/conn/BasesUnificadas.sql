@@ -1057,3 +1057,8 @@ INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico
 (@cel04, @sw_zoom, '5.14',  'Instalado', @tec_it2,  '2023-07-16'),
 (@cel05, @sw_android14, '14.0', 'Actualizado', @adm_inv, '2024-02-03'),
 (@cel05, @sw_teams, '5.17', 'Instalado', @adm_inv, '2024-02-03');
+
+
+-- SELECT id_pieza, marca, modelo, stock_actual FROM piezas;
+-- SELECT * FROM mantenimiento_piezas;
+-- SELECT * FROM equipo_componentes;

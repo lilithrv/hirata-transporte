@@ -4,6 +4,9 @@
  */
 package vista;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author gustavo
@@ -565,7 +568,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
         }
 
         // ==========================================
-        // 2. EVALUAR CHECKLIST OBLIGATORIO (CON NUEVO ORDEN Y COMPONENTE)
+        // EVALUAR CHECKLIST OBLIGATORIO (CON NUEVO ORDEN Y COMPONENTE)
         // ==========================================
         boolean checklistCompleto = cbxDesarmeInicial.isSelected()
                 && cbxLimpiezaFisica.isSelected()
@@ -645,6 +648,34 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                 return; // Opción: Cancelar o cerrar la ventana
             }
         }
+        
+        List<Integer> idsPiezasUsadas = new ArrayList<>();
+
+        if (cbxSustitucion.isSelected()) {
+            java.awt.Component[] filas = pnlPanelPiezas.getComponents();
+            for (java.awt.Component componenteFila : filas) {
+                if (componenteFila instanceof javax.swing.JPanel) {
+                    javax.swing.JPanel fila = (javax.swing.JPanel) componenteFila;
+                    for (java.awt.Component subComp : fila.getComponents()) {
+                        if (subComp instanceof javax.swing.JComboBox) {
+                            javax.swing.JComboBox<?> combo = (javax.swing.JComboBox<?>) subComp;
+                            String seleccion = combo.getSelectedItem().toString();
+                            
+                            // Extraer el ID si no es la opción por defecto ni "Otro"
+                            if (!seleccion.equals("-- Seleccione Repuesto --") && !seleccion.startsWith("Otro")) {
+                                try {
+                                    String idStr = seleccion.substring(0, seleccion.indexOf(" |")).trim();
+                                    int idPieza = Integer.parseInt(idStr);
+                                    idsPiezasUsadas.add(idPieza);
+                                } catch (Exception e) {
+                                    System.err.println("Error extrayendo ID de pieza: " + seleccion);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         // ==========================================
         // LLAMADA AL DAO Y CIERRE DE VENTANA
@@ -663,7 +694,8 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                 cbxArmadoCierre.isSelected(),
                 cbxSustitucion.isSelected(),
                 tipoMantenimiento,
-                txtObservaciones.getText().trim()
+                txtObservaciones.getText().trim(),
+                idsPiezasUsadas
         );
 
         if (exito) {
@@ -673,7 +705,6 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                     "Guardado Exitoso",
                     javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
-            // RETORNO Y RECARGA INTELIGENTE
             if (this.ventanaPrincipal != null) {
                 if (this.ventanaPrincipal instanceof vista.VistaListaEquipos) {
                     vista.VistaListaEquipos lista = (vista.VistaListaEquipos) this.ventanaPrincipal;
@@ -681,7 +712,7 @@ public class VistaMantenimientoNotebook extends javax.swing.JFrame {
                 }
                 this.ventanaPrincipal.setVisible(true);
             }
-            this.dispose(); // Destruimos la ventana de mantenimiento
+            this.dispose(); 
 
         } else {
             javax.swing.JOptionPane.showMessageDialog(this,
