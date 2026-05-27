@@ -14,6 +14,7 @@ import modelo.Usuario;
 
 public class MantenimientoEquipoOficinaDAO {
 
+    // NO USAR ESTA FUNCIÓN
     public boolean registrar(MantenimientoEquipoOficina mantenimiento) {
         String sql = "INSERT INTO mantenimiento_equipos_oficina "
                 + "(id_equipo, id_tecnico, tipo_mantenimiento, descripcion, acciones_realizadas, piezas_revisadas, estado_resultado, observaciones) "

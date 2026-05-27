@@ -4,7 +4,7 @@
  */
 package vista;
 
-import vista.historialequipos.VistaHistorialMantenimientoEquipo;
+import vista.historialequipos.VistaHistorialMantenimientoEquipos;
 import vista.software.VistaSoftware;
 import vista.etapa1.VistaAdminMantenimiento;
 import vista.etapa1.VistaConductor;
@@ -268,7 +268,7 @@ public class VistaLogin extends javax.swing.JFrame {
                     new VistaSoftware().setVisible(true);
                     break;
                 case "Administrador de Mantenimiento Equipos":
-                    new VistaHistorialMantenimientoEquipo().setVisible(true);
+                    new VistaHistorialMantenimientoEquipos().setVisible(true);
                     break;
                 case "Administrador de Inventario":
                     new VistaInventarioPiezas().setVisible(true);
