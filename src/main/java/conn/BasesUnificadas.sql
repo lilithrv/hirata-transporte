@@ -456,11 +456,11 @@ INSERT INTO tipos_pieza (nombre) VALUES
     ('Tarjeta Madre'),
     ('Ventilador'),
     ('Batería'),
-    ('Batería Celular'),
     ('Pantalla'),
-    ('Pantalla Celular'),
     ('Tóner'),
-    ('Otro');
+    ('Otro'),
+    ('Batería Celular'),
+    ('Pantalla Celular');
 
 -- Tipos de software
 CREATE TABLE tipos_software (
@@ -646,7 +646,6 @@ CREATE TABLE detalle_mant_notebook (
 );
 
 INSERT INTO usuarios (nombre, email, password, id_rol) VALUES
-    ('Carlos Mendoza', 'c.mendoza@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 4),
     ('Ana Rodríguez', 'a.rodriguez@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 4),
     ('Diego Soto', 'd.soto@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 5),
     ('Valentina Torres', 'v.torres@hirata.cl', '$2a$10$scGxNiZOnINrxXydL2.0x.zfC.4S1.NN1mIM.d24kw0U58NwX9k1S', 5),

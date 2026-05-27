@@ -206,9 +206,8 @@ public class EquipoOficinaDAO {
         }
         return lista;
     }
-    
-    
-       public List<String> obtenerPiezasPorTipos(List<String> tiposPermitidos) {
+
+    public List<String> obtenerPiezasPorTipos(List<String> tiposPermitidos) {
         List<String> listaPiezas = new ArrayList<>();
 
         StringBuilder sb = new StringBuilder();
@@ -246,7 +245,7 @@ public class EquipoOficinaDAO {
                             + rs.getString("descripcion") + ")";
                     listaPiezas.add(pieza);
                 }
-               
+
             }
 
         } catch (SQLException e) {
@@ -264,8 +263,8 @@ public class EquipoOficinaDAO {
 
         Connection conn = Conexion.getInstancia();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);                          
-            try (ResultSet rs = ps.executeQuery()) {   
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     TipoEquipo tipo = new TipoEquipo();
                     tipo.setIdTipoEquipo(rs.getInt("id_tipo_equipo"));
@@ -287,7 +286,7 @@ public class EquipoOficinaDAO {
         }
         return null;
     }
-    
+
     public boolean guardarMantenimientoNotebook(int idEquipo, String estadoEqui, String estadoMant,
             boolean desarme, boolean limpieza, boolean ram, boolean almacenamiento, boolean pasta, boolean cierre, boolean sustitucion,
             String tipoMant, String observaciones) {
@@ -382,8 +381,6 @@ public class EquipoOficinaDAO {
         return false;
     }
 
-    
-    
     public boolean guardarMantenimientoPC(int idEquipo, String estadoEqui, String estadoMant,
             boolean desarme, boolean limpieza, boolean ram, boolean almacenamiento, boolean pasta, boolean cierre, boolean sustitucion,
             String tipoMant, String observaciones) {
@@ -475,8 +472,7 @@ public class EquipoOficinaDAO {
         }
         return false;
     }
-    
-    
+
     public boolean guardarMantenimientoCelular(int idEquipo, String estadoEqui, String estadoMant,
             boolean revPantalla, boolean limpiezaPuertos, boolean testBateria, boolean cierre, boolean sustitucion,
             String tipoMant, String observaciones) {
@@ -565,5 +561,94 @@ public class EquipoOficinaDAO {
         return false;
     }
 
+    public boolean guardarMantenimientoImpresora(int idEquipo, String estadoEqui, String estadoMant,
+        boolean limpiezaRodillos, boolean revisionToner, boolean calibracionCabezales, boolean actualizacionFirmware, 
+        boolean armado, boolean sustitucion, String tipoMant, String observaciones) {
+
+        Connection conn = Conexion.getInstancia();
+
+        try {
+            conn.setAutoCommit(false);
+            int idMantenimiento = -1;
+            String sqlBuscarMant = "SELECT id_mantenimiento FROM mantenimiento_equipos WHERE id_equipo = ? AND estado != 'Completado' LIMIT 1";
+
+            try (java.sql.PreparedStatement psBusca = conn.prepareStatement(sqlBuscarMant)) {
+                psBusca.setInt(1, idEquipo);
+                try (java.sql.ResultSet rs = psBusca.executeQuery()) {
+                    if (rs.next()) {
+                        idMantenimiento = rs.getInt("id_mantenimiento");
+                    }
+                }
+            }
+
+            if (idMantenimiento == -1) {
+                String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio) VALUES (?, ?, ?, ?, 1, NOW())";
+                try (java.sql.PreparedStatement psCrear = conn.prepareStatement(sqlCrearMant, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+                    psCrear.setInt(1, idEquipo);
+                    psCrear.setString(2, tipoMant);
+                    psCrear.setString(3, estadoMant);
+                    psCrear.setString(4, observaciones);
+                    psCrear.executeUpdate();
+                    try (java.sql.ResultSet rsKeys = psCrear.getGeneratedKeys()) {
+                        if (rsKeys.next()) {
+                            idMantenimiento = rsKeys.getInt(1);
+                        }
+                    }
+                }
+            } else {
+                String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ? WHERE id_mantenimiento = ?";
+                try (java.sql.PreparedStatement psMant = conn.prepareStatement(sqlUpdateMant)) {
+                    psMant.setString(1, estadoMant);
+                    psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
+                    psMant.setString(3, tipoMant);
+                    psMant.setString(4, observaciones);
+                    psMant.setInt(5, idMantenimiento);
+                    psMant.executeUpdate();
+                }
+            }
+
+            String sqlUpdateEquipo = "UPDATE equipos_oficina SET estado = ? WHERE id_equipo = ?";
+            try (java.sql.PreparedStatement psEqui = conn.prepareStatement(sqlUpdateEquipo)) {
+                psEqui.setString(1, estadoEqui);
+                psEqui.setInt(2, idEquipo);
+                psEqui.executeUpdate();
+            }
+
+            // Checklist específico para Impresora alineado con la BD
+            String sqlChecklist = "INSERT INTO detalle_mant_impresora (id_mantenimiento, limpieza_rodillos, revision_toner, calibracion_cabezales, actualizacion_firmware) "
+                    + "VALUES (?, ?, ?, ?, ?) "
+                    + "ON DUPLICATE KEY UPDATE limpieza_rodillos=?, revision_toner=?, calibracion_cabezales=?, actualizacion_firmware=?";
+            
+            try (java.sql.PreparedStatement psCheck = conn.prepareStatement(sqlChecklist)) {
+                psCheck.setInt(1, idMantenimiento);
+                psCheck.setBoolean(2, limpiezaRodillos); 
+                psCheck.setBoolean(3, revisionToner); 
+                psCheck.setBoolean(4, calibracionCabezales); 
+                psCheck.setBoolean(5, actualizacionFirmware);
+                
+                psCheck.setBoolean(6, limpiezaRodillos); 
+                psCheck.setBoolean(7, revisionToner); 
+                psCheck.setBoolean(8, calibracionCabezales); 
+                psCheck.setBoolean(9, actualizacionFirmware);
+                psCheck.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (java.sql.SQLException e) {
+            System.err.println("Error en transacción Impresora: " + e.getMessage());
+            try {
+                conn.rollback();
+            } catch (java.sql.SQLException ex) {
+            }
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (java.sql.SQLException e) {
+            }
+        }
+        return false;
+    }
 
 } // Class
