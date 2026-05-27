@@ -278,4 +278,32 @@ public class UsuarioDAO {
         return lista;
     }
 
+    // listar responsables equipos
+    public List<Usuario> listarResponsablesEquipo() {
+        List<Usuario> lista = new ArrayList<>();
+        String sql = "SELECT u.*, r.nombre AS nombre_rol "
+                + "FROM usuarios u "
+                + "JOIN roles r ON u.id_rol = r.id_rol "
+                + "WHERE r.nombre != 'Conductor' "
+                + "ORDER BY u.nombre";
+
+        Connection cn = Conexion.getInstancia();
+        try (PreparedStatement ps = cn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Rol rol = new Rol(
+                        rs.getInt("id_rol"),
+                        rs.getString("nombre_rol")
+                );
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("id_usuario"));
+                u.setNombreUsuario(rs.getString("nombre"));
+                u.setEmail(rs.getString("email"));
+                u.setRol(rol);
+                lista.add(u);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al listar responsables: " + e.getMessage());
+        }
+        return lista;
+    }
 }
