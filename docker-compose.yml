@@ -1,0 +1,48 @@
+services:
+  # =============================================================================
+  # SERVICIO 1: WIKI WEB (MkDocs)
+  # =============================================================================
+  wiki:
+    image: squidfunk/mkdocs-material
+    container_name: mi-proyecto-wiki
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/docs
+    entrypoint: ["mkdocs", "serve", "-a", "0.0.0.0:8000", "--livereload"]
+
+  # =============================================================================
+  # SERVICIO 2: VIGILANCIA PDF (Pandoc)
+  # =============================================================================
+  pdf-watcher:
+    image: pandoc/extra
+    platform: linux/amd64
+    container_name: mi-proyecto-pdf
+    volumes:
+      - .:/data
+    working_dir: /data
+    entrypoint: /bin/sh
+    command:
+      - "-c"
+      - |
+        apk add --no-cache inotify-tools python3 py3-pip
+        pip install --quiet pyyaml
+        echo '👁️  Vigilando cambios en docs/...'
+        while true; do
+          inotifywait -e modify,create,delete -r docs/ mkdocs.yml scripts/
+          echo '📝 Cambios detectados, regenerando PDF...'
+          python3 scripts/build_pdf.py
+          pandoc _build/combined.md \
+            -o documentacion_tecnica.pdf \
+            --from markdown \
+            --template templates/eisvogel.latex \
+            --toc \
+            --number-sections \
+            -V geometry:margin=2.5cm \
+            -V lang=es \
+            -V colorlinks=true \
+            -V linkcolor=blue \
+            -V fontsize=11pt
+          echo '✅ PDF actualizado: documentacion_tecnica.pdf'
+          echo '---'
+        done

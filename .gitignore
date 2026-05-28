@@ -19,3 +19,13 @@ Thumbs.db
 *.jar
 *.war
 *.ear
+
+
+# Documentación generada
+site/
+_build/
+documentacion_tecnica.pdf
+
+# Docker
+.docker/
+

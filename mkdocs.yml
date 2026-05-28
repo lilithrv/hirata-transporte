@@ -1,0 +1,31 @@
+site_name: "Sistema de Gestión Hirata Transporte"
+theme:
+  name: material
+  language: es
+  palette:
+    primary: red  # Color institucional o llamativo para transporte
+    accent: red
+  features:
+    - navigation.tabs
+    - content.code.copy
+
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+
+docs_dir: docs
+
+nav:
+  - Portal de Inicio: index.md
+  - Manual Técnico (Desarrolladores):
+      - Arquitectura y Stack: tecnico/arquitectura.md
+      - Modelo de Base de Datos: tecnico/base-datos.md
+  - Manual de Usuario (Operadores):
+      - Registro de Mantenimiento: usuario/mantenimiento.md
+      - Control de Inventario: usuario/inventario.md
