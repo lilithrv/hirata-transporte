@@ -16,9 +16,13 @@ Esta Wiki está organizada según la audiencia y el rol que desempeñes en la em
 
 Contiene las guías de arquitectura, modelo de datos relacional en MySQL y especificaciones técnicas del código fuente en Java Swing.
 
+<br>
+
 *   **[Manual Técnico - Arquitectura y Stack](tecnico/arquitectura.md):** Estructura en capas del software y uso de consultas seguras con `PreparedStatement`.
 
 *   **[Manual Técnico - Modelo de Base de Datos](tecnico/base-datos.md):** Estructura de las tablas en MySQL (`transporte_hirata`) y diccionario de datos.
+
+---
 
 ### 🔧 Área Operativa y Técnicos
 
