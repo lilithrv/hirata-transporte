@@ -14,5 +14,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.x
-      - run: pip install mkdocs-material mkdocs-pdf-export-plugin
-      - run: mkdocs gh-deploy --force
+      - run: |
+          pip install mkdocs-material
+          pip install mkdocs-pdf-export-plugin
+          pip install weasyprint
