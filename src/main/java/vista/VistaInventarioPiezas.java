@@ -66,7 +66,7 @@ public class VistaInventarioPiezas extends JFrame {
     public VistaInventarioPiezas() {
         construirInterfaz();
 
-        EstiloHirata.aplicarVentana(this, "Mantenimiento de Piezas - Inventario", 1400, 900);
+        EstiloHirata.aplicarVentana(this, "Mantenimiento de Piezas - Inventario", 1400, 1000);
 
         setMinimumSize(new java.awt.Dimension(1400, 850));
         setLocationRelativeTo(null);
