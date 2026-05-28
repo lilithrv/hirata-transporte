@@ -1,4 +1,3 @@
-# .github/workflows/deploy.yml
 name: Publicar Wiki
 
 on:
@@ -21,10 +20,7 @@ jobs:
           python-version: 3.x
       
       - name: Instalar dependencias
-        run: |
-          pip install mkdocs-material
-          pip install mkdocs-pdf-export-plugin
-          pip install weasyprint
+        run: pip install mkdocs-material
       
       - name: Deploy a GitHub Pages
         run: mkdocs gh-deploy --force
