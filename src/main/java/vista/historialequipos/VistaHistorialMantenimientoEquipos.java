@@ -238,6 +238,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
         txtBuscarSerie = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
+        btnDetalle = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         btnExit = new javax.swing.JButton();
@@ -266,7 +267,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
                 btnLogoutActionPerformed(evt);
             }
         });
-        panelHistorial.add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 10, -1, -1));
+        panelHistorial.add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 20, -1, -1));
 
         tablaHistorial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -279,11 +280,6 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tablaHistorial.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaHistorialMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tablaHistorial);
 
         panelHistorial.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 1230, 150));
@@ -311,6 +307,14 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
             }
         });
         panelHistorial.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 120, -1, -1));
+
+        btnDetalle.setText("VER DETALLE");
+        btnDetalle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetalleActionPerformed(evt);
+            }
+        });
+        panelHistorial.add(btnDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 120, -1, -1));
 
         jTabbedPane1.addTab("Historial", panelHistorial);
 
@@ -550,9 +554,9 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
         poblarTabla(todosLosMantenimientos);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
-    private void tablaHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaHistorialMouseClicked
+    private void btnDetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetalleActionPerformed
         // TODO add your handling code here:
-        int filaHist = tablaHistorial.getSelectedRow();
+          int filaHist = tablaHistorial.getSelectedRow();
         if (filaHist == -1) {
             JOptionPane.showMessageDialog(this, "Selecciona un registro primero.");
             return;
@@ -575,7 +579,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al obtener detalle: " + e.getMessage());
         }
 
-    }//GEN-LAST:event_tablaHistorialMouseClicked
+    }//GEN-LAST:event_btnDetalleActionPerformed
 
     /**
      * @param args the command line arguments
@@ -605,6 +609,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnDetalle;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnExit;
