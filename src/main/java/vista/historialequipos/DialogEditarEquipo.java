@@ -196,6 +196,11 @@ public class DialogEditarEquipo extends javax.swing.JDialog {
 
         btnCancelar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         btnCancelar.setText("CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnEditar.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         btnEditar.setText("EDITAR");
@@ -350,6 +355,11 @@ public class DialogEditarEquipo extends javax.swing.JDialog {
                     "Error al actualizar. Verifique que el N° de serie no esté repetido.");
         }
     }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
