@@ -4,6 +4,8 @@
  */
 package vista.historialequipos;
 
+import vista.EstiloHirata;
+
 import dao.EquipoOficinaDAO;
 import dao.SoftwareDAO;
 import dao.TipoEquipoDAO;
@@ -43,11 +45,13 @@ public class DialogEditarEquipo extends javax.swing.JDialog {
     public DialogEditarEquipo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        EstiloHirata.aplicarDialogoOscuro(this);
     }
 
     DialogEditarEquipo(java.awt.Frame parent, boolean modal, EquipoOficina equipo) {
         super(parent, modal);
         initComponents();
+        EstiloHirata.aplicarDialogoOscuro(this);
 
         this.setLocationRelativeTo(parent);
 
@@ -61,11 +65,13 @@ public class DialogEditarEquipo extends javax.swing.JDialog {
         spinnerFecha.setModel(dateModel);
         JSpinner.DateEditor editor = new JSpinner.DateEditor(spinnerFecha, "dd/MM/yyyy");
         spinnerFecha.setEditor(editor);
+        EstiloHirata.aplicarSpinnerOscuro(spinnerFecha);
 
         cargarComboTipo();
         cargarComboEstado();
         cargarComboResponsable();
         cargarDatos();
+        EstiloHirata.aplicarSpinnerOscuro(spinnerFecha);
 
     }
 
@@ -211,33 +217,30 @@ public class DialogEditarEquipo extends javax.swing.JDialog {
                 .addGap(54, 54, 54)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblResponsable)
-                        .addGap(134, 134, 134)
-                        .addComponent(cmbResponsable, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(lblFecha)
+                        .addGap(106, 106, 106)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(spinnerFecha)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblTipo)
                             .addComponent(lblMarca)
                             .addComponent(lblModelo)
                             .addComponent(lblSerie)
-                            .addComponent(lblEstado))
-                        .addGap(149, 149, 149)
+                            .addComponent(lblEstado)
+                            .addComponent(lblResponsable))
+                        .addGap(143, 143, 143)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cmbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtModelo)
                             .addComponent(txtMarca, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(cmbTipo, 0, 285, Short.MAX_VALUE)
-                            .addComponent(txtSerie)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblFecha)
-                        .addGap(97, 97, 97)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCancelar)
-                                .addGap(41, 41, 41)
-                                .addComponent(btnEditar)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(spinnerFecha))))
+                            .addComponent(txtSerie)
+                            .addComponent(cmbResponsable, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(74, 74, 74))
         );
         layout.setVerticalGroup(

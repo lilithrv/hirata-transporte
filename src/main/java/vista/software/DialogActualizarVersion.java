@@ -32,7 +32,7 @@ public class DialogActualizarVersion extends javax.swing.JDialog {
     public DialogActualizarVersion(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        EstiloHirata.aplicar(getContentPane());
+        EstiloHirata.aplicarDialogoOscuro(this);
         this.setLocationRelativeTo(parent);
         softwareDAO = new SoftwareDAO();
         usuarioDAO = new UsuarioDAO();
@@ -41,6 +41,7 @@ public class DialogActualizarVersion extends javax.swing.JDialog {
     public DialogActualizarVersion(java.awt.Frame parent, boolean modal, int idSwEquipo, String nombreSoftware, String versionActual) {
         super(parent, modal);
         initComponents();
+        EstiloHirata.aplicarDialogoOscuro(this);
 
         this.setLocationRelativeTo(parent);
 
@@ -138,7 +139,7 @@ public class DialogActualizarVersion extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(120, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(126, 126, 126))
             .addGroup(layout.createSequentialGroup()
@@ -150,17 +151,16 @@ public class DialogActualizarVersion extends javax.swing.JDialog {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
                 .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnCancelar)
-                        .addGap(29, 29, 29)
-                        .addComponent(btnGuardar))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtSoftware)
-                        .addComponent(txtAnterior)
-                        .addComponent(txtNueva)
-                        .addComponent(cmbTecnico, 0, 252, Short.MAX_VALUE)
-                        .addComponent(txtNotas)))
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtSoftware)
+                    .addComponent(txtAnterior)
+                    .addComponent(txtNueva)
+                    .addComponent(cmbTecnico, 0, 252, Short.MAX_VALUE)
+                    .addComponent(txtNotas))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(

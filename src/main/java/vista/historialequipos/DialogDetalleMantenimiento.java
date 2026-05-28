@@ -4,6 +4,8 @@
  */
 package vista.historialequipos;
 
+import vista.EstiloHirata;
+
 import java.awt.Frame;
 import java.util.Map;
 import modelo.MantenimientoEquipoOficina;
@@ -23,12 +25,14 @@ public class DialogDetalleMantenimiento extends javax.swing.JDialog {
     public DialogDetalleMantenimiento(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        EstiloHirata.aplicarDialogoOscuro(this);
         this.setSize(825,863);
     }
 
     DialogDetalleMantenimiento(java.awt.Frame parent, MantenimientoEquipoOficina mant) {
         super(parent, "Detalle de Mantención #" + mant.getIdMantenimientoEquipo(), true);
         initComponents();
+        EstiloHirata.aplicarDialogoOscuro(this);
         this.setSize(825,863);
         this.mant = mant;
 
@@ -226,7 +230,7 @@ public class DialogDetalleMantenimiento extends javax.swing.JDialog {
                 btnVolverActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 750, -1, -1));
+        getContentPane().add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 750, 110, -1));
 
         jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         jLabel2.setText("DETALLE");

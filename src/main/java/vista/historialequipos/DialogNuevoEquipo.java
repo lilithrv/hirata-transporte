@@ -4,6 +4,8 @@
  */
 package vista.historialequipos;
 
+import vista.EstiloHirata;
+
 import dao.EquipoOficinaDAO;
 import dao.TipoEquipoDAO;
 import dao.UsuarioDAO;
@@ -38,6 +40,7 @@ public class DialogNuevoEquipo extends javax.swing.JDialog {
     public DialogNuevoEquipo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        EstiloHirata.aplicarDialogoOscuro(this);
 
         this.setLocationRelativeTo(parent);
 
@@ -46,6 +49,7 @@ public class DialogNuevoEquipo extends javax.swing.JDialog {
         spinnerFecha.setModel(dateModel);
         JSpinner.DateEditor editor = new JSpinner.DateEditor(spinnerFecha, "dd/MM/yyyy");
         spinnerFecha.setEditor(editor);
+        EstiloHirata.aplicarSpinnerOscuro(spinnerFecha);
 
         tipoDAO = new TipoEquipoDAO();
         equipoDAO = new EquipoOficinaDAO();

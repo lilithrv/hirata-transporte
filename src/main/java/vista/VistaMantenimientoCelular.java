@@ -26,12 +26,12 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
      */
     public VistaMantenimientoCelular(int idEquipo, javax.swing.JFrame principal) {
         initComponents();
-        EstiloHirata.aplicarVentana(this, getTitle(), getWidth() > 0 ? getWidth() : 1000, getHeight() > 0 ? getHeight() : 650);
+        EstiloHirata.aplicarVentanaOscura(this, getTitle(), getWidth() > 0 ? getWidth() : 1000, getHeight() > 0 ? getHeight() : 650);
         
         this.idRecibido = idEquipo; // Ahora la ventana ya sabe qué equipo es
         this.ventanaPrincipal = principal;
         
-        this.setSize(1000, 800);
+        this.setSize(1280, 860);
 
         // Evita que el usuario cambie el tamaño de la ventana
         this.setResizable(false);
@@ -224,7 +224,7 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
                 cbxPantallaActionPerformed(evt);
             }
         });
-        jpnCheckList.add(cbxPantalla, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 19, -1, -1));
+        jpnCheckList.add(cbxPantalla, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
 
         cbxLimpieza.setForeground(new java.awt.Color(0, 0, 0));
         cbxLimpieza.setText("Limpieza Física");
@@ -233,7 +233,7 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
                 cbxLimpiezaActionPerformed(evt);
             }
         });
-        jpnCheckList.add(cbxLimpieza, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 46, -1, -1));
+        jpnCheckList.add(cbxLimpieza, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
 
         cbxBateria.setForeground(new java.awt.Color(0, 0, 0));
         cbxBateria.setText("Revisión Rendimiento Batería");
@@ -242,7 +242,7 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
                 cbxBateriaActionPerformed(evt);
             }
         });
-        jpnCheckList.add(cbxBateria, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 73, -1, -1));
+        jpnCheckList.add(cbxBateria, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
         cbxArmadoCierre.setForeground(new java.awt.Color(0, 0, 0));
         cbxArmadoCierre.setText("Armado y Cierre");
@@ -251,7 +251,7 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
                 cbxArmadoCierreActionPerformed(evt);
             }
         });
-        jpnCheckList.add(cbxArmadoCierre, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 100, -1, -1));
+        jpnCheckList.add(cbxArmadoCierre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
         cbxSustitucion.setForeground(new java.awt.Color(0, 0, 0));
         cbxSustitucion.setText("Sustitución de Componentes");
@@ -260,7 +260,7 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
                 cbxSustitucionActionPerformed(evt);
             }
         });
-        jpnCheckList.add(cbxSustitucion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
+        jpnCheckList.add(cbxSustitucion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("                                                  "));
 
@@ -268,7 +268,7 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
         pnlPanelPiezas.setLayout(new javax.swing.BoxLayout(pnlPanelPiezas, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane2.setViewportView(pnlPanelPiezas);
 
-        jpnCheckList.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 137, 793, 150));
+        jpnCheckList.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 157, 830, 130));
 
         btnAgregar.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         btnAgregar.setText("+");
@@ -277,7 +277,7 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
                 btnAgregarActionPerformed(evt);
             }
         });
-        jpnCheckList.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(816, 172, 60, 50));
+        jpnCheckList.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 180, 60, 50));
 
         pnlObservaciones.setBackground(new java.awt.Color(255, 255, 255));
         pnlObservaciones.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Observaciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 13), new java.awt.Color(0, 0, 0))); // NOI18N
@@ -288,22 +288,6 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
         txtObservaciones.setRows(5);
         txtObservaciones.setBorder(null);
         jScrollPane1.setViewportView(txtObservaciones);
-
-        javax.swing.GroupLayout pnlObservacionesLayout = new javax.swing.GroupLayout(pnlObservaciones);
-        pnlObservaciones.setLayout(pnlObservacionesLayout);
-        pnlObservacionesLayout.setHorizontalGroup(
-            pnlObservacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlObservacionesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-        );
-        pnlObservacionesLayout.setVerticalGroup(
-            pnlObservacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlObservacionesLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                .addContainerGap())
-        );
 
         btnGuardarMantnimiento.setBackground(new java.awt.Color(204, 204, 204));
         btnGuardarMantnimiento.setForeground(new java.awt.Color(0, 0, 0));
@@ -323,6 +307,31 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout pnlObservacionesLayout = new javax.swing.GroupLayout(pnlObservaciones);
+        pnlObservaciones.setLayout(pnlObservacionesLayout);
+        pnlObservacionesLayout.setHorizontalGroup(
+            pnlObservacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlObservacionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlObservacionesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnGuardarMantnimiento)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        pnlObservacionesLayout.setVerticalGroup(
+            pnlObservacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlObservacionesLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addGroup(pnlObservacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGuardarMantnimiento)
+                    .addComponent(btnCancelar))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -332,15 +341,11 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(pnlInfoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(386, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(pnlObservaciones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jpnCheckList, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnGuardarMantnimiento)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCancelar)))
+                            .addComponent(jpnCheckList, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(67, 67, 67))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -352,18 +357,14 @@ public class VistaMantenimientoCelular extends javax.swing.JFrame {
                 .addComponent(jpnCheckList, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlObservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCancelar)
-                    .addComponent(btnGuardarMantnimiento))
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1004, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

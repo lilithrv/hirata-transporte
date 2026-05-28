@@ -12,6 +12,7 @@ import dao.EquipoOficinaDAO;
 import dao.MantenimientoEquipoOficinaDAO;
 import dao.SoftwareDAO;
 import dao.TipoEquipoDAO;
+import java.awt.Color;
 import java.awt.Component;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -50,8 +51,9 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
      */
     public VistaHistorialMantenimientoEquipos() {
         initComponents();
+        EstiloHirata.aplicarVentanaOscura(this, getTitle(), getWidth() > 0 ? getWidth() : 1000, getHeight() > 0 ? getHeight() : 650);
 
-        this.setSize(1300, 550);
+        this.setSize(1320, 760);
 
         // Evita que el usuario cambie el tamaño de la ventana
         this.setResizable(false);
@@ -66,6 +68,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
         equipoDAO = new EquipoOficinaDAO();
 
         lblSinRegistros.setText("No hay mantenimientos registrados");
+        lblSinRegistros.setForeground(Color.WHITE);
         lblSinRegistros.setHorizontalAlignment(SwingConstants.CENTER);
         lblSinRegistros.setVisible(false);
 
@@ -86,15 +89,16 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
         poblarTabla(todosLosMantenimientos);
     }
 
-    private void poblarTabla(List<MantenimientoEquipoOficina> lista) {
+       private void poblarTabla(List<MantenimientoEquipoOficina> lista) {
         if (lista.isEmpty()) {
             tablaHistorial.setVisible(false);
-            panelHistorial.setVisible(false);
+            jScrollPane1.setVisible(false);
             lblSinRegistros.setVisible(true);
             return;
         }
+
         tablaHistorial.setVisible(true);
-        panelHistorial.setVisible(true);
+        jScrollPane1.setVisible(true);
         lblSinRegistros.setVisible(false);
 
         DefaultTableModel modelo = new DefaultTableModel() {
@@ -103,10 +107,12 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
                 return false;
             }
         };
+
         modelo.setColumnIdentifiers(new String[]{
             "ID", "Tipo Equipo", "Marca", "Modelo", "N° Serie",
             "Tipo Mantención", "Estado", "Técnico", "Fecha Registro", "Piezas Revisadas"
         });
+
         for (MantenimientoEquipoOficina m : lista) {
             modelo.addRow(new Object[]{
                 m.getIdMantenimientoEquipo(),
@@ -121,33 +127,36 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
                 m.getPiezasRevisadas() != null ? m.getPiezasRevisadas() : "—"
             });
         }
+
         tablaHistorial.setModel(modelo);
 
-        // Ajuste de ancho de columnas
-        tablaEquipos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        // Ajuste de ancho de columnas para tablaHistorial.
+        tablaHistorial.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         int anchoTotal = 0;
-        for (int col = 0; col < tablaEquipos.getColumnCount(); col++) {
-            int maxAncho = 0;
-            TableColumn columna = tablaEquipos.getColumnModel().getColumn(col);
 
-            TableCellRenderer headerRenderer = tablaEquipos.getTableHeader().getDefaultRenderer();
+        for (int col = 0; col < tablaHistorial.getColumnCount(); col++) {
+            int maxAncho = 0;
+            TableColumn columna = tablaHistorial.getColumnModel().getColumn(col);
+
+            TableCellRenderer headerRenderer = tablaHistorial.getTableHeader().getDefaultRenderer();
             Component headerComp = headerRenderer.getTableCellRendererComponent(
-                    tablaEquipos, columna.getHeaderValue(), false, false, 0, col);
+                    tablaHistorial, columna.getHeaderValue(), false, false, 0, col
+            );
             maxAncho = headerComp.getPreferredSize().width;
 
-            for (int fila = 0; fila < tablaEquipos.getRowCount(); fila++) {
-                TableCellRenderer renderer = tablaEquipos.getCellRenderer(fila, col);
-                Component comp = tablaEquipos.prepareRenderer(renderer, fila, col);
+            for (int fila = 0; fila < tablaHistorial.getRowCount(); fila++) {
+                TableCellRenderer renderer = tablaHistorial.getCellRenderer(fila, col);
+                Component comp = tablaHistorial.prepareRenderer(renderer, fila, col);
                 maxAncho = Math.max(maxAncho, comp.getPreferredSize().width);
             }
 
-            columna.setPreferredWidth(maxAncho + 20);
-            anchoTotal += maxAncho + 20;
+            columna.setPreferredWidth(maxAncho + 25);
+            anchoTotal += maxAncho + 25;
         }
 
-        int anchoVisible = tablaEquipos.getParent().getWidth();
+        int anchoVisible = tablaHistorial.getParent().getWidth();
         if (anchoTotal < anchoVisible) {
-            tablaEquipos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+            tablaHistorial.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         }
     }
 
@@ -259,7 +268,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
 
         lblTitulo.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         lblTitulo.setText(" HISTORIAL MANTENIMIENTO EQUIPOS ");
-        panelHistorial.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 60, -1, -1));
+        panelHistorial.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 20, -1, -1));
 
         btnLogout.setText("CERRAR SESIÓN");
         btnLogout.addActionListener(new java.awt.event.ActionListener() {
@@ -267,7 +276,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
                 btnLogoutActionPerformed(evt);
             }
         });
-        panelHistorial.add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 20, -1, -1));
+        panelHistorial.add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(1119, 20, 150, -1));
 
         tablaHistorial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -282,10 +291,10 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tablaHistorial);
 
-        panelHistorial.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 1230, 150));
+        panelHistorial.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 1230, 250));
 
         lblSinRegistros.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        panelHistorial.add(lblSinRegistros, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 140, -1, -1));
+        panelHistorial.add(lblSinRegistros, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 330, 700, 30));
 
         jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 17)); // NOI18N
         jLabel1.setText("N° Serie");
@@ -314,7 +323,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
                 btnDetalleActionPerformed(evt);
             }
         });
-        panelHistorial.add(btnDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 120, -1, -1));
+        panelHistorial.add(btnDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 120, 140, -1));
 
         jTabbedPane1.addTab("Historial", panelHistorial);
 
@@ -373,42 +382,40 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnExit)
-                .addGap(28, 28, 28))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(538, 538, 538))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1097, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(293, 293, 293)
-                        .addComponent(btnAgregar)
-                        .addGap(57, 57, 57)
-                        .addComponent(btnEditar)
-                        .addGap(56, 56, 56)
-                        .addComponent(btnEliminar)))
-                .addContainerGap(183, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(370, 370, 370)
+                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(90, 90, 90)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1097, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(370, 370, 370)
+                            .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(29, 29, 29)
+                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(29, 29, 29)
+                            .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(113, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnExit)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(92, 92, 92)
+                .addGap(36, 36, 36)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnExit)
+                    .addComponent(jLabel4))
+                .addGap(61, 61, 61)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar)
                     .addComponent(btnEditar)
                     .addComponent(btnEliminar))
-                .addContainerGap(179, Short.MAX_VALUE))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Equipos", jPanel2);

@@ -23,6 +23,7 @@ public class VistaMantenimientoImpresora extends javax.swing.JFrame {
      */
     public VistaMantenimientoImpresora(int idEquipo, javax.swing.JFrame principal) {
         initComponents();
+        EstiloHirata.aplicarVentanaOscura(this, getTitle(), getWidth() > 0 ? getWidth() : 1000, getHeight() > 0 ? getHeight() : 650);
 
         this.idRecibido = idEquipo;
         this.ventanaPrincipal = principal;
@@ -38,9 +39,9 @@ public class VistaMantenimientoImpresora extends javax.swing.JFrame {
         cbxActualizacionFirmware.setEnabled(false);
         cbxArmadoCierre.setEnabled(false);
 
-        EstiloHirata.aplicarVentana(this, "Inventario Central", 1100, 900);
+        EstiloHirata.aplicarVentanaOscura(this, "Inventario Central", 1100, 900);
         this.setMinimumSize(new java.awt.Dimension(1100, 900));
-        this.setResizable(true);
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
     }
 
@@ -282,14 +283,10 @@ public class VistaMantenimientoImpresora extends javax.swing.JFrame {
                     .addGroup(jpnCheckListLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(cbxArmadoCierre))
-                    .addGroup(jpnCheckListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jpnCheckListLayout.createSequentialGroup()
-                            .addGap(25, 25, 25)
-                            .addComponent(cbxSustitucion))
-                        .addGroup(jpnCheckListLayout.createSequentialGroup()
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 793, Short.MAX_VALUE)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jpnCheckListLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 793, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpnCheckListLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(cbxCalibracionCabezales))
@@ -300,6 +297,10 @@ public class VistaMantenimientoImpresora extends javax.swing.JFrame {
                         .addGap(6, 6, 6)
                         .addComponent(cbxActualizacionFirmware)))
                 .addGap(25, 25, 25))
+            .addGroup(jpnCheckListLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cbxSustitucion)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpnCheckListLayout.setVerticalGroup(
             jpnCheckListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -314,15 +315,15 @@ public class VistaMantenimientoImpresora extends javax.swing.JFrame {
                 .addComponent(cbxActualizacionFirmware)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxArmadoCierre)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpnCheckListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpnCheckListLayout.createSequentialGroup()
-                        .addComponent(cbxSustitucion)
-                        .addGap(39, 39, 39)
+                        .addGap(71, 71, 71)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpnCheckListLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(4, 4, 4)
+                        .addComponent(cbxSustitucion)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -403,7 +404,7 @@ public class VistaMantenimientoImpresora extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCancelar)
                     .addComponent(btnGuardarMantnimiento))
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

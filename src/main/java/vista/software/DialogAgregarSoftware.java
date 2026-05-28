@@ -36,7 +36,7 @@ public class DialogAgregarSoftware extends javax.swing.JDialog {
     public DialogAgregarSoftware(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        EstiloHirata.aplicar(getContentPane());
+        EstiloHirata.aplicarDialogoOscuro(this);
         this.setLocationRelativeTo(parent);
         softwareDAO = new SoftwareDAO();
         usuarioDAO = new UsuarioDAO();
@@ -46,6 +46,7 @@ public class DialogAgregarSoftware extends javax.swing.JDialog {
     public DialogAgregarSoftware(Frame parent, boolean modal, EquipoOficina equipo) {
         super(parent, modal);
         initComponents();
+        EstiloHirata.aplicarDialogoOscuro(this);
 
         this.setLocationRelativeTo(parent);
 
