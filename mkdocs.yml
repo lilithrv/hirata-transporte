@@ -1,4 +1,6 @@
 site_name: "Sistema de Gestión Hirata Transporte"
+repo_url: "https://github.com/lilithrv/hirata-transporte"
+repo_name: "hirata-transporte"
 theme:
   name: material
   language: es
@@ -8,6 +10,27 @@ theme:
   features:
     - navigation.tabs
     - content.code.copy
+    - navigation.footer
+  palette:
+    # Configuración del Modo Claro
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: red
+      accent: red
+      toggle:
+        icon: material/weather-night
+        name: Cambiar a modo oscuro
+    # Configuración del Modo Oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: red
+      accent: red
+      toggle:
+        icon: material/weather-sunny
+        name: Cambiar a modo claro
+        
+copyright: "&copy; 2026 Empresa de Transporte Hirata — Todos los derechos reservados."        
+
 
 plugins:
   - search
