@@ -14,11 +14,13 @@ import dao.SoftwareDAO;
 import dao.TipoEquipoDAO;
 import java.awt.Component;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -40,6 +42,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VistaHistorialMantenimientoEquipos.class.getName());
     private MantenimientoEquipoOficinaDAO mantenimientoDAO;
+    private List<MantenimientoEquipoOficina> todosLosMantenimientos = new ArrayList<>();
     private EquipoOficinaDAO equipoDAO;
 
     /**
@@ -48,7 +51,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
     public VistaHistorialMantenimientoEquipos() {
         initComponents();
 
-        this.setSize(1138, 550);
+        this.setSize(1300, 550);
 
         // Evita que el usuario cambie el tamaño de la ventana
         this.setResizable(false);
@@ -74,45 +77,43 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
     private void cargarTabla() {
 
         MantenimientoEquipoOficinaDAO dao = new MantenimientoEquipoOficinaDAO();
-        List<MantenimientoEquipoOficina> mantenimientos;
-
         try {
-            mantenimientos = dao.listarTodos();
+            todosLosMantenimientos = dao.listarTodos();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar historial: " + e.getMessage());
             return;
         }
+        poblarTabla(todosLosMantenimientos);
+    }
 
-        if (mantenimientos.isEmpty()) {
+    private void poblarTabla(List<MantenimientoEquipoOficina> lista) {
+        if (lista.isEmpty()) {
             tablaHistorial.setVisible(false);
-            panelHistorial.setVisible(false);   // oculta también el scroll
+            panelHistorial.setVisible(false);
             lblSinRegistros.setVisible(true);
             return;
-        } else {
-            tablaHistorial.setVisible(true);
-            panelHistorial.setVisible(true);
-            lblSinRegistros.setVisible(false);
         }
+        tablaHistorial.setVisible(true);
+        panelHistorial.setVisible(true);
+        lblSinRegistros.setVisible(false);
 
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // tabla solo lectura
+                return false;
             }
         };
-
         modelo.setColumnIdentifiers(new String[]{
             "ID", "Tipo Equipo", "Marca", "Modelo", "N° Serie",
             "Tipo Mantención", "Estado", "Técnico", "Fecha Registro", "Piezas Revisadas"
         });
-
-        for (MantenimientoEquipoOficina m : mantenimientos) {
+        for (MantenimientoEquipoOficina m : lista) {
             modelo.addRow(new Object[]{
                 m.getIdMantenimientoEquipo(),
-                m.getEquipo().getTipoEquipo().getNombre(), // anidado
-                m.getEquipo().getMarca(), // anidado
-                m.getEquipo().getModelo(), // anidado
-                m.getEquipo().getNumeroSerie(), // anidado
+                m.getEquipo().getTipoEquipo().getNombre(),
+                m.getEquipo().getMarca(),
+                m.getEquipo().getModelo(),
+                m.getEquipo().getNumeroSerie(),
                 m.getTipoMantenimiento(),
                 m.getEstadoResultado(),
                 m.getTecnico() != null ? m.getTecnico().getNombreUsuario() : "Sin asignar",
@@ -120,25 +121,23 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
                 m.getPiezasRevisadas() != null ? m.getPiezasRevisadas() : "—"
             });
         }
-
         tablaHistorial.setModel(modelo);
 
-        // Ajusta cada columna al contenido más ancho
-        tablaHistorial.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        // Ajuste de ancho de columnas
+        tablaEquipos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         int anchoTotal = 0;
-
-        for (int col = 0; col < tablaHistorial.getColumnCount(); col++) {
+        for (int col = 0; col < tablaEquipos.getColumnCount(); col++) {
             int maxAncho = 0;
+            TableColumn columna = tablaEquipos.getColumnModel().getColumn(col);
 
-            TableColumn columna = tablaHistorial.getColumnModel().getColumn(col);
-            TableCellRenderer headerRenderer = tablaHistorial.getTableHeader().getDefaultRenderer();
+            TableCellRenderer headerRenderer = tablaEquipos.getTableHeader().getDefaultRenderer();
             Component headerComp = headerRenderer.getTableCellRendererComponent(
-                    tablaHistorial, columna.getHeaderValue(), false, false, 0, col);
+                    tablaEquipos, columna.getHeaderValue(), false, false, 0, col);
             maxAncho = headerComp.getPreferredSize().width;
 
-            for (int fila = 0; fila < tablaHistorial.getRowCount(); fila++) {
-                TableCellRenderer renderer = tablaHistorial.getCellRenderer(fila, col);
-                Component comp = tablaHistorial.prepareRenderer(renderer, fila, col);
+            for (int fila = 0; fila < tablaEquipos.getRowCount(); fila++) {
+                TableCellRenderer renderer = tablaEquipos.getCellRenderer(fila, col);
+                Component comp = tablaEquipos.prepareRenderer(renderer, fila, col);
                 maxAncho = Math.max(maxAncho, comp.getPreferredSize().width);
             }
 
@@ -146,9 +145,9 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
             anchoTotal += maxAncho + 20;
         }
 
-        int anchoVisible = tablaHistorial.getParent().getWidth();
+        int anchoVisible = tablaEquipos.getParent().getWidth();
         if (anchoTotal < anchoVisible) {
-            tablaHistorial.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+            tablaEquipos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         }
     }
 
@@ -235,6 +234,10 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaHistorial = new javax.swing.JTable();
         lblSinRegistros = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        txtBuscarSerie = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         btnExit = new javax.swing.JButton();
@@ -247,8 +250,10 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jTabbedPane1.setMinimumSize(new java.awt.Dimension(1300, 315));
 
         panelHistorial.setBackground(new java.awt.Color(255, 255, 255));
+        panelHistorial.setMinimumSize(new java.awt.Dimension(1300, 280));
         panelHistorial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblTitulo.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
@@ -274,12 +279,38 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablaHistorial.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaHistorialMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaHistorial);
 
-        panelHistorial.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1100, 150));
+        panelHistorial.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 1230, 150));
 
         lblSinRegistros.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         panelHistorial.add(lblSinRegistros, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 140, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 17)); // NOI18N
+        jLabel1.setText("N° Serie");
+        panelHistorial.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 70, 20));
+        panelHistorial.add(txtBuscarSerie, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 120, 280, -1));
+
+        btnBuscar.setText("BUSCAR");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        panelHistorial.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 120, -1, -1));
+
+        btnLimpiar.setText("LIMPIAR");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
+        panelHistorial.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 120, -1, -1));
 
         jTabbedPane1.addTab("Historial", panelHistorial);
 
@@ -357,7 +388,7 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
                         .addComponent(btnEditar)
                         .addGap(56, 56, 56)
                         .addComponent(btnEliminar)))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap(183, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -382,11 +413,11 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -493,6 +524,59 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        String texto = txtBuscarSerie.getText().trim().toLowerCase();
+
+        if (texto.isEmpty()) {
+            poblarTabla(todosLosMantenimientos);
+            return;
+        }
+
+        List<MantenimientoEquipoOficina> filtrados = todosLosMantenimientos.stream()
+                .filter(m -> m.getEquipo().getNumeroSerie().toLowerCase().contains(texto))
+                .collect(java.util.stream.Collectors.toList());
+
+        poblarTabla(filtrados);
+
+        if (filtrados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron registros para ese N° de serie.");
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        // TODO add your handling code here:
+        txtBuscarSerie.setText("");
+        poblarTabla(todosLosMantenimientos);
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void tablaHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaHistorialMouseClicked
+        // TODO add your handling code here:
+        int filaHist = tablaHistorial.getSelectedRow();
+        if (filaHist == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un registro primero.");
+            return;
+        }
+
+        int idHist = (int) tablaHistorial.getValueAt(filaHist, 0);
+
+        try {
+            MantenimientoEquipoOficina mant = mantenimientoDAO.obtenerDetallePorId(idHist);
+
+            if (mant == null) {
+                JOptionPane.showMessageDialog(this, "No se pudo obtener el registro.");
+                return;
+            }
+
+            DialogDetalleMantenimiento dialog = new DialogDetalleMantenimiento(this, mant);
+            dialog.setVisible(true);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al obtener detalle: " + e.getMessage());
+        }
+
+    }//GEN-LAST:event_tablaHistorialMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -520,10 +604,13 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnLogout;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -534,5 +621,6 @@ public class VistaHistorialMantenimientoEquipos extends javax.swing.JFrame {
     private javax.swing.JPanel panelHistorial;
     private javax.swing.JTable tablaEquipos;
     private javax.swing.JTable tablaHistorial;
+    private javax.swing.JTextField txtBuscarSerie;
     // End of variables declaration//GEN-END:variables
 }
