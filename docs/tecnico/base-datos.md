@@ -10,23 +10,30 @@ El siguiente diagrama ilustra cómo se relacionan los equipos de oficina con los
 
 ```mermaid
 erDiagram
-    USUARIOS ||--o{ EQUIPOS_OFICINA : "es responsable de"
-    USUARIOS ||--o{ MANTENIMIENTO_EQUIPOS : "ejecuta como técnico"
+    ROLES ||--o{ USUARIOS : "asigna"
+    USUARIOS ||--o{ VEHICULOS : "conduce"
+    USUARIOS ||--o{ KILOMETRAJE : "registra"
+    USUARIOS ||--o{ MANTENIMIENTO : "ejecuta"
+    USUARIOS ||--o{ EQUIPOS_OFICINA : "responsable"
+    
+    VEHICULOS ||--o{ KILOMETRAJE : "posee"
+    VEHICULOS ||--o{ MANTENIMIENTO : "recibe"
+    
     TIPOS_EQUIPO ||--o{ EQUIPOS_OFICINA : "clasifica"
+    TIPOS_PIEZA ||--o{ PIEZAS : "clasifica"
+    TIPOS_SOFTWARE ||--o{ SOFTWARE : "clasifica"
     
+    EQUIPOS_OFICINA ||--o{ EQUIPO_COMPONENTES : "contiene"
     EQUIPOS_OFICINA ||--o{ MANTENIMIENTO_EQUIPOS : "recibe"
-    EQUIPOS_OFICINA ||--o{ EQUIPO_COMPONENTES : "contiene físicamente"
-    EQUIPOS_OFICINA ||--o{ SOFTWARE_EQUIPO : "tiene instalado"
+    EQUIPOS_OFICINA ||--o{ SOFTWARE_EQUIPO : "tiene_instalado"
     
-    PIEZAS ||--o{ EQUIPO_COMPONENTES : "es el modelo de"
-    PIEZAS ||--o{ MANTENIMIENTO_PIEZAS : "es consumida en"
+    PIEZAS ||--o{ EQUIPO_COMPONENTES : "provee"
+    PIEZAS ||--o{ MANTENIMIENTO_PIEZAS : "se_usa_en"
     
-    MANTENIMIENTO_EQUIPOS ||--o{ MANTENIMIENTO_PIEZAS : "utiliza repuestos"
-    MANTENIMIENTO_EQUIPOS ||--o| DETALLE_MANT_NOTEBOOK : "genera checklist"
-    MANTENIMIENTO_EQUIPOS ||--o| DETALLE_MANT_IMPRESORA : "genera checklist"
-    
-    SOFTWARE ||--o{ SOFTWARE_EQUIPO : "version"
+    MANTENIMIENTO_EQUIPOS ||--o{ MANTENIMIENTO_PIEZAS : "consume"
+    SOFTWARE ||--o{ SOFTWARE_EQUIPO : "pertenece"
 ```
+
 ## 📖 Diccionario de Datos Principal
 
 ### 1. Gestión de Activos (```equipos_oficina```)
@@ -43,6 +50,7 @@ Tabla central que almacena el registro de los activos informáticos (Notebooks, 
 | id_responsable | INT | FK -> usuarios | Empleado a cargo del equipo. |
 
 ---
+
 ###  2. Historial de Mantenimiento (```mantenimiento_equipos```)
 Almacena el registro de intervenciones técnicas, cumpliendo con el requerimiento de trazabilidad.
 
@@ -85,3 +93,4 @@ Lleva el seguimiento de las instalaciones y actualizaciones de programas por equ
 # ✅ Sistema de Checklists Dinámicos
 Para garantizar la calidad del servicio, el sistema utiliza tablas independientes vinculadas ``` 1:1 ``` al ``` id_mantenimiento ``` según el tipo de equipo. Por ejemplo, la tabla ``` detalle_mant_notebook  ```exige verificar el desarmado, cambio de pasta térmica y check de RAM, mientras que ``` detalle_mant_impresora ``` exige calibración de cabezales y revisión de rodillos.
 
+---
