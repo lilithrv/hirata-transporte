@@ -27,6 +27,6 @@ graph TD
     B -->|Consultas SQL Preparadas| C[(Capa de Datos: <br>MySQL)]
     C -->|Retorna ResultSets / Estado| B
     B -->|Actualiza Interfaz| A
-````
+```
 
 ---
