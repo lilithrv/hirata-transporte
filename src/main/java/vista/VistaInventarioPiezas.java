@@ -59,13 +59,14 @@ public class VistaInventarioPiezas extends JFrame {
     private JButton btnLimpiar;
     private JButton btnStockBajo;
     private JButton btnVerTodo;
+    private JButton btnCerrarSesion;
 
     private Integer idSeleccionado = null;
 
     public VistaInventarioPiezas() {
         construirInterfaz();
 
-        EstiloHirata.aplicarVentana(this, "Mantenimiento de Piezas - Inventario", 1400, 850);
+        EstiloHirata.aplicarVentana(this, "Mantenimiento de Piezas - Inventario", 1400, 900);
 
         setMinimumSize(new java.awt.Dimension(1400, 850));
         setLocationRelativeTo(null);
@@ -152,13 +153,14 @@ public class VistaInventarioPiezas extends JFrame {
         agregarCampo(panel, gbc, 5, "Stock actual", spStockActual);
         agregarCampo(panel, gbc, 6, "Stock mínimo", spStockMinimo);
 
-        JPanel botones = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
+        JPanel botones = new JPanel(new java.awt.GridLayout(2, 2, 8, 8));
         botones.setOpaque(false);
 
         btnGuardar = new JButton("Guardar");
         btnActualizar = new JButton("Actualizar");
         btnEliminar = new JButton("Eliminar");
         btnLimpiar = new JButton("Limpiar");
+        btnCerrarSesion = new JButton("Cerrar sesión");
 
         botones.add(btnGuardar);
         botones.add(btnActualizar);
@@ -169,12 +171,28 @@ public class VistaInventarioPiezas extends JFrame {
         gbc.insets = new Insets(14, 0, 0, 0);
         panel.add(botones, gbc);
 
+        gbc.gridy = 7;
+        gbc.insets = new Insets(14, 0, 0, 0);
+        panel.add(botones, gbc);
+
+        btnCerrarSesion = new JButton("Cerrar sesión");
+
+        gbc.gridy = 8;
+        gbc.insets = new Insets(8, 0, 0, 0);
+        panel.add(btnCerrarSesion, gbc);
+
         btnGuardar.addActionListener(e -> guardar());
         btnActualizar.addActionListener(e -> actualizar());
         btnEliminar.addActionListener(e -> eliminar());
         btnLimpiar.addActionListener(e -> limpiar());
 
+        btnCerrarSesion.addActionListener(e -> {
+            dispose();
+            new VistaLogin().setVisible(true);
+        });
+
         return panel;
+
     }
 
     private void agregarCampo(JPanel panel, GridBagConstraints gbc, int y, String etiqueta, java.awt.Component campo) {
@@ -464,8 +482,8 @@ public class VistaInventarioPiezas extends JFrame {
 
         sorter.setRowFilter(
                 texto.isEmpty()
-                        ? null
-                        : RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(texto))
+                ? null
+                : RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(texto))
         );
     }
 
