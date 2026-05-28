@@ -11,7 +11,7 @@ theme:
 
 plugins:
   - search
-  - mkdocs-pdf-export-plugin
+
 
 markdown_extensions:
   - attr_list
