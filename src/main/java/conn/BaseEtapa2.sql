@@ -637,3 +637,53 @@ INSERT INTO software_equipo (id_equipo, id_software, version, estado, id_tecnico
 (@cel04, @sw_zoom, '5.14',  'Instalado', @tec_it2,  '2023-07-16'),
 (@cel05, @sw_android14, '14.0', 'Actualizado', @adm_inv, '2024-02-03'),
 (@cel05, @sw_teams, '5.17', 'Instalado', @adm_inv, '2024-02-03');
+
+-- HISTORIAL MANTENIMIENTOS
+
+
+-- NOTEBOOKS
+INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado)
+VALUES (1, 'Preventivo', 'Completado', 'Mantención preventiva semestral, limpieza general y cambio de pasta térmica', 101, '2025-01-10 09:00:00', '2025-01-10 11:30:00');
+INSERT INTO detalle_mant_notebook (id_mantenimiento, desarme_inicial, limpieza_fisica, check_ram, check_almacenamiento, cambio_pasta, armado_cierre, sustitucion_piezas)
+VALUES (LAST_INSERT_ID(), true, true, true, true, true, true, false);
+
+INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado)
+VALUES (2, 'Correctivo', 'Completado', 'Reemplazo de módulo RAM defectuoso', 102, '2025-02-14 10:00:00', '2025-02-14 12:00:00');
+INSERT INTO detalle_mant_notebook (id_mantenimiento, desarme_inicial, limpieza_fisica, check_ram, check_almacenamiento, cambio_pasta, armado_cierre, sustitucion_piezas)
+VALUES (LAST_INSERT_ID(), true, false, true, false, false, true, true);
+
+INSERT INTO mantenimiento_piezas (id_mantenimiento, id_pieza, cantidad, tipo_uso)
+VALUES (2, 1, 1, 'Reemplazo');
+
+-- PC ESCRITORIO
+INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado)
+VALUES (11, 'Preventivo', 'Completado', 'Limpieza interna y actualización de sistema operativo', 101, '2025-02-20 08:00:00', '2025-02-20 10:30:00');
+INSERT INTO detalle_mant_computador (id_mantenimiento, desarmado_inicial, limpieza_fisica, check_ram, check_almacenamiento, armado_cierre, actualizacion_so)
+VALUES (LAST_INSERT_ID(), true, true, true, true, true, true);
+
+-- IMPRESORA
+INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado)
+VALUES (23, 'Preventivo', 'Completado', 'Limpieza de rodillos y calibración de cabezales', 101, '2025-03-12 09:00:00', '2025-03-12 10:00:00');
+INSERT INTO detalle_mant_impresora (id_mantenimiento, limpieza_rodillos, revision_toner, calibracion_cabezales, actualizacion_firmware)
+VALUES (LAST_INSERT_ID(), true, true, true, false);
+
+INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado)
+VALUES (24, 'Correctivo', 'Completado', 'Reemplazo de tóner y actualización de firmware', 102, '2025-04-01 11:00:00', '2025-04-01 11:45:00');
+INSERT INTO detalle_mant_impresora (id_mantenimiento, limpieza_rodillos, revision_toner, calibracion_cabezales, actualizacion_firmware)
+VALUES (LAST_INSERT_ID(), false, true, false, true);
+
+INSERT INTO mantenimiento_piezas (id_mantenimiento, id_pieza, cantidad, tipo_uso)
+VALUES (5, 92, 1, 'Reemplazo');
+
+
+-- CELULARES
+
+INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado)
+VALUES (28, 'Preventivo', 'Completado', 'Revisión de batería y limpieza de puertos', 101, '2025-04-10 08:30:00', '2025-04-10 09:30:00');
+INSERT INTO detalle_mant_celular (id_mantenimiento, revision_pantalla_tactil, test_rendimiento_bateria, limpieza_puertos_carga, actualizacion_android)
+VALUES (LAST_INSERT_ID(), true, true, true, false);
+
+INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado)
+VALUES (29, 'Correctivo', 'Completado', 'Actualización de Android y test de pantalla táctil', 102, '2025-05-03 10:00:00', '2025-05-03 11:00:00');
+INSERT INTO detalle_mant_celular (id_mantenimiento, revision_pantalla_tactil, test_rendimiento_bateria, limpieza_puertos_carga, actualizacion_android)
+VALUES (LAST_INSERT_ID(), true, false, true, true);
