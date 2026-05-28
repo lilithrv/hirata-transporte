@@ -22,6 +22,7 @@ Formulario para ingresar, editar o eliminar información de una pieza.
 Tabla con todos los componentes, permitiendo búsquedas rápidas, filtrado por "Stock bajo" o visualización total.
 
 ![Panel de Inventario](../assets/form_panel_inventario.png){ style="border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);" }
+
 ---
 
 ## Flujo de Trabajo
@@ -47,3 +48,5 @@ Haz clic directamente sobre la fila deseada en la tabla. Al hacerlo, los campos 
 **Para editar**: Realiza los cambios necesarios en los campos y presiona el botón **Actualizar**.
 
 **Para eliminar**: Presiona el botón **Eliminar** para retirar la pieza del inventario.
+
+---

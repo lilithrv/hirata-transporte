@@ -1,20 +1,30 @@
+# .github/workflows/deploy.yml
 name: Publicar Wiki
+
 on:
   push:
     branches:
       - main
       - master
+
 permissions:
   contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-python@v5
         with:
           python-version: 3.x
-      - run: |
+      
+      - name: Instalar dependencias
+        run: |
           pip install mkdocs-material
           pip install mkdocs-pdf-export-plugin
           pip install weasyprint
+      
+      - name: Deploy a GitHub Pages
+        run: mkdocs gh-deploy --force
