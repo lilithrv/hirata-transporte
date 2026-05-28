@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import modelo.EquipoOficina;
 import modelo.MantenimientoEquipoOficina;
 import modelo.TipoEquipo;
@@ -26,10 +28,10 @@ public class MantenimientoEquipoOficinaDAO {
             ps.setInt(2, mantenimiento.getTecnico().getIdUsuario());
             ps.setString(3, mantenimiento.getTipoMantenimiento());
             ps.setString(4, mantenimiento.getDescripcion());
-            ps.setString(5, mantenimiento.getAccionesRealizadas());
+            //ps.setString(5, mantenimiento.getAccionesRealizadas());
             ps.setString(6, mantenimiento.getPiezasRevisadas());
             ps.setString(7, mantenimiento.getEstadoResultado());
-            ps.setString(8, mantenimiento.getObservaciones());
+          //ps.setString(8, mantenimiento.getObservaciones());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("Error al registrar mantenimiento de equipo de oficina: " + e.getMessage());
@@ -125,5 +127,121 @@ public class MantenimientoEquipoOficinaDAO {
         }
 
         return lista;
+    }
+
+    public MantenimientoEquipoOficina obtenerDetallePorId(int idMantenimiento) throws SQLException {
+        String sql = """
+        SELECT
+            me.id_mantenimiento, me.tipo_mantenimiento, me.estado,
+            me.descripcion, me.fecha_registro, me.fecha_inicio, me.fecha_completado,
+            eo.id_equipo, eo.marca AS equipo_marca, eo.modelo AS equipo_modelo,
+            eo.numero_serie,
+            te.id_tipo_equipo, te.nombre AS tipo_equipo,
+            u.id_usuario, u.nombre AS tecnico_nombre, u.email AS tecnico_email,
+            -- Checklist Notebook
+            nb.desarme_inicial, nb.limpieza_fisica AS nb_limpieza, nb.check_ram AS nb_ram,
+            nb.check_almacenamiento AS nb_alm, nb.cambio_pasta, nb.armado_cierre AS nb_cierre,
+            nb.sustitucion_piezas,
+            -- Checklist Computador
+            pc.desarmado_inicial, pc.limpieza_fisica AS pc_limpieza, pc.check_ram AS pc_ram,
+            pc.check_almacenamiento AS pc_alm, pc.armado_cierre AS pc_cierre,
+            pc.actualizacion_so,
+            -- Checklist Impresora
+            imp.limpieza_rodillos, imp.revision_toner, imp.calibracion_cabezales,
+            imp.actualizacion_firmware,
+            -- Checklist Celular
+            cel.revision_pantalla_tactil, cel.test_rendimiento_bateria,
+            cel.limpieza_puertos_carga, cel.actualizacion_android,
+            -- Piezas
+            (
+                SELECT GROUP_CONCAT(
+                    CONCAT(p.marca, ' ', p.modelo, ' (', mp.tipo_uso, ')')
+                    ORDER BY mp.id_mant_pieza SEPARATOR ' | '
+                )
+                FROM mantenimiento_piezas mp
+                JOIN piezas p ON mp.id_pieza = p.id_pieza
+                WHERE mp.id_mantenimiento = me.id_mantenimiento
+            ) AS piezas_revisadas
+        FROM mantenimiento_equipos me
+        JOIN equipos_oficina eo   ON me.id_equipo = eo.id_equipo
+        JOIN tipos_equipo    te   ON eo.id_tipo_equipo = te.id_tipo_equipo
+        LEFT JOIN usuarios   u    ON me.id_tecnico = u.id_usuario
+        LEFT JOIN detalle_mant_notebook  nb  ON nb.id_mantenimiento  = me.id_mantenimiento
+        LEFT JOIN detalle_mant_computador pc  ON pc.id_mantenimiento  = me.id_mantenimiento
+        LEFT JOIN detalle_mant_impresora  imp ON imp.id_mantenimiento = me.id_mantenimiento
+        LEFT JOIN detalle_mant_celular    cel ON cel.id_mantenimiento = me.id_mantenimiento
+        WHERE me.id_mantenimiento = ?
+    """;
+
+        Connection conn = Conexion.getInstancia();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idMantenimiento);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+
+                MantenimientoEquipoOficina m = new MantenimientoEquipoOficina();
+                m.setIdMantenimientoEquipo(rs.getInt("id_mantenimiento"));
+                m.setTipoMantenimiento(rs.getString("tipo_mantenimiento"));
+                m.setEstadoResultado(rs.getString("estado"));
+                m.setDescripcion(rs.getString("descripcion"));
+                m.setFechaRegistro(rs.getDate("fecha_registro"));
+                m.setFechaInicio(rs.getTimestamp("fecha_inicio"));      
+                m.setFechaCompletado(rs.getTimestamp("fecha_completado")); 
+                m.setPiezasRevisadas(rs.getString("piezas_revisadas"));
+
+                TipoEquipo tipoEquipo = new TipoEquipo(rs.getInt("id_tipo_equipo"), rs.getString("tipo_equipo"));
+                EquipoOficina equipo = new EquipoOficina();
+                equipo.setIdEquipo(rs.getInt("id_equipo"));
+                equipo.setMarca(rs.getString("equipo_marca"));
+                equipo.setModelo(rs.getString("equipo_modelo"));
+                equipo.setNumeroSerie(rs.getString("numero_serie"));
+                equipo.setTipoEquipo(tipoEquipo);
+                m.setEquipo(equipo);
+
+                if (!rs.wasNull()) {
+                    Usuario tecnico = new Usuario();
+                    tecnico.setIdUsuario(rs.getInt("id_usuario"));
+                    tecnico.setNombreUsuario(rs.getString("tecnico_nombre"));
+                    tecnico.setEmail(rs.getString("tecnico_email"));
+                    m.setTecnico(tecnico);
+                }
+
+                // Checklist según tipo 
+                String tipoNombre = rs.getString("tipo_equipo").toLowerCase();
+                Map<String, Boolean> checklist = new LinkedHashMap<>();
+
+                if (tipoNombre.contains("notebook")) {
+                    checklist.put("Desarme inicial", rs.getBoolean("desarme_inicial"));
+                    checklist.put("Limpieza física", rs.getBoolean("nb_limpieza"));
+                    checklist.put("Check RAM", rs.getBoolean("nb_ram"));
+                    checklist.put("Check almacenamiento", rs.getBoolean("nb_alm"));
+                    checklist.put("Cambio pasta térmica", rs.getBoolean("cambio_pasta"));
+                    checklist.put("Armado y cierre", rs.getBoolean("nb_cierre"));
+                    checklist.put("Sustitución piezas", rs.getBoolean("sustitucion_piezas"));
+                } else if (tipoNombre.contains("computador") || tipoNombre.contains("pc")) {
+                    checklist.put("Desarmado inicial", rs.getBoolean("desarmado_inicial"));
+                    checklist.put("Limpieza física", rs.getBoolean("pc_limpieza"));
+                    checklist.put("Check RAM", rs.getBoolean("pc_ram"));
+                    checklist.put("Check almacenamiento", rs.getBoolean("pc_alm"));
+                    checklist.put("Armado y cierre", rs.getBoolean("pc_cierre"));
+                    checklist.put("Actualización SO", rs.getBoolean("actualizacion_so"));
+                } else if (tipoNombre.contains("impresora")) {
+                    checklist.put("Limpieza rodillos", rs.getBoolean("limpieza_rodillos"));
+                    checklist.put("Revisión tóner", rs.getBoolean("revision_toner"));
+                    checklist.put("Calibración cabezales", rs.getBoolean("calibracion_cabezales"));
+                    checklist.put("Actualización firmware", rs.getBoolean("actualizacion_firmware"));
+                } else if (tipoNombre.contains("celular")) {
+                    checklist.put("Pantalla táctil", rs.getBoolean("revision_pantalla_tactil"));
+                    checklist.put("Test batería", rs.getBoolean("test_rendimiento_bateria"));
+                    checklist.put("Limpieza puertos", rs.getBoolean("limpieza_puertos_carga"));
+                    checklist.put("Actualización Android", rs.getBoolean("actualizacion_android"));
+                }
+
+                m.setChecklist(checklist); 
+                return m;
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package modelo;
 
 import java.util.Date;
+import java.util.Map;
 
 public class MantenimientoEquipoOficina {
 
@@ -14,6 +15,9 @@ public class MantenimientoEquipoOficina {
     private String piezasRevisadas;
     private String estadoResultado;
     private String observaciones;
+    private java.sql.Timestamp fechaInicio;
+    private java.sql.Timestamp fechaCompletado;
+    private Map<String, Boolean> checklist;
 
     public int getIdMantenimientoEquipo() {
         return idMantenimientoEquipo;
@@ -93,5 +97,29 @@ public class MantenimientoEquipoOficina {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public java.sql.Timestamp getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(java.sql.Timestamp fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public java.sql.Timestamp getFechaCompletado() {
+        return fechaCompletado;
+    }
+
+    public void setFechaCompletado(java.sql.Timestamp fechaCompletado) {
+        this.fechaCompletado = fechaCompletado;
+    }
+
+    public Map<String, Boolean> getChecklist() {
+        return checklist;
+    }
+
+    public void setChecklist(Map<String, Boolean> checklist) {
+        this.checklist = checklist;
     }
 }
