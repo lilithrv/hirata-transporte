@@ -28,9 +28,11 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Cambiar a modo claro
-        
+
 copyright: "&copy; 2026 Empresa de Transporte Hirata — Todos los derechos reservados."        
 
+extra:
+  generator: false
 
 plugins:
   - search
