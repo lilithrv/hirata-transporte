@@ -145,13 +145,12 @@ public class MantenimientoEquipoOficinaDAO {
             -- Checklist Computador
             pc.desarmado_inicial, pc.limpieza_fisica AS pc_limpieza, pc.check_ram AS pc_ram,
             pc.check_almacenamiento AS pc_alm, pc.armado_cierre AS pc_cierre,
-            pc.actualizacion_so,
             -- Checklist Impresora
             imp.limpieza_rodillos, imp.revision_toner, imp.calibracion_cabezales,
             imp.actualizacion_firmware,
             -- Checklist Celular
             cel.revision_pantalla_tactil, cel.test_rendimiento_bateria,
-            cel.limpieza_puertos_carga, cel.actualizacion_android,
+            cel.limpieza_puertos_carga, 
             -- Piezas
             (
                 SELECT GROUP_CONCAT(
@@ -226,7 +225,6 @@ public class MantenimientoEquipoOficinaDAO {
                     checklist.put("Check RAM", rs.getBoolean("pc_ram"));
                     checklist.put("Check almacenamiento", rs.getBoolean("pc_alm"));
                     checklist.put("Armado y cierre", rs.getBoolean("pc_cierre"));
-                    checklist.put("Actualización SO", rs.getBoolean("actualizacion_so"));
                 } else if (tipoNombre.contains("impresora")) {
                     checklist.put("Limpieza rodillos", rs.getBoolean("limpieza_rodillos"));
                     checklist.put("Revisión tóner", rs.getBoolean("revision_toner"));
@@ -236,7 +234,6 @@ public class MantenimientoEquipoOficinaDAO {
                     checklist.put("Pantalla táctil", rs.getBoolean("revision_pantalla_tactil"));
                     checklist.put("Test batería", rs.getBoolean("test_rendimiento_bateria"));
                     checklist.put("Limpieza puertos", rs.getBoolean("limpieza_puertos_carga"));
-                    checklist.put("Actualización Android", rs.getBoolean("actualizacion_android"));
                 }
 
                 m.setChecklist(checklist); 

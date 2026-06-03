@@ -44,9 +44,6 @@ public class DialogDetalleMantenimiento extends javax.swing.JDialog {
         // Campos de texto (JLabel o JTextField no editable)
         // Equipo
 
-        System.out.println("Checklist: " + mant.getChecklist());
-        System.out.println("Equipo tipo: " + mant.getEquipo().getTipoEquipo().getNombre());
-
         txtEquipo.setText(
                 mant.getEquipo().getTipoEquipo().getNombre() + " "
                 + mant.getEquipo().getMarca() + " "

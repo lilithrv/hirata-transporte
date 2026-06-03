@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import modelo.EquipoOficina;
 import modelo.TipoEquipo;
+import util.Sesion;
 
 public class EquipoOficinaDAO {
 
@@ -334,19 +335,30 @@ public class EquipoOficinaDAO {
             }
 
             if (idMantenimiento == -1) {
-                String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio) VALUES (?, ?, ?, ?, 1, NOW())";
+                String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado) VALUES (?, ?, ?, ?, ?, NOW(), ?)";
                 try (java.sql.PreparedStatement psCrear = conn.prepareStatement(sqlCrearMant, java.sql.Statement.RETURN_GENERATED_KEYS)) {
-                    psCrear.setInt(1, idEquipo); psCrear.setString(2, tipoMant); psCrear.setString(3, estadoMant); psCrear.setString(4, observaciones);
+                    psCrear.setInt(1, idEquipo); 
+                    psCrear.setString(2, tipoMant); 
+                    psCrear.setString(3, estadoMant); 
+                    psCrear.setString(4, observaciones);
+                    psCrear.setInt(5, Sesion.getUsuarioActivo().getIdUsuario());
+                    psCrear.setTimestamp(6, estadoMant.equals("Completado")     
+                    ? new java.sql.Timestamp(System.currentTimeMillis()) 
+                    : null);
                     psCrear.executeUpdate();
                     try (java.sql.ResultSet rsKeys = psCrear.getGeneratedKeys()) {
                         if (rsKeys.next()) idMantenimiento = rsKeys.getInt(1);
                     }
                 }
             } else {
-                String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ? WHERE id_mantenimiento = ?";
+                String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ?, id_tecnico= ? WHERE id_mantenimiento = ?";
                 try (java.sql.PreparedStatement psMant = conn.prepareStatement(sqlUpdateMant)) {
-                    psMant.setString(1, estadoMant); psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
-                    psMant.setString(3, tipoMant); psMant.setString(4, observaciones); psMant.setInt(5, idMantenimiento);
+                    psMant.setString(1, estadoMant); 
+                    psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
+                    psMant.setString(3, tipoMant); 
+                    psMant.setString(4, observaciones); 
+                    psMant.setInt(5, Sesion.getUsuarioActivo().getIdUsuario()); 
+                    psMant.setInt(6, idMantenimiento);    
                     psMant.executeUpdate();
                 }
             }
@@ -399,12 +411,16 @@ public class EquipoOficinaDAO {
 
             // Insert o update en mantenimiento_equipos
             if (idMantenimiento == -1) {
-                String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio) VALUES (?, ?, ?, ?, 1, NOW())";
+                String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado) VALUES (?, ?, ?, ?, ?, NOW(), ?)";
                 try (java.sql.PreparedStatement psCrear = conn.prepareStatement(sqlCrearMant, java.sql.Statement.RETURN_GENERATED_KEYS)) {
                     psCrear.setInt(1, idEquipo);
                     psCrear.setString(2, tipoMant);
                     psCrear.setString(3, estadoMant);
                     psCrear.setString(4, observaciones);
+                    psCrear.setInt(5, Sesion.getUsuarioActivo().getIdUsuario());
+                    psCrear.setTimestamp(6, estadoMant.equals("Completado")     
+                    ? new java.sql.Timestamp(System.currentTimeMillis()) 
+                    : null);
                     psCrear.executeUpdate();
                     try (java.sql.ResultSet rsKeys = psCrear.getGeneratedKeys()) {
                         if (rsKeys.next()) {
@@ -413,13 +429,14 @@ public class EquipoOficinaDAO {
                     }
                 }
             } else {
-                String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ? WHERE id_mantenimiento = ?";
+                String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ?, id_tecnico = ? WHERE id_mantenimiento = ?";
                 try (java.sql.PreparedStatement psMant = conn.prepareStatement(sqlUpdateMant)) {
                     psMant.setString(1, estadoMant);
                     psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
                     psMant.setString(3, tipoMant);
                     psMant.setString(4, observaciones);
-                    psMant.setInt(5, idMantenimiento);
+                    psMant.setInt(5, Sesion.getUsuarioActivo().getIdUsuario()); 
+                    psMant.setInt(6, idMantenimiento); 
                     psMant.executeUpdate();
                 }
             }
@@ -490,12 +507,16 @@ public class EquipoOficinaDAO {
             }
 
             if (idMantenimiento == -1) {
-                String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio) VALUES (?, ?, ?, ?, 1, NOW())";
+                String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fehca_completado) VALUES (?, ?, ?, ?, ?, NOW()), ?";
                 try (java.sql.PreparedStatement psCrear = conn.prepareStatement(sqlCrearMant, java.sql.Statement.RETURN_GENERATED_KEYS)) {
                     psCrear.setInt(1, idEquipo);
                     psCrear.setString(2, tipoMant);
                     psCrear.setString(3, estadoMant);
                     psCrear.setString(4, observaciones);
+                    psCrear.setInt(5, Sesion.getUsuarioActivo().getIdUsuario());
+                    psCrear.setTimestamp(6, estadoMant.equals("Completado")     
+                    ? new java.sql.Timestamp(System.currentTimeMillis()) 
+                    : null);
                     psCrear.executeUpdate();
                     try (java.sql.ResultSet rsKeys = psCrear.getGeneratedKeys()) {
                         if (rsKeys.next()) {
@@ -504,13 +525,14 @@ public class EquipoOficinaDAO {
                     }
                 }
             } else {
-                String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ? WHERE id_mantenimiento = ?";
+                String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ?, id_tecnico = ? WHERE id_mantenimiento = ?";
                 try (java.sql.PreparedStatement psMant = conn.prepareStatement(sqlUpdateMant)) {
                     psMant.setString(1, estadoMant);
                     psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
                     psMant.setString(3, tipoMant);
                     psMant.setString(4, observaciones);
-                    psMant.setInt(5, idMantenimiento);
+                    psMant.setInt(5, Sesion.getUsuarioActivo().getIdUsuario()); 
+                    psMant.setInt(6, idMantenimiento); 
                     psMant.executeUpdate();
                 }
             }
@@ -573,19 +595,30 @@ public class EquipoOficinaDAO {
             }
 
              if (idMantenimiento == -1) {
-                String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio) VALUES (?, ?, ?, ?, 1, NOW())";
+                String sqlCrearMant = "INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado) VALUES (?, ?, ?, ?, ?, NOW()), ?";
                 try (java.sql.PreparedStatement psCrear = conn.prepareStatement(sqlCrearMant, java.sql.Statement.RETURN_GENERATED_KEYS)) {
-                    psCrear.setInt(1, idEquipo); psCrear.setString(2, tipoMant); psCrear.setString(3, estadoMant); psCrear.setString(4, observaciones);
+                    psCrear.setInt(1, idEquipo); 
+                    psCrear.setString(2, tipoMant); 
+                    psCrear.setString(3, estadoMant); 
+                    psCrear.setString(4, observaciones);
+                    psCrear.setInt(5, Sesion.getUsuarioActivo().getIdUsuario());
+                    psCrear.setTimestamp(6, estadoMant.equals("Completado")     
+                    ? new java.sql.Timestamp(System.currentTimeMillis()) 
+                    : null);
                     psCrear.executeUpdate();
                     try (java.sql.ResultSet rsKeys = psCrear.getGeneratedKeys()) {
                         if (rsKeys.next()) idMantenimiento = rsKeys.getInt(1);
                     }
                 }
             } else {
-                String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ? WHERE id_mantenimiento = ?";
+                String sqlUpdateMant = "UPDATE mantenimiento_equipos SET estado = ?, fecha_completado = ?, tipo_mantenimiento = ?, descripcion = ?, id_tecnico = ? WHERE id_mantenimiento = ?";
                 try (java.sql.PreparedStatement psMant = conn.prepareStatement(sqlUpdateMant)) {
-                    psMant.setString(1, estadoMant); psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
-                    psMant.setString(3, tipoMant); psMant.setString(4, observaciones); psMant.setInt(5, idMantenimiento);
+                    psMant.setString(1, estadoMant); 
+                    psMant.setTimestamp(2, estadoMant.equals("Completado") ? new java.sql.Timestamp(System.currentTimeMillis()) : null);
+                    psMant.setString(3, tipoMant); 
+                    psMant.setString(4, observaciones); 
+                    psMant.setInt(5, Sesion.getUsuarioActivo().getIdUsuario()); 
+                    psMant.setInt(6, idMantenimiento); 
                     psMant.executeUpdate();
                 }
             }
