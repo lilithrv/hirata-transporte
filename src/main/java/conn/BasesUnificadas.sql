@@ -605,8 +605,9 @@ CREATE TABLE detalle_mant_computador (
     limpieza_fisica BOOLEAN DEFAULT FALSE,
     check_ram BOOLEAN DEFAULT FALSE,
     check_almacenamiento BOOLEAN DEFAULT FALSE,
+    cambio_pasta BOOLEAN DEFAULT FALSE,
     armado_cierre BOOLEAN DEFAULT FALSE,
-    actualizacion_so BOOLEAN DEFAULT FALSE,
+    sustitucion_piezas BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_mantenimiento) REFERENCES mantenimiento_equipos(id_mantenimiento) ON DELETE CASCADE
 );
 
@@ -628,7 +629,7 @@ CREATE TABLE detalle_mant_celular (
     revision_pantalla_tactil BOOLEAN DEFAULT FALSE,
     test_rendimiento_bateria BOOLEAN DEFAULT FALSE,
     limpieza_puertos_carga BOOLEAN DEFAULT FALSE,
-    actualizacion_android BOOLEAN DEFAULT FALSE,
+    armado_cierre BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_mantenimiento) REFERENCES mantenimiento_equipos(id_mantenimiento) ON DELETE CASCADE
 );
 
@@ -1079,7 +1080,7 @@ VALUES (2, 1, 1, 'Reemplazo');
 -- PC ESCRITORIO
 INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado)
 VALUES (11, 'Preventivo', 'Completado', 'Limpieza interna y actualización de sistema operativo', 101, '2025-02-20 08:00:00', '2025-02-20 10:30:00');
-INSERT INTO detalle_mant_computador (id_mantenimiento, desarmado_inicial, limpieza_fisica, check_ram, check_almacenamiento, armado_cierre, actualizacion_so)
+INSERT INTO detalle_mant_computador (id_mantenimiento, desarmado_inicial, limpieza_fisica, check_ram, check_almacenamiento, cambio_pasta, armado_cierre)
 VALUES (LAST_INSERT_ID(), true, true, true, true, true, true);
 
 -- IMPRESORA
@@ -1101,11 +1102,11 @@ VALUES (5, 92, 1, 'Reemplazo');
 
 INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado)
 VALUES (28, 'Preventivo', 'Completado', 'Revisión de batería y limpieza de puertos', 101, '2025-04-10 08:30:00', '2025-04-10 09:30:00');
-INSERT INTO detalle_mant_celular (id_mantenimiento, revision_pantalla_tactil, test_rendimiento_bateria, limpieza_puertos_carga, actualizacion_android)
-VALUES (LAST_INSERT_ID(), true, true, true, false);
+INSERT INTO detalle_mant_celular (id_mantenimiento, revision_pantalla_tactil, test_rendimiento_bateria,  armado_cierre)
+VALUES (LAST_INSERT_ID(), true, true, true);
 
 INSERT INTO mantenimiento_equipos (id_equipo, tipo_mantenimiento, estado, descripcion, id_tecnico, fecha_inicio, fecha_completado)
 VALUES (29, 'Correctivo', 'Completado', 'Actualización de Android y test de pantalla táctil', 102, '2025-05-03 10:00:00', '2025-05-03 11:00:00');
-INSERT INTO detalle_mant_celular (id_mantenimiento, revision_pantalla_tactil, test_rendimiento_bateria, limpieza_puertos_carga, actualizacion_android)
-VALUES (LAST_INSERT_ID(), true, false, true, true);
+INSERT INTO detalle_mant_celular (id_mantenimiento, revision_pantalla_tactil, test_rendimiento_bateria)
+VALUES (LAST_INSERT_ID(), true, false);
 
